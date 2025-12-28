@@ -1,0 +1,17 @@
+# Session file (contains sensitive auth data)
+session_name.session
+*.session
+
+# Environment variables (uncomment before pushing to public repo!)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+
+# IDE
+.vscode/
+.idea/
