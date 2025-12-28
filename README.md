@@ -13,6 +13,16 @@ flowchart LR
     B -->|Notify| F[👤 Your Private Group]
 ```
 
+### Flow Explanation
+
+| Step | What Happens |
+|------|--------------|
+| 1️⃣ | Signal arrives in **Signal Channel** (public/private channel you're monitoring) |
+| 2️⃣ | Bot parses the message → extracts Symbol, Side (Long/Short), Price, TP1 |
+| 3️⃣ | Bot places **Entry Order** + **Take Profit Order** on Binance Futures |
+| 4️⃣ | Bot sends confirmation (or error) to **Your Private Group** |
+
+> **Result:** You get notified in your private group about every trade! 🚀
 ## 📁 Project Structure
 
 ```
