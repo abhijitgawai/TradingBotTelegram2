@@ -177,14 +177,81 @@ TP 1: 0.029556 - Probability 94%
 | Price | `0.02926` | Limit order price |
 | TP1 | `0.029556` | Take profit price |
 
-## 🌐 Deployment (Render/Railway)
+## 🌐 Deployment (Oracle Cloud Free Tier)
 
-1. Push code to GitHub (private repo recommended)
-2. Connect repo to Render/Railway
-3. Set environment variables in dashboard
-4. Deploy!
+Oracle Cloud offers **Always Free** VMs with **static IP** - perfect for Binance API!
 
-**Keep Alive:** Use [UptimeRobot](https://uptimerobot.com/) to ping your URL every 5 mins.
+### Step 1: Create Oracle Cloud Account
+1. Go to https://cloud.oracle.com/free
+2. Sign up (credit card required, but won't be charged)
+3. Select "Always Free" resources only
+
+### Step 2: Create VM Instance
+1. Navigate to **Compute → Instances → Create Instance**
+2. Choose **Ubuntu 22.04** image
+3. Select shape: **VM.Standard.E2.1.Micro** (Always Free)
+4. Download SSH key pair when creating
+5. Note the **Public IP Address** after creation
+
+### Step 3: Add IP to Binance Whitelist
+Go to Binance API settings and add your VM's public IP to the whitelist.
+
+### Step 4: Connect & Deploy
+```bash
+# SSH into your VM
+ssh -i your-key.pem ubuntu@YOUR_VM_IP
+
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Python
+sudo apt install python3 python3-pip git -y
+
+# Clone your repo
+git clone https://github.com/YOUR_USERNAME/TradingBotTelegram2.git
+cd TradingBotTelegram2
+
+# Install dependencies
+pip3 install -r requirements.txt
+
+# Create .env file with your credentials
+nano .env
+
+# Run bot in background
+nohup python3 bot.py > bot.log 2>&1 &
+
+# Check if running
+ps aux | grep bot.py
+```
+
+### Step 5: Run as System Service (Recommended)
+```bash
+# Create service file
+sudo nano /etc/systemd/system/tradingbot.service
+```
+
+Paste:
+```ini
+[Unit]
+Description=Trading Bot
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/TradingBotTelegram2
+ExecStart=/usr/bin/python3 bot.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then:
+```bash
+sudo systemctl enable tradingbot
+sudo systemctl start tradingbot
+sudo systemctl status tradingbot
+```
 
 ## ⚠️ Disclaimer
 
