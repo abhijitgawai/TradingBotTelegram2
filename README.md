@@ -264,25 +264,33 @@ Run these commands:
 # 1. Update system
 sudo apt update && sudo apt upgrade -y
 
-# 2. Install Python & Git
-sudo apt install python3 python3-pip git -y
+# 2. Install Python, venv & Git
+sudo apt install python3 python3-pip python3-venv python3-full git -y
 
 # 3. Clone your code
 git clone https://github.com/YOUR_USERNAME/ShantoohBot2.git
 cd ShantoohBot2
 
-# 4. Install dependencies
-pip3 install -r requirements.txt
+# 4. Create virtual environment
+python3 -m venv venv
 
-# 5. Create .env file
+# 5. Activate virtual environment
+source venv/bin/activate
+
+# 6. Install dependencies (inside venv)
+pip install -r requirements.txt
+
+# 7. Create .env file
 nano .env
 # (Paste your secrets, then Ctrl+X → Y → Enter)
 
-# 6. Test the bot
-python3 bot.py
+# 8. Test the bot
+python bot.py
 # Should show: "🚀 PRODUCTION MODE: Listening..."
 # Press Ctrl+C to stop
 ```
+
+> **Note:** Always activate venv with `source venv/bin/activate` before running the bot!
 
 ---
 
@@ -302,7 +310,7 @@ After=network.target
 [Service]
 User=YOUR_USERNAME
 WorkingDirectory=/home/YOUR_USERNAME/ShantoohBot2
-ExecStart=/usr/bin/python3 bot.py
+ExecStart=/home/YOUR_USERNAME/ShantoohBot2/venv/bin/python bot.py
 Restart=always
 RestartSec=10
 

@@ -1,5 +1,4 @@
 telethon
 binance-futures-connector
-flask
 requests
 python-dotenv

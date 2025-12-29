@@ -130,13 +130,8 @@ async def handle_new_signal(event):
 
 # --- STARTUP LOGIC ---
 if __name__ == "__main__":
-    try:
-        from keep_alive import keep_alive
-        keep_alive()
-        print("Keep-alive server started.")
-    except Exception as e:
-        print(f"Keep-alive failed to start: {e}")
-
-    print("Bot is listening...")
+    print("Bot is starting...")
     tg_client.start()
+    print("Bot is listening...")
     tg_client.run_until_disconnected()
+
