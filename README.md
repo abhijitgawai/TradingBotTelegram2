@@ -319,6 +319,7 @@ WorkingDirectory=/home/abhijeetgawai2000/TradingBotTelegram2
 ExecStart=/home/abhijeetgawai2000/TradingBotTelegram2/venv/bin/python bot.py
 Restart=always
 RestartSec=10
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
@@ -338,12 +339,25 @@ sudo systemctl status tradingbot
 
 ### Useful Commands
 
+**Most Used (copy-paste ready):**
+```bash
+# Restart bot after any changes
+sudo systemctl restart tradingbot
+
+# View live logs (Ctrl+C to exit)
+sudo journalctl -u tradingbot -f
+```
+
+**All Commands:**
+
 | Command | Purpose |
 |---------|---------|
 | `sudo systemctl status tradingbot` | Check if running |
 | `sudo systemctl restart tradingbot` | Restart bot |
 | `sudo systemctl stop tradingbot` | Stop bot |
+| `sudo systemctl start tradingbot` | Start bot |
 | `sudo journalctl -u tradingbot -f` | View live logs |
+| `sudo journalctl -u tradingbot -n 50` | Last 50 log lines |
 | `nano ~/TradingBotTelegram2/.env` | Edit config |
 
 ---
