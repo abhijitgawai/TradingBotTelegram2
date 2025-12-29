@@ -50,7 +50,93 @@ SIGNAL_CHANNEL_ID=-100xxxxxxxxxx
 MY_PRIVATE_GROUP_ID=-100xxxxxxxxxx
 LEVERAGE=5
 MARGIN_USD=100
+ISTESTING=true
 ```
+
+**ISTESTING Mode:**
+| Value | Behavior |
+|-------|----------|
+| `true` | Bot listens to private group, NO real trades, shows "Test Trade Placed" |
+| `false` | Bot listens to signal channel, executes real trades on Binance |
+
+---
+
+## 📋 Step-by-Step Setup Guide
+
+### Step 1: Get Telegram API Credentials
+
+1. Go to **https://my.telegram.org**
+2. Login with phone number (with country code: `+919876543210`)
+3. Enter OTP received in Telegram
+4. Click **"API development tools"**
+5. Fill form:
+   - App title: `TradingBot`
+   - Short name: `tradingbot`
+   - Platform: `Desktop`
+   - URL: (leave empty)
+6. Click **Create application**
+7. Copy `App api_id` → `TELEGRAM_API_ID`
+8. Copy `App api_hash` → `TELEGRAM_API_HASH`
+
+> **Note:** FCM credentials are NOT needed.
+
+---
+
+### Step 2: Get Binance API Credentials
+
+1. Go to **https://www.binance.com** → Login
+2. Profile → **API Management**
+3. Click **Create API** → Select **System generated**
+4. Label: `TradingBot` → Complete 2FA
+5. Copy `API Key` → `BINANCE_KEY`
+6. Copy `Secret Key` → `BINANCE_SECRET` (shown once!)
+7. **Edit Restrictions:**
+   - ✅ Enable Futures
+   - ✅ Enable Reading
+   - ❌ Disable Withdraw (for safety)
+
+#### ⚠️ IP Restriction (Required for Futures)
+
+Binance requires IP whitelist when Futures is enabled. Add your IP:
+
+**For Local Testing:**
+```bash
+# Windows - Get your public IP
+curl ifconfig.me
+
+# Or visit: https://whatismyip.com
+```
+
+Copy your public IP (e.g., `103.45.67.89`) and add it to Binance API restrictions.
+
+**For Cloud Deployment (Render/Railway):**
+- Free tiers have dynamic IPs - may need paid plan with static IP
+- Or use a VPS with fixed IP
+
+---
+
+### Step 3: Get Channel/Group IDs
+
+**Method 1: Using @userinfobot**
+1. Forward any message from signal channel → `@userinfobot`
+2. Copy the ID (e.g., `-1001234567890`) → `SIGNAL_CHANNEL_ID`
+
+**Method 2: Using Telegram Web (Recommended)**
+1. Open https://web.telegram.org/a/
+2. Go to the channel/group
+3. Look at URL: `https://web.telegram.org/a/#-1001234567890`
+4. Copy the number after `#` (including the minus sign)
+
+**For your private group:**
+- If URL shows `#-5160897944`, use `-1005160897944` (add `100` after the minus)
+- Format: `-100` + `group_id`
+
+| ID Type | URL Example | Use in .env |
+|---------|-------------|-------------|
+| Channel | `#-1001234567890` | `-1001234567890` |
+| Group | `#-5160897944` | `-1005160897944` |
+
+---
 
 ## 🔑 Generate Session String
 

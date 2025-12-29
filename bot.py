@@ -19,7 +19,12 @@ SIGNAL_CHANNEL_ID = int(os.getenv('SIGNAL_CHANNEL_ID'))
 MY_PRIVATE_GROUP_ID = int(os.getenv('MY_PRIVATE_GROUP_ID'))
 
 LEVERAGE = int(os.getenv('LEVERAGE', 5))
-MARGIN_USD = int(os.getenv('MARGIN_USD', 100))  
+MARGIN_USD = int(os.getenv('MARGIN_USD', 100))
+
+# Testing mode - use private group as signal source
+ISTESTING = os.getenv('ISTESTING', 'false').lower() == 'true'
+if ISTESTING:
+    SIGNAL_CHANNEL_ID = MY_PRIVATE_GROUP_ID  
 
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
@@ -67,24 +72,27 @@ async def handle_new_signal(event):
         # Calculate Quantity
         quantity = round((MARGIN_USD * LEVERAGE) / entry_price, 1)
 
-        # Set Leverage
-        binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
+        if not ISTESTING:
+            # Set Leverage
+            binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
 
-        # Entry LIMIT Order
-        binance_client.new_order(
-            symbol=symbol, side=side, type='LIMIT',
-            timeInForce='GTC', quantity=quantity, price=entry_price
-        )
+            # Entry LIMIT Order
+            binance_client.new_order(
+                symbol=symbol, side=side, type='LIMIT',
+                timeInForce='GTC', quantity=quantity, price=entry_price
+            )
 
-        # TP LIMIT Order
-        exit_side = "SELL" if side == "BUY" else "BUY"
-        binance_client.new_order(
-            symbol=symbol, side=exit_side, type='LIMIT',
-            quantity=quantity, price=tp1_price,
-            timeInForce='GTC', reduceOnly="True"
-        )
+            # TP LIMIT Order
+            exit_side = "SELL" if side == "BUY" else "BUY"
+            binance_client.new_order(
+                symbol=symbol, side=exit_side, type='LIMIT',
+                quantity=quantity, price=tp1_price,
+                timeInForce='GTC', reduceOnly="True"
+            )
 
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 Trade Placed: {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
+            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 Trade Placed: {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
+        else:
+            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 Test Trade Placed: {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
 
     except Exception as e:
         await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"⚠️ Binance Error for {symbol}: {str(e)}")
