@@ -23,6 +23,7 @@ flowchart LR
 | 4️⃣ | Bot sends confirmation (or error) to **Your Private Group** |
 
 > **Result:** You get notified in your private group about every trade! 🚀
+
 ## 📁 Project Structure
 
 ```
@@ -109,27 +110,18 @@ curl ifconfig.me
 
 Copy your public IP (e.g., `103.45.67.89`) and add it to Binance API restrictions.
 
-**For Cloud Deployment (Render/Railway):**
-- Free tiers have dynamic IPs - may need paid plan with static IP
-- Or use a VPS with fixed IP
+**For Cloud Deployment:**
+- Use your GCP VM's static IP (see deployment section below)
 
 ---
 
 ### Step 3: Get Channel/Group IDs
 
-**Method 1: Using @userinfobot**
-1. Forward any message from signal channel → `@userinfobot`
-2. Copy the ID (e.g., `-1001234567890`) → `SIGNAL_CHANNEL_ID`
-
-**Method 2: Using Telegram Web (Recommended)**
+**Using Telegram Web (Recommended)**
 1. Open https://web.telegram.org/a/
 2. Go to the channel/group
 3. Look at URL: `https://web.telegram.org/a/#-1001234567890`
 4. Copy the number after `#` (including the minus sign)
-
-**For your private group:**
-- If URL shows `#-5160897944`, use `-1005160897944` (add `100` after the minus)
-- Format: `-100` + `group_id`
 
 | ID Type | URL Example | Use in .env |
 |---------|-------------|-------------|
@@ -138,7 +130,7 @@ Copy your public IP (e.g., `103.45.67.89`) and add it to Binance API restriction
 
 ---
 
-## 🔑 Generate Session String
+### Step 4: Generate Session String
 
 ```bash
 # 1. First fill TELEGRAM_API_ID and TELEGRAM_API_HASH in .env
@@ -147,6 +139,8 @@ python generate_session.py
 
 # 3. Copy the output and paste into SESSION_STRING in .env
 ```
+
+---
 
 ## 🚀 Local Setup
 
@@ -157,6 +151,8 @@ pip install -r requirements.txt
 # Run bot
 python bot.py
 ```
+
+---
 
 ## 📡 Signal Format
 
@@ -177,54 +173,121 @@ TP 1: 0.029556 - Probability 94%
 | Price | `0.02926` | Limit order price |
 | TP1 | `0.029556` | Take profit price |
 
-## 🌐 Deployment (Oracle Cloud Free Tier)
+---
 
-Oracle Cloud offers **Always Free** VMs with **static IP** - perfect for Binance API!
+## 🌐 Deployment on Google Cloud Platform (FREE!)
 
-### Step 1: Create Oracle Cloud Account
-1. Go to https://cloud.oracle.com/free
-2. Sign up (credit card required, but won't be charged)
-3. Select "Always Free" resources only
+### Why Google Cloud?
+- ✅ **Static IP** (required for Binance API whitelist)
+- ✅ **$300 free credits** for 90 days
+- ✅ **Always Free tier** after credits
+- ✅ **UPI payment** accepted in India (₹1000 refundable deposit)
+
+---
+
+### Step 1: Create Google Cloud Account
+
+1. Go to **https://cloud.google.com/free**
+2. Click **"Get started for free"**
+3. Sign in with Google account
+4. Payment: Select **UPI** → Pay ₹1000 (refundable deposit)
+5. Get **$300 free credits**!
+
+---
 
 ### Step 2: Create VM Instance
-1. Navigate to **Compute → Instances → Create Instance**
-2. Choose **Ubuntu 22.04** image
-3. Select shape: **VM.Standard.E2.1.Micro** (Always Free)
-4. Download SSH key pair when creating
-5. Note the **Public IP Address** after creation
 
-### Step 3: Add IP to Binance Whitelist
-Go to Binance API settings and add your VM's public IP to the whitelist.
+1. Go to **https://console.cloud.google.com**
+2. Search **"Compute Engine"** → Click it → Enable API
+3. Click **"Create Instance"**
 
-### Step 4: Connect & Deploy
+#### VM Configuration (Lowest Cost - FREE!):
+
+| Section | Field | Value |
+|---------|-------|-------|
+| **Name** | Name | `trading-bot` |
+| **Region** | Region | `asia-south1 (Mumbai)` |
+| **Region** | Zone | `asia-south1-a` |
+| **Machine** | Machine family | `General-purpose` |
+| **Machine** | Series | `E2` |
+| **Machine** | Machine type | `e2-micro` (2 vCPU, 1 GB) ✅ FREE |
+| **Machine** | Provisioning model | `Standard` |
+| **OS & Storage** | Operating System | `Ubuntu` |
+| **OS & Storage** | Version | `Ubuntu 22.04 LTS x86/64` |
+| **OS & Storage** | Boot disk type | `Standard persistent disk` |
+| **OS & Storage** | Size | `30 GB` |
+| **Networking** | Allow HTTP traffic | ✅ Checked |
+| **Networking** | Allow HTTPS traffic | ✅ Checked |
+| **Networking** | Allow Load Balancer | ❌ Unchecked |
+| **Observability** | Install Ops Agent | ❌ Unchecked (optional) |
+| **Advanced** | Deletion protection | ✅ Enabled (recommended) |
+
+4. Click **"Create"** → Wait 1-2 minutes
+
+---
+
+### Step 3: Reserve Static IP (IMPORTANT!)
+
+1. Go to **VPC Network → IP addresses**
+2. Click **"Reserve external"**
+3. Fill:
+   - Name: `trading-bot-ip`
+   - Region: `asia-south1`
+   - Attached to: `trading-bot` (your VM)
+4. Click **"Reserve"**
+5. Note your IP (e.g., `34.100.182.165`) ← **This will never change!**
+
+---
+
+### Step 4: Add IP to Binance Whitelist
+
+1. Go to **Binance → API Management**
+2. Click **Edit** on your API key
+3. Under **IP Access Restrictions** → Add your GCP IP (e.g., `34.100.182.165`)
+4. Save
+
+---
+
+### Step 5: Connect to VM via SSH
+
+1. Go to **Compute Engine → VM instances**
+2. Find your VM → Click **"SSH"** button
+3. A terminal opens in your browser!
+
+---
+
+### Step 6: Setup Bot on VM
+
+Run these commands:
+
 ```bash
-# SSH into your VM
-ssh -i your-key.pem ubuntu@YOUR_VM_IP
-
-# Update system
+# 1. Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install Python
+# 2. Install Python & Git
 sudo apt install python3 python3-pip git -y
 
-# Clone your repo
-git clone https://github.com/YOUR_USERNAME/TradingBotTelegram2.git
-cd TradingBotTelegram2
+# 3. Clone your code
+git clone https://github.com/YOUR_USERNAME/ShantoohBot2.git
+cd ShantoohBot2
 
-# Install dependencies
+# 4. Install dependencies
 pip3 install -r requirements.txt
 
-# Create .env file with your credentials
+# 5. Create .env file
 nano .env
+# (Paste your secrets, then Ctrl+X → Y → Enter)
 
-# Run bot in background
-nohup python3 bot.py > bot.log 2>&1 &
-
-# Check if running
-ps aux | grep bot.py
+# 6. Test the bot
+python3 bot.py
+# Should show: "🚀 PRODUCTION MODE: Listening..."
+# Press Ctrl+C to stop
 ```
 
-### Step 5: Run as System Service (Recommended)
+---
+
+### Step 7: Run Bot 24/7 (Systemd Service)
+
 ```bash
 # Create service file
 sudo nano /etc/systemd/system/tradingbot.service
@@ -237,21 +300,67 @@ Description=Trading Bot
 After=network.target
 
 [Service]
-User=ubuntu
-WorkingDirectory=/home/ubuntu/TradingBotTelegram2
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME/ShantoohBot2
 ExecStart=/usr/bin/python3 bot.py
 Restart=always
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
 ```
 
+> Replace `YOUR_USERNAME` with your actual username (run `whoami` to check)
+
 Then:
 ```bash
+sudo systemctl daemon-reload
 sudo systemctl enable tradingbot
 sudo systemctl start tradingbot
 sudo systemctl status tradingbot
 ```
+
+---
+
+### Useful Commands
+
+| Command | Purpose |
+|---------|---------|
+| `sudo systemctl status tradingbot` | Check if running |
+| `sudo systemctl restart tradingbot` | Restart bot |
+| `sudo systemctl stop tradingbot` | Stop bot |
+| `sudo journalctl -u tradingbot -f` | View live logs |
+| `nano ~/ShantoohBot2/.env` | Edit config |
+
+---
+
+### Cost Summary
+
+| Component | Monthly Cost |
+|-----------|--------------|
+| e2-micro VM (744 hrs) | **$0** (free tier) |
+| 30 GB Standard disk | ~$1.20 |
+| Static IP (attached) | **$0** |
+| **Total** | ~$1.20/month (covered by $300 credits for 250 months!) |
+
+### 💳 Billing & Payment Notes
+
+**Q: I paid ₹1000 via UPI and deleted the autopay. Will I be charged?**
+
+| Scenario | What Happens |
+|----------|--------------|
+| Stay within free tier | ✅ No charges, ₹1000 stays as credit |
+| Use only free resources | ✅ Safe, no deductions |
+| Exceed free tier | ⚠️ Google emails you, service pauses (no surprise charges) |
+| Delete payment method | ✅ OK if staying in free tier |
+
+**Important:**
+- Your ₹1000 deposit is converted to ~$12 credit (added to $300 free credits)
+- Google **cannot charge you** without a valid payment method
+- If you exceed limits, service pauses - you won't be billed unexpectedly
+- To be safe: Set up **Budget Alerts** in GCP Console → Billing → Budgets
+
+---
 
 ## ⚠️ Disclaimer
 
@@ -264,3 +373,4 @@ This bot executes real trades. Use at your own risk. Always test with small amou
 **Abhijit Gawai**
 
 *✨ Vibe coded with [Antigravity](https://deepmind.google/) using Claude Opus 4.5 Thinking*
+
