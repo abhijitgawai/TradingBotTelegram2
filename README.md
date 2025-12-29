@@ -29,10 +29,9 @@ flowchart LR
 ```
 ShantoohBot2/
 ├── bot.py              # Main bot logic
-├── keep_alive.py       # Flask server to prevent sleep
 ├── generate_session.py # Run once to get SESSION_STRING
 ├── requirements.txt    # Python dependencies
-├── .env                # API keys & config (create manually)
+├── .env                # API keys & config (template on GitHub, real values local only)
 ├── .gitignore          # Excludes sensitive files
 └── README.md           # This file
 ```
@@ -296,21 +295,28 @@ python bot.py
 
 ### Step 7: Run Bot 24/7 (Systemd Service)
 
+**First, find your username:**
 ```bash
-# Create service file
+whoami
+# Example output: abhijeetgawai2000
+```
+
+**Create service file:**
+```bash
 sudo nano /etc/systemd/system/tradingbot.service
 ```
 
-Paste:
+**Paste this (replace `abhijeetgawai2000` with YOUR username from `whoami`):**
 ```ini
 [Unit]
 Description=Trading Bot
 After=network.target
 
 [Service]
-User=YOUR_USERNAME
-WorkingDirectory=/home/YOUR_USERNAME/ShantoohBot2
-ExecStart=/home/YOUR_USERNAME/ShantoohBot2/venv/bin/python bot.py
+# CHANGE THIS: Replace 'abhijeetgawai2000' with your username from 'whoami' command
+User=abhijeetgawai2000
+WorkingDirectory=/home/abhijeetgawai2000/TradingBotTelegram2
+ExecStart=/home/abhijeetgawai2000/TradingBotTelegram2/venv/bin/python bot.py
 Restart=always
 RestartSec=10
 
@@ -318,9 +324,9 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-> Replace `YOUR_USERNAME` with your actual username (run `whoami` to check)
+**Save:** `Ctrl+X` → `Y` → `Enter`
 
-Then:
+**Start the service:**
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable tradingbot
@@ -338,7 +344,55 @@ sudo systemctl status tradingbot
 | `sudo systemctl restart tradingbot` | Restart bot |
 | `sudo systemctl stop tradingbot` | Stop bot |
 | `sudo journalctl -u tradingbot -f` | View live logs |
-| `nano ~/ShantoohBot2/.env` | Edit config |
+| `nano ~/TradingBotTelegram2/.env` | Edit config |
+
+---
+
+### Updating Bot Code on VM
+
+When you push changes to GitHub, update the VM:
+
+```bash
+# SSH into VM, then:
+cd ~/TradingBotTelegram2
+git pull origin main
+sudo systemctl restart tradingbot
+```
+
+### After Changing Files - What To Do?
+
+**You DON'T need to redo systemd setup!** Just restart:
+
+| What You Changed | Commands to Run |
+|------------------|-----------------|
+| `.env` file | `sudo systemctl restart tradingbot` |
+| `bot.py` (pushed to GitHub) | `git pull origin main` then `sudo systemctl restart tradingbot` |
+| `bot.py` (edited directly on VM) | `sudo systemctl restart tradingbot` |
+| `tradingbot.service` file | `sudo systemctl daemon-reload` then `sudo systemctl restart tradingbot` |
+
+**Quick restart:**
+```bash
+sudo systemctl restart tradingbot && sudo systemctl status tradingbot
+```
+
+---
+
+### Git Tips for .env Security
+
+**Keep template on GitHub, real values local only:**
+
+```bash
+# Stop Git from tracking local .env changes
+git update-index --assume-unchanged .env
+
+# To undo (if you want to update the template):
+git update-index --no-assume-unchanged .env
+```
+
+This way:
+- GitHub has mock/template `.env` 
+- Your local `.env` has real keys (not tracked)
+- GCP VM has real keys (created manually)
 
 ---
 
