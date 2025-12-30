@@ -111,9 +111,18 @@ async def handle_new_signal(event):
 
     # --- EXECUTION ---
     try:
-        # Calculate Quantity
-        quantity = round((MARGIN_USD * LEVERAGE) / entry_price, 1)
-        print(f"   📌 Quantity: {quantity}")
+        # Calculate Quantity with smart rounding based on price
+        raw_quantity = (MARGIN_USD * LEVERAGE) / entry_price
+        if entry_price > 1000:       # BTC, ETH - expensive coins
+            decimals = 3
+        elif entry_price > 1:        # Mid-range altcoins
+            decimals = 1
+        else:                        # Cheap coins like DOGE, SHIB
+            decimals = 0
+        quantity = round(raw_quantity, decimals)
+        if decimals == 0:
+            quantity = int(quantity)  # Remove .0 for whole numbers
+        print(f"   📌 Quantity: {quantity} (precision: {decimals} decimals)")
 
         if PLACE_REAL_TRADES:
             print(f"   🔄 Placing REAL orders on Binance...")
