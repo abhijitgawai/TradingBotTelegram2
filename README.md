@@ -561,6 +561,43 @@ Always use **Static IP** for Binance API (see Step 3 in deployment).
 
 ---
 
+## 🏆 Problems Solved During Development
+
+| Problem | Root Cause | Solution |
+|---------|------------|----------|
+| **Invalid symbol error** | Typo in coin name (DODGE vs DOGE) | Bot auto-appends USDT, just use correct ticker |
+| **Precision over maximum** | Quantity had wrong decimal places | Implemented API-based precision caching at startup |
+| **Position side mismatch** | Binance in Hedge Mode | Switch to One-Way Mode in Binance Futures settings |
+| **Git pull conflict on VM** | Edited .env on VM caused merge conflict | Use `git reset --hard HEAD` then restore .env from backup |
+| **IP not whitelisted** | Local IP not added to Binance | Add both local and GCP VM IPs to whitelist |
+| **Cross margin risk** | Default was Cross margin | Added automatic Isolated margin setting via API |
+| **Fallback decimals inaccurate** | Price-based estimation failed for some coins | Cache all 655 symbol precisions from Binance at startup |
+
+---
+
+## 📝 Changelog
+
+### v1.3 (Latest)
+- ✅ **Symbol precision caching** - Fetches exact decimal places from Binance API at startup
+- ✅ **Fallback logic** - Uses price-based estimation if symbol not in cache
+- ✅ **Test suite** - Added `verify_setup.py` with 8 comprehensive tests
+
+### v1.2
+- ✅ **Isolated margin mode** - Automatically sets each trade to Isolated (safer)
+- ✅ **Troubleshooting docs** - Added common errors and fixes to README
+
+### v1.1
+- ✅ **Smart quantity rounding** - Dynamic decimals based on coin price
+- ✅ **Debug logging** - Detailed console output for signal processing
+- ✅ **Telegram ID normalization** - Handles -100XXXXXX format automatically
+
+### v1.0
+- ✅ **Core functionality** - Parse signals, place limit orders, send notifications
+- ✅ **Testing modes** - LISTEN_TO_PRIVATE_GROUP and PLACE_REAL_TRADES flags
+- ✅ **GCP deployment guide** - Step-by-step with static IP and systemd service
+
+---
+
 ## ⚠️ Disclaimer
 
 This bot executes real trades. Use at your own risk. Always test with small amounts first.

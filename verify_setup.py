@@ -2,7 +2,7 @@
 Test suite for Trading Bot functionality.
 Run this to verify API connection and bot logic before deploying.
 
-Usage: python test_margin.py
+Usage: python verify_setup.py
 """
 import os
 import re
