@@ -126,6 +126,17 @@ async def handle_new_signal(event):
 
         if PLACE_REAL_TRADES:
             print(f"   🔄 Placing REAL orders on Binance...")
+            
+            # Set Isolated Margin Mode (safer - only position margin at risk)
+            try:
+                binance_client.change_margin_type(symbol=symbol, marginType='ISOLATED')
+                print(f"   ✅ Margin mode set to ISOLATED")
+            except Exception as e:
+                if 'No need to change margin type' in str(e):
+                    print(f"   ✅ Already in ISOLATED mode")
+                else:
+                    print(f"   ⚠️ Margin type warning: {str(e)}")
+            
             # Set Leverage
             binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
 

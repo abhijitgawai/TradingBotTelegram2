@@ -444,6 +444,123 @@ This way:
 
 ---
 
+## 🔧 Binance Futures Settings (IMPORTANT!)
+
+Before running the bot, configure these settings on Binance:
+
+### Position Mode: One-Way Mode
+
+1. Go to **Binance Futures** → **Settings** (gear icon, top right)
+2. Find **Position Mode**
+3. Select **One-Way Mode** (not Hedge Mode)
+
+> ⚠️ If you see error `"Order's position side does not match user's setting"`, you need to switch to One-Way Mode.
+
+### Margin Mode: Isolated (Recommended)
+
+1. On Binance Futures trading page
+2. Click on margin mode (next to leverage)
+3. Select **Isolated** (safer than Cross)
+
+| Mode | Risk Level | Description |
+|------|------------|-------------|
+| Isolated | ✅ Lower | Only position margin is at risk |
+| Cross | ⚠️ Higher | Entire account balance at risk |
+
+---
+
+## 🛠️ Troubleshooting Common Errors
+
+### Error: "Precision is over the maximum"
+```
+⚠️ Binance Error for DOGEUSDT: (400, -1111, 'Precision is over the maximum defined for this asset.')
+```
+**Cause:** Quantity has too many decimal places for this coin  
+**Fix:** Bot now uses smart rounding based on price:
+
+| Price Range | Decimals | Example |
+|-------------|----------|---------|
+| > $1000 (BTC, ETH) | 3 | `0.050` |
+| $1 - $1000 | 1 | `125.5` |
+| < $1 (DOGE, SHIB) | 0 | `4065` |
+
+---
+
+### Error: "Position side does not match"
+```
+⚠️ Binance Error: (400, -4061, "Order's position side does not match user's setting.")
+```
+**Cause:** Binance is in Hedge Mode  
+**Fix:** Switch to **One-Way Mode** in Binance Futures settings (see above)
+
+---
+
+### Error: Git pull conflict on VM
+```
+error: Pulling is not possible because you have unmerged files.
+```
+**Cause:** You edited `.env` on VM and Git detects conflict  
+**Fix:**
+```bash
+# Backup your .env
+cp .env .env.backup
+
+# Reset and pull
+git reset --hard HEAD
+git pull origin main
+
+# Restore your real credentials
+cp .env.backup .env
+
+# Restart bot
+sudo systemctl restart tradingbot
+```
+
+---
+
+### Error: "daemon-reload" warning
+```
+Warning: The unit file of tradingbot.service changed on disk. Run 'systemctl daemon-reload'
+```
+**Cause:** Service file was modified  
+**Fix:** Just run `sudo systemctl daemon-reload` then restart
+
+---
+
+## 📌 Important Notes
+
+### Order Types
+The bot places **LIMIT orders** (not market orders):
+- **Entry:** Limit order at signal's current price
+- **Take Profit:** Limit order at TP1 price with `reduceOnly=True`
+
+### Quantity Calculation
+```
+Position Size = MARGIN_USD × LEVERAGE
+Quantity = Position Size ÷ Entry Price
+```
+Example with `MARGIN_USD=100`, `LEVERAGE=5`, price `$0.32`:
+```
+Position = $100 × 5 = $500
+Quantity = $500 ÷ $0.32 = 1562 coins
+```
+
+### Verifying VM IP
+Check if your VM IP matches Binance whitelist:
+```bash
+curl -s ifconfig.me && echo
+```
+
+### Static vs Ephemeral IP
+| IP Type | Changes on restart? | Binance compatible? |
+|---------|---------------------|---------------------|
+| Ephemeral | ⚠️ Yes | ❌ No |
+| Static | ✅ No | ✅ Yes |
+
+Always use **Static IP** for Binance API (see Step 3 in deployment).
+
+---
+
 ## ⚠️ Disclaimer
 
 This bot executes real trades. Use at your own risk. Always test with small amounts first.
