@@ -59,6 +59,17 @@ print("=" * 50)
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
+# Cache symbol precision from Binance (for accurate quantity rounding)
+SYMBOL_PRECISION = {}
+try:
+    exchange_info = binance_client.exchange_info()
+    for s in exchange_info['symbols']:
+        SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
+    print(f"📋 Cached {len(SYMBOL_PRECISION)} symbol decimals")
+except Exception as e:
+    print(f"⚠️ Could not cache decimals, using fallback: {str(e)}")
+
+
 @tg_client.on(events.NewMessage(chats=LISTEN_CHANNEL))
 async def handle_new_signal(event):
     print(f"✅ Signal detected! Processing...")
@@ -111,18 +122,25 @@ async def handle_new_signal(event):
 
     # --- EXECUTION ---
     try:
-        # Calculate Quantity with smart rounding based on price
+        # Calculate Quantity with precision from cache or fallback
         raw_quantity = (MARGIN_USD * LEVERAGE) / entry_price
-        if entry_price > 1000:       # BTC, ETH - expensive coins
-            decimals = 3
-        elif entry_price > 1:        # Mid-range altcoins
-            decimals = 1
-        else:                        # Cheap coins like DOGE, SHIB
-            decimals = 0
+        
+        # Try to get precision from cache, else use price-based fallback
+        if symbol in SYMBOL_PRECISION:
+            decimals = SYMBOL_PRECISION[symbol]
+            precision_source = "API"
+        else:
+            # Fallback: estimate based on price
+            if entry_price <= 1:
+                decimals = 0
+            else:
+                decimals = 1
+            precision_source = "fallback"
+        
         quantity = round(raw_quantity, decimals)
         if decimals == 0:
-            quantity = int(quantity)  # Remove .0 for whole numbers
-        print(f"   📌 Quantity: {quantity} (precision: {decimals} decimals)")
+            quantity = int(quantity)
+        print(f"   📌 Quantity: {quantity} (decimals: {decimals}, source: {precision_source})")
 
         if PLACE_REAL_TRADES:
             print(f"   🔄 Placing REAL orders on Binance...")

@@ -166,6 +166,42 @@ except Exception as e:
     print(f"❌ Failed to get position mode: {str(e)}")
 
 # ============================================================
+# TEST 8: Symbol Precision Cache (from API)
+# ============================================================
+print(f"\n-- Test 8: Symbol Precision Cache --")
+try:
+    import time
+    start_time = time.time()
+    
+    exchange_info = client.exchange_info()
+    SYMBOL_PRECISION = {}
+    
+    for s in exchange_info['symbols']:
+        SYMBOL_PRECISION[s['symbol']] = {
+            'quantityPrecision': s['quantityPrecision'],
+            'pricePrecision': s['pricePrecision'],
+        }
+    
+    elapsed = (time.time() - start_time) * 1000
+    
+    print(f"✅ Cached {len(SYMBOL_PRECISION)} symbols in {elapsed:.0f}ms")
+    
+    # Show sample precisions
+    sample_symbols = ['BTCUSDT', 'ETHUSDT', 'DOGEUSDT', 'SHIBUSDT', 'SOLUSDT']
+    print(f"\n   Sample Precisions:")
+    print(f"   {'Symbol':<12} {'Qty Decimals':<15} {'Price Decimals'}")
+    print(f"   {'-'*12} {'-'*15} {'-'*15}")
+    for sym in sample_symbols:
+        if sym in SYMBOL_PRECISION:
+            p = SYMBOL_PRECISION[sym]
+            print(f"   {sym:<12} {p['quantityPrecision']:<15} {p['pricePrecision']}")
+    
+    print(f"\n   ℹ️ This data can be cached at bot startup for instant lookups")
+    
+except Exception as e:
+    print(f"❌ Failed to get exchange info: {str(e)}")
+
+# ============================================================
 # SUMMARY
 # ============================================================
 print("\n" + "=" * 60)
