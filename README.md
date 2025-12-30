@@ -50,14 +50,20 @@ SIGNAL_CHANNEL_ID=-100xxxxxxxxxx
 MY_PRIVATE_GROUP_ID=-100xxxxxxxxxx
 LEVERAGE=5
 MARGIN_USD=100
-ISTESTING=true
+
+# Testing Configuration (2 simple variables)
+LISTEN_TO_PRIVATE_GROUP=true
+PLACE_REAL_TRADES=false
 ```
 
-**ISTESTING Mode:**
-| Value | Behavior |
-|-------|----------|
-| `true` | Bot listens to private group, NO real trades, shows "Test Trade Placed" |
-| `false` | Bot listens to signal channel, executes real trades on Binance |
+### Testing Modes:
+
+| LISTEN_TO_PRIVATE_GROUP | PLACE_REAL_TRADES | Use Case |
+|-------------------------|-------------------|----------|
+| `true` | `false` | Test signal parsing (no trades) |
+| `true` | `true` | Test with real trades from private group |
+| `false` | `false` | Monitor signal channel (no trades) |
+| `false` | `true` | 🚀 **PRODUCTION** - Real trades from signal channel |
 
 ---
 

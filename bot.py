@@ -17,7 +17,13 @@ BINANCE_SECRET = os.getenv('BINANCE_SECRET')
 
 LEVERAGE = int(os.getenv('LEVERAGE', 5))
 MARGIN_USD = int(os.getenv('MARGIN_USD', 100))
-ISTESTING = os.getenv('ISTESTING', 'false').lower() == 'true'
+
+# --- TESTING CONFIGURATION (2 simple variables) ---
+# LISTEN_TO_PRIVATE_GROUP: If true, bot listens to your private group. If false, listens to signal channel.
+# PLACE_REAL_TRADES: If true, bot places real orders on Binance. If false, only simulates.
+
+LISTEN_TO_PRIVATE_GROUP = os.getenv('LISTEN_TO_PRIVATE_GROUP', 'true').lower() == 'true'
+PLACE_REAL_TRADES = os.getenv('PLACE_REAL_TRADES', 'false').lower() == 'true'
 
 
 def normalize_telegram_id(chat_id):
@@ -32,18 +38,28 @@ def normalize_telegram_id(chat_id):
 SIGNAL_CHANNEL_ID = normalize_telegram_id(os.getenv('SIGNAL_CHANNEL_ID'))
 MY_PRIVATE_GROUP_ID = normalize_telegram_id(os.getenv('MY_PRIVATE_GROUP_ID'))
 
-# Testing mode - use private group as signal source
-if ISTESTING:
-    SIGNAL_CHANNEL_ID = MY_PRIVATE_GROUP_ID
-    print(f"🧪 TESTING MODE: Listening to group {SIGNAL_CHANNEL_ID}")
+# Decide which channel to listen to
+if LISTEN_TO_PRIVATE_GROUP:
+    LISTEN_CHANNEL = MY_PRIVATE_GROUP_ID
+    source_name = "Private Group"
 else:
-    print(f"🚀 PRODUCTION MODE: Listening to channel {SIGNAL_CHANNEL_ID}")  
+    LISTEN_CHANNEL = SIGNAL_CHANNEL_ID
+    source_name = "Signal Channel"
+
+# Print configuration on startup
+print("=" * 50)
+print("🤖 BOT CONFIGURATION")
+print("=" * 50)
+print(f"📡 Listening to: {source_name}")
+print(f"💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
+print(f"📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}")
+print("=" * 50)
 
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
-@tg_client.on(events.NewMessage(chats=SIGNAL_CHANNEL_ID))
+@tg_client.on(events.NewMessage(chats=LISTEN_CHANNEL))
 async def handle_new_signal(event):
     print(f"✅ Signal detected! Processing...")
     print("Signal is - " + event.raw_text)
@@ -99,8 +115,8 @@ async def handle_new_signal(event):
         quantity = round((MARGIN_USD * LEVERAGE) / entry_price, 1)
         print(f"   📌 Quantity: {quantity}")
 
-        if not ISTESTING:
-            print(f"   🔄 Placing real orders on Binance...")
+        if PLACE_REAL_TRADES:
+            print(f"   🔄 Placing REAL orders on Binance...")
             # Set Leverage
             binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
 
@@ -118,11 +134,11 @@ async def handle_new_signal(event):
                 timeInForce='GTC', reduceOnly="True"
             )
 
-            print(f"   📤 Sending success message...")
+            print(f"   ✅ Orders placed successfully!")
             await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 Trade Placed: {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
         else:
-            print(f"   🧪 TEST MODE - Skipping Binance, sending test message...")
-            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 Test Trade Placed: {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
+            print(f"   🧪 SIMULATION - No real trade placed")
+            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🧪 [SIMULATION] {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}\nQty: {quantity}")
 
     except Exception as e:
         print(f"   ⚠️ Error: {str(e)}")
