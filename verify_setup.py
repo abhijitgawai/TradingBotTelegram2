@@ -209,3 +209,40 @@ print("🏁 TEST SUITE COMPLETE")
 print("=" * 60)
 print("\nIf all tests passed, your bot is ready to trade!")
 print("Run 'python bot.py' to start the bot.\n")
+
+# ============================================================
+# OPTIONAL: Set ALL Symbols to ISOLATED Mode
+# ============================================================
+RUN_ISOLATED_SCRIPT = os.getenv('RUN_ISOLATED_SCRIPT', 'false').lower() == 'true'
+
+if RUN_ISOLATED_SCRIPT:
+    import time
+    print("\n" + "=" * 60)
+    print("🔧 SET ALL SYMBOLS TO ISOLATED MODE")
+    print("=" * 60)
+    
+    symbols = [s['symbol'] for s in exchange_info['symbols'] if s['contractType'] == 'PERPETUAL']
+    print(f"📋 Found {len(symbols)} PERPETUAL symbols")
+    print(f"⏱️  Estimated time: ~{len(symbols) * 0.1 / 60:.1f} minutes")
+    
+    confirm = input("\nType 'yes' to proceed or 'no' to skip: ").strip().lower()
+    
+    if confirm == 'yes':
+        success, already, failed = 0, 0, 0
+        for i, sym in enumerate(symbols, 1):
+            try:
+                client.change_margin_type(symbol=sym, marginType='ISOLATED')
+                print(f"[{i}/{len(symbols)}] ✅ {sym}")
+                success += 1
+            except Exception as e:
+                if 'No need to change' in str(e):
+                    print(f"[{i}/{len(symbols)}] ⚪ {sym} already ISOLATED")
+                    already += 1
+                else:
+                    print(f"[{i}/{len(symbols)}] ❌ {sym}: {str(e)[:40]}")
+                    failed += 1
+            time.sleep(0.1)  # Rate limit
+        
+        print(f"\n📊 Done! Set: {success} | Already: {already} | Failed: {failed}")
+    else:
+        print("⏭️  Skipped isolated margin setup.")
