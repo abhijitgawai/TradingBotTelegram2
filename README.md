@@ -65,6 +65,22 @@ PLACE_REAL_TRADES=false
 | `false` | `false` | Monitor signal channel (no trades) |
 | `false` | `true` | 🚀 **PRODUCTION** - Real trades from signal channel |
 
+### Isolated Margin Setup (One-Time):
+
+```env
+# Set to true to pre-configure ALL Binance symbols to ISOLATED margin mode
+RUN_ISOLATED_SCRIPT=false
+```
+
+When `RUN_ISOLATED_SCRIPT=true`, running `python verify_setup.py` will:
+1. Fetch all 600+ PERPETUAL symbols from Binance
+2. Set each one to ISOLATED margin mode (with rate limiting)
+3. Takes ~10 minutes to complete
+
+**Why?** ISOLATED mode is safer - only position margin is at risk, not your entire account.
+
+> Run this **once** before deploying. After completion, set back to `false`.
+
 ---
 
 ## 📋 Step-by-Step Setup Guide
@@ -373,9 +389,39 @@ sudo journalctl -u tradingbot -f
 When you push changes to GitHub, update the VM:
 
 ```bash
-# SSH into VM, then:
+# 1. Go to project folder
 cd ~/TradingBotTelegram2
+
+# 2. Backup .env and stash local changes (avoids merge conflicts)
+cp .env .env.backup
+git stash
+
+# 3. Pull latest code
 git pull origin main
+
+# 4. Restore your real .env
+cp .env.backup .env
+
+# 5. Restart bot
+sudo systemctl restart tradingbot
+sudo journalctl -u tradingbot -f
+```
+
+### Running verify_setup.py on VM
+
+You can run the test script while bot is running (separate process):
+
+```bash
+cd ~/TradingBotTelegram2
+source venv/bin/activate
+
+# Edit .env to set RUN_ISOLATED_SCRIPT=true (if needed)
+nano .env
+
+# Run tests
+python verify_setup.py
+
+# Restart bot after tests
 sudo systemctl restart tradingbot
 ```
 
