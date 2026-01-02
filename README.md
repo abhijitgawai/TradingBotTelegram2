@@ -52,18 +52,18 @@ LEVERAGE=5
 MARGIN_USD=100
 
 # Testing Configuration (2 simple variables)
-LISTEN_TO_PRIVATE_GROUP=true
+LISTEN_TO_SIGNAL_GROUP=true
 PLACE_REAL_TRADES=false
 ```
 
 ### Testing Modes:
 
-| LISTEN_TO_PRIVATE_GROUP | PLACE_REAL_TRADES | Use Case |
-|-------------------------|-------------------|----------|
-| `true` | `false` | Test signal parsing (no trades) |
-| `true` | `true` | Test with real trades from private group |
-| `false` | `false` | Monitor signal channel (no trades) |
-| `false` | `true` | 🚀 **PRODUCTION** - Real trades from signal channel |
+| LISTEN_TO_SIGNAL_GROUP | PLACE_REAL_TRADES | Use Case |
+|------------------------|-------------------|----------|
+| `false` | `false` | Test signal parsing from private group (no trades) |
+| `false` | `true` | Test with real trades from private group |
+| `true` | `false` | Monitor signal channel (no trades) |
+| `true` | `true` | 🚀 **PRODUCTION** - Real trades from signal channel |
 
 ### Isolated Margin Setup (One-Time):
 
@@ -363,11 +363,8 @@ sudo systemctl status tradingbot
 
 **Most Used (copy-paste ready):**
 ```bash
-# Restart bot after any changes
-sudo systemctl restart tradingbot
-
-# View live logs (Ctrl+C to exit)
-sudo journalctl -u tradingbot -f
+# Restart bot and view live logs
+sudo systemctl restart tradingbot && sudo journalctl -u tradingbot -f
 ```
 
 **All Commands:**

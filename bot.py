@@ -19,10 +19,10 @@ LEVERAGE = int(os.getenv('LEVERAGE', 5))
 MARGIN_USD = int(os.getenv('MARGIN_USD', 100))
 
 # --- TESTING CONFIGURATION (2 simple variables) ---
-# LISTEN_TO_PRIVATE_GROUP: If true, bot listens to your private group. If false, listens to signal channel.
+# LISTEN_TO_SIGNAL_GROUP: If true, bot listens to signal channel. If false, listens to private group.
 # PLACE_REAL_TRADES: If true, bot places real orders on Binance. If false, only simulates.
 
-LISTEN_TO_PRIVATE_GROUP = os.getenv('LISTEN_TO_PRIVATE_GROUP', 'true').lower() == 'true'
+LISTEN_TO_SIGNAL_GROUP = os.getenv('LISTEN_TO_SIGNAL_GROUP', 'false').lower() == 'true'
 PLACE_REAL_TRADES = os.getenv('PLACE_REAL_TRADES', 'false').lower() == 'true'
 
 
@@ -39,12 +39,12 @@ SIGNAL_CHANNEL_ID = normalize_telegram_id(os.getenv('SIGNAL_CHANNEL_ID'))
 MY_PRIVATE_GROUP_ID = normalize_telegram_id(os.getenv('MY_PRIVATE_GROUP_ID'))
 
 # Decide which channel to listen to
-if LISTEN_TO_PRIVATE_GROUP:
-    LISTEN_CHANNEL = MY_PRIVATE_GROUP_ID
-    source_name = "Private Group"
-else:
+if LISTEN_TO_SIGNAL_GROUP:
     LISTEN_CHANNEL = SIGNAL_CHANNEL_ID
-    source_name = "Signal Channel"
+    source_name = "✅ Signal Channel"
+else:
+    LISTEN_CHANNEL = MY_PRIVATE_GROUP_ID
+    source_name = "❌ Private Group (testing)"
 
 # Print configuration on startup
 print("=" * 50)
