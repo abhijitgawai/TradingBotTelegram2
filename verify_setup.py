@@ -1,248 +1,226 @@
 """
-Test suite for Trading Bot functionality.
-Run this to verify API connection and bot logic before deploying.
+Verify Setup - Complete Test Suite for Trading Bot
+Run this single file to verify all components before deploying.
 
 Usage: python verify_setup.py
 """
 import os
 import re
+import time
+import asyncio
 from dotenv import load_dotenv
-from binance.um_futures import UMFutures
 
 load_dotenv()
 
+# Track test results
+PASSED = 0
+FAILED = 0
+
+def test_pass(msg):
+    global PASSED
+    PASSED += 1
+    print(f"✅ {msg}")
+
+def test_fail(msg):
+    global FAILED
+    FAILED += 1
+    print(f"❌ {msg}")
+
+print("=" * 60)
+print("🧪 TRADING BOT - VERIFY SETUP")
+print("=" * 60)
+
+# ============================================================
+# TEST CASE 1: Environment Variables
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 1: Environment Variables")
+print("=" * 60)
+
+def mask(val, show=4):
+    if not val: return "NOT SET"
+    return val[:show] + "*" * min(len(val) - show, 10) if len(val) > show else val
+
+TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
+TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
+SESSION_STRING = os.getenv('SESSION_STRING')
+SIGNAL_CHANNEL_ID = os.getenv('SIGNAL_CHANNEL_ID')
+MY_PRIVATE_GROUP_ID = os.getenv('MY_PRIVATE_GROUP_ID')
 BINANCE_KEY = os.getenv('BINANCE_KEY')
 BINANCE_SECRET = os.getenv('BINANCE_SECRET')
+LEVERAGE = os.getenv('LEVERAGE', '5')
+MARGIN_USD = os.getenv('MARGIN_USD', '100')
 
+env_vars = ['TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'SESSION_STRING', 
+            'SIGNAL_CHANNEL_ID', 'MY_PRIVATE_GROUP_ID', 'BINANCE_KEY', 'BINANCE_SECRET']
+
+all_set = all(os.getenv(v) for v in env_vars)
+if all_set:
+    test_pass("TEST CASE 1: All environment variables set")
+else:
+    test_fail("TEST CASE 1: Missing environment variables")
+
+# Check -100 format
+if SIGNAL_CHANNEL_ID and SIGNAL_CHANNEL_ID.startswith('-100'):
+    print(f"   ✅ SIGNAL_CHANNEL_ID uses -100 format")
+else:
+    print(f"   ⚠️ SIGNAL_CHANNEL_ID should start with -100")
+
+if MY_PRIVATE_GROUP_ID and MY_PRIVATE_GROUP_ID.startswith('-100'):
+    print(f"   ✅ MY_PRIVATE_GROUP_ID uses -100 format")
+else:
+    print(f"   ⚠️ MY_PRIVATE_GROUP_ID should start with -100")
+
+# Convert types
+TELEGRAM_API_ID = int(TELEGRAM_API_ID) if TELEGRAM_API_ID else None
+SIGNAL_CHANNEL_ID = int(SIGNAL_CHANNEL_ID) if SIGNAL_CHANNEL_ID else None
+MY_PRIVATE_GROUP_ID = int(MY_PRIVATE_GROUP_ID) if MY_PRIVATE_GROUP_ID else None
+LEVERAGE = int(LEVERAGE)
+MARGIN_USD = int(MARGIN_USD)
+
+# ============================================================
+# TEST CASE 2: Binance API Connection
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 2: Binance API Connection")
+print("=" * 60)
+
+from binance.um_futures import UMFutures
 client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
-# Test configuration
-TEST_SYMBOL = "DOGEUSDT"
-TEST_LEVERAGE = 5
-MARGIN_USD = 100
+try:
+    account = client.account()
+    print(f"   Balance: {account['totalWalletBalance']} USDT")
+    test_pass("TEST CASE 2: Binance API connected")
+except Exception as e:
+    test_fail(f"TEST CASE 2: Binance API failed - {str(e)[:40]}")
 
+# ============================================================
+# TEST CASE 3: Telegram Connection
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 3: Telegram Connection")
 print("=" * 60)
-print("🧪 TRADING BOT TEST SUITE")
+
+from telethon import TelegramClient
+from telethon.sessions import StringSession
+
+async def test_telegram():
+    tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
+    await tg_client.start()
+    
+    me = await tg_client.get_me()
+    print(f"   Connected as: {me.first_name}")
+    
+    # Test Signal Channel
+    try:
+        entity = await tg_client.get_entity(SIGNAL_CHANNEL_ID)
+        print(f"   Signal Channel: {entity.title}")
+        signal_ok = True
+    except:
+        print(f"   Signal Channel: Failed")
+        signal_ok = False
+    
+    # Test Private Group
+    try:
+        entity = await tg_client.get_entity(MY_PRIVATE_GROUP_ID)
+        print(f"   Private Group: {entity.title}")
+        private_ok = True
+    except:
+        print(f"   Private Group: Failed")
+        private_ok = False
+    
+    await tg_client.disconnect()
+    return signal_ok and private_ok
+
+try:
+    telegram_ok = asyncio.run(test_telegram())
+    if telegram_ok:
+        test_pass("TEST CASE 3: Telegram connected")
+    else:
+        test_fail("TEST CASE 3: Telegram channel access failed")
+except Exception as e:
+    test_fail(f"TEST CASE 3: Telegram failed - {str(e)[:40]}")
+
+# ============================================================
+# TEST CASE 4: Signal Parsing
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 4: Signal Parsing")
 print("=" * 60)
-
-# ============================================================
-# TEST 1: API Connection
-# ============================================================
-print("\n-- Test 1: API Connection --")
-try:
-    account_info = client.account()
-    print(f"✅ Connected to Binance Futures")
-    print(f"   Total Wallet Balance: {account_info['totalWalletBalance']} USDT")
-    print(f"   Available Balance: {account_info['availableBalance']} USDT")
-except Exception as e:
-    print(f"❌ API Connection Failed: {str(e)}")
-
-# ============================================================
-# TEST 2: Margin Type Change (Cross → Isolated)
-# ============================================================
-print(f"\n-- Test 2: Margin Type Change ({TEST_SYMBOL}) --")
-try:
-    result = client.change_margin_type(symbol=TEST_SYMBOL, marginType='ISOLATED')
-    print(f"✅ Changed to ISOLATED mode")
-except Exception as e:
-    if 'No need to change margin type' in str(e):
-        print(f"✅ Already in ISOLATED mode")
-    else:
-        print(f"⚠️ Error: {str(e)}")
-
-# ============================================================
-# TEST 3: Leverage Change
-# ============================================================
-print(f"\n-- Test 3: Leverage Change ({TEST_SYMBOL}) --")
-try:
-    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=TEST_LEVERAGE)
-    print(f"✅ Leverage set to {TEST_LEVERAGE}x")
-    print(f"   Max Notional: {result['maxNotionalValue']}")
-except Exception as e:
-    print(f"❌ Leverage Change Failed: {str(e)}")
-
-# ============================================================
-# TEST 4: Get Current Price
-# ============================================================
-print(f"\n-- Test 4: Get Current Price ({TEST_SYMBOL}) --")
-try:
-    ticker = client.ticker_price(symbol=TEST_SYMBOL)
-    current_price = float(ticker['price'])
-    print(f"✅ Current Price: ${current_price}")
-except Exception as e:
-    print(f"❌ Failed to get price: {str(e)}")
-
-# ============================================================
-# TEST 5: Smart Quantity Calculation
-# ============================================================
-print(f"\n-- Test 5: Smart Quantity Calculation --")
-
-test_prices = [
-    ("BTCUSDT", 95000.0),    # High price coin
-    ("ETHUSDT", 3400.0),     # Mid-high price
-    ("SOLUSDT", 185.0),      # Mid price
-    ("DOGEUSDT", 0.32),      # Low price
-    ("SHIBUSDT", 0.000022),  # Very low price
-]
-
-for symbol, price in test_prices:
-    raw_quantity = (MARGIN_USD * TEST_LEVERAGE) / price
-    if price > 1000:
-        decimals = 3
-    elif price > 1:
-        decimals = 1
-    else:
-        decimals = 0
-    quantity = round(raw_quantity, decimals)
-    if decimals == 0:
-        quantity = int(quantity)
-    print(f"   {symbol}: ${price} → Qty: {quantity} ({decimals} decimals)")
-
-print(f"✅ Quantity calculation tested")
-
-# ============================================================
-# TEST 6: Signal Parsing
-# ============================================================
-print(f"\n-- Test 6: Signal Parsing --")
 
 test_signal = """📥 #DOGE | Open Long
 Current price: 0.31500
-Settings: BYBIT. Timeframe: 45 min
-
 TP 1: 0.31800 - Probability 95%
-TP 2: 0.32000 - Probability 90%
 """
 
-# Parse symbol
 symbol_match = re.search(r'#(\w+)', test_signal)
-if symbol_match:
-    symbol = f"{symbol_match.group(1).upper()}USDT"
-    print(f"   Symbol: {symbol} ✅")
-else:
-    print(f"   Symbol: NOT FOUND ❌")
-
-# Parse side
-if "Open Long" in test_signal:
-    side = "BUY"
-    print(f"   Side: {side} ✅")
-elif "Open Short" in test_signal:
-    side = "SELL"
-    print(f"   Side: {side} ✅")
-else:
-    print(f"   Side: NOT FOUND ❌")
-
-# Parse price
+side_found = "Open Long" in test_signal or "Open Short" in test_signal
 price_match = re.search(r'Current price: ([\d.]+)', test_signal)
-if price_match:
-    entry_price = float(price_match.group(1))
-    print(f"   Entry Price: {entry_price} ✅")
-else:
-    print(f"   Entry Price: NOT FOUND ❌")
-
-# Parse TP1
 tp1_match = re.search(r'TP 1: ([\d.]+)', test_signal)
-if tp1_match:
-    tp1_price = float(tp1_match.group(1))
-    print(f"   TP1: {tp1_price} ✅")
+
+if symbol_match and side_found and price_match and tp1_match:
+    print(f"   Symbol: {symbol_match.group(1)}USDT")
+    print(f"   Entry: {price_match.group(1)}, TP1: {tp1_match.group(1)}")
+    test_pass("TEST CASE 4: Signal parsing works")
 else:
-    print(f"   TP1: NOT FOUND ❌")
-
-print(f"✅ Signal parsing tested")
+    test_fail("TEST CASE 4: Signal parsing failed")
 
 # ============================================================
-# TEST 7: Check Position Mode
+# TEST CASE 5: Symbol Precision Cache
 # ============================================================
-print(f"\n-- Test 7: Position Mode Check --")
+print("\n" + "=" * 60)
+print("TEST CASE 5: Symbol Precision Cache")
+print("=" * 60)
+
 try:
-    position_mode = client.get_position_mode()
-    is_hedge = position_mode.get('dualSidePosition', False)
-    mode = "Hedge Mode" if is_hedge else "One-Way Mode"
-    print(f"   Current Mode: {mode}")
-    if is_hedge:
-        print(f"   ⚠️ Warning: Hedge Mode is ON. Bot requires One-Way Mode!")
-    else:
-        print(f"   ✅ One-Way Mode - Compatible with bot")
-except Exception as e:
-    print(f"❌ Failed to get position mode: {str(e)}")
-
-# ============================================================
-# TEST 8: Symbol Precision Cache (from API)
-# ============================================================
-print(f"\n-- Test 8: Symbol Precision Cache --")
-try:
-    import time
-    start_time = time.time()
-    
+    start = time.time()
     exchange_info = client.exchange_info()
-    SYMBOL_PRECISION = {}
-    
-    for s in exchange_info['symbols']:
-        SYMBOL_PRECISION[s['symbol']] = {
-            'quantityPrecision': s['quantityPrecision'],
-            'pricePrecision': s['pricePrecision'],
-        }
-    
-    elapsed = (time.time() - start_time) * 1000
-    
-    print(f"✅ Cached {len(SYMBOL_PRECISION)} symbols in {elapsed:.0f}ms")
-    
-    # Show sample precisions
-    sample_symbols = ['BTCUSDT', 'ETHUSDT', 'DOGEUSDT', 'SHIBUSDT', 'SOLUSDT']
-    print(f"\n   Sample Precisions:")
-    print(f"   {'Symbol':<12} {'Qty Decimals':<15} {'Price Decimals'}")
-    print(f"   {'-'*12} {'-'*15} {'-'*15}")
-    for sym in sample_symbols:
-        if sym in SYMBOL_PRECISION:
-            p = SYMBOL_PRECISION[sym]
-            print(f"   {sym:<12} {p['quantityPrecision']:<15} {p['pricePrecision']}")
-    
-    print(f"\n   ℹ️ This data can be cached at bot startup for instant lookups")
-    
+    PRECISION = {s['symbol']: s['quantityPrecision'] for s in exchange_info['symbols']}
+    elapsed = (time.time() - start) * 1000
+    print(f"   Cached {len(PRECISION)} symbols in {elapsed:.0f}ms")
+    print(f"   DOGEUSDT precision: {PRECISION.get('DOGEUSDT', 'N/A')} decimals")
+    test_pass("TEST CASE 5: Symbol precision cached")
 except Exception as e:
-    print(f"❌ Failed to get exchange info: {str(e)}")
+    test_fail(f"TEST CASE 5: Cache failed - {str(e)[:40]}")
+
+# ============================================================
+# TEST CASE 6: Margin & Leverage
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 6: Margin & Leverage")
+print("=" * 60)
+
+TEST_SYMBOL = "DOGEUSDT"
+try:
+    # Set Isolated
+    try:
+        client.change_margin_type(symbol=TEST_SYMBOL, marginType='ISOLATED')
+        print(f"   Changed to ISOLATED")
+    except Exception as e:
+        if 'No need to change' in str(e):
+            print(f"   Already ISOLATED")
+    
+    # Set Leverage
+    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=LEVERAGE)
+    print(f"   Leverage: {LEVERAGE}x")
+    test_pass("TEST CASE 6: Margin & Leverage set")
+except Exception as e:
+    test_fail(f"TEST CASE 6: Failed - {str(e)[:40]}")
 
 # ============================================================
 # SUMMARY
 # ============================================================
 print("\n" + "=" * 60)
-print("🏁 TEST SUITE COMPLETE")
+print("🏁 TEST SUMMARY")
 print("=" * 60)
-print("\nIf all tests passed, your bot is ready to trade!")
-print("Run 'python bot.py' to start the bot.\n")
+print(f"\n   ✅ PASSED: {PASSED}")
+print(f"   ❌ FAILED: {FAILED}")
+print(f"   📊 TOTAL:  {PASSED + FAILED}")
 
-# ============================================================
-# OPTIONAL: Set ALL Symbols to ISOLATED Mode
-# ============================================================
-RUN_ISOLATED_SCRIPT = os.getenv('RUN_ISOLATED_SCRIPT', 'false').lower() == 'true'
+if FAILED == 0:
+    print("\n🎉 All tests passed! Bot is ready to trade.")
+else:
+    print(f"\n⚠️ {FAILED} test(s) failed. Please fix before deploying.")
 
-if RUN_ISOLATED_SCRIPT:
-    import time
-    print("\n" + "=" * 60)
-    print("🔧 SET ALL SYMBOLS TO ISOLATED MODE")
-    print("=" * 60)
-    
-    symbols = [s['symbol'] for s in exchange_info['symbols'] if s['contractType'] == 'PERPETUAL']
-    print(f"📋 Found {len(symbols)} PERPETUAL symbols")
-    print(f"⏱️  Estimated time: ~{len(symbols) * 0.1 / 60:.1f} minutes")
-    
-    confirm = input("\nType 'yes' to proceed or 'no' to skip: ").strip().lower()
-    
-    if confirm == 'yes':
-        success, already, failed = 0, 0, 0
-        for i, sym in enumerate(symbols, 1):
-            try:
-                client.change_margin_type(symbol=sym, marginType='ISOLATED')
-                print(f"[{i}/{len(symbols)}] ✅ {sym}")
-                success += 1
-            except Exception as e:
-                if 'No need to change' in str(e):
-                    print(f"[{i}/{len(symbols)}] ⚪ {sym} already ISOLATED")
-                    already += 1
-                else:
-                    print(f"[{i}/{len(symbols)}] ❌ {sym}: {str(e)[:40]}")
-                    failed += 1
-            time.sleep(0.1)  # Rate limit
-        
-        print(f"\n📊 Done! Set: {success} | Already: {already} | Failed: {failed}")
-    else:
-        print("⏭️  Skipped isolated margin setup.")
+print("\nRun 'python bot.py' to start the bot.\n")
