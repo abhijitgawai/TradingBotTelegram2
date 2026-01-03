@@ -51,7 +51,7 @@ try:
 except Exception as e:
     print(f"⚠️ Could not cache decimals, using fallback: {str(e)}")
 
-print(f"("===============📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}("===============")
+print(f"===============📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}===============")
 
 
 
