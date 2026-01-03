@@ -29,9 +29,6 @@ PLACE_REAL_TRADES = os.getenv('PLACE_REAL_TRADES', 'false').lower() == 'true'
 SIGNAL_CHANNEL_ID = int(os.getenv('SIGNAL_CHANNEL_ID'))
 MY_PRIVATE_GROUP_ID = int(os.getenv('MY_PRIVATE_GROUP_ID'))
 
-# Which channel to listen
-LISTEN_CHANNEL = SIGNAL_CHANNEL_ID if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID
-
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
@@ -189,7 +186,7 @@ async def handle_signal(event):
 # --- STARTUP LOGIC ---
 if __name__ == "__main__":
     print("===============🤖 BOT CONFIGURATION===============")
-    print(f"📡 Listening to: {'Signal Channel' if LISTEN_TO_SIGNAL_GROUP else 'Private Group (testing)'}")
+    print(f"📡 Listening to: {'✅ Signal Channel' if LISTEN_TO_SIGNAL_GROUP else '❌ Private Group (testing)'}")
     print(f"💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
     print(f"📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}")
     

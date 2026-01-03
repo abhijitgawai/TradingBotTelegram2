@@ -91,6 +91,14 @@ client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 try:
     account = client.account()
     print(f"   Balance: {account['totalWalletBalance']} USDT")
+    
+    # Check Position Mode (must be One-Way, not Hedge)
+    mode = client.get_position_mode()
+    if mode['dualSidePosition']:
+        print("   ⚠️ Position Mode: HEDGE (change to One-Way in Binance settings!)")
+    else:
+        print("   ✅ Position Mode: One-Way")
+    
     test_pass("TEST CASE 2: Binance API connected")
 except Exception as e:
     test_fail(f"TEST CASE 2: Binance API failed - {str(e)[:40]}")
