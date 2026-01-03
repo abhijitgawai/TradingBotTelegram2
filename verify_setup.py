@@ -110,25 +110,38 @@ async def test_telegram():
     await tg_client.start()
     
     me = await tg_client.get_me()
-    print(f"   Connected as: {me.first_name}")
+    print(f"   Telegram account in use: {me.first_name}")
     
-    # Test Signal Channel
+    signal_ok = False
+    private_ok = False
+    
+    # Test Signal Channel (try raw first, then normalized - same as bot.py)
     try:
         entity = await tg_client.get_entity(SIGNAL_CHANNEL_ID)
-        print(f"   Signal Channel: {entity.title}")
+        print(f"   Signal Channel: {entity.title} (raw)")
         signal_ok = True
     except:
-        print(f"   Signal Channel: Failed")
-        signal_ok = False
+        norm_id = int('-' + str(SIGNAL_CHANNEL_ID)[4:])
+        try:
+            entity = await tg_client.get_entity(norm_id)
+            print(f"   Signal Channel: {entity.title} (normalized)")
+            signal_ok = True
+        except:
+            print(f"   ❌ Signal Channel: FAILED")
     
-    # Test Private Group
+    # Test Private Group (try raw first, then normalized - same as bot.py)
     try:
         entity = await tg_client.get_entity(MY_PRIVATE_GROUP_ID)
-        print(f"   Private Group: {entity.title}")
+        print(f"   Private Group: {entity.title} (raw)")
         private_ok = True
     except:
-        print(f"   Private Group: Failed")
-        private_ok = False
+        norm_id = int('-' + str(MY_PRIVATE_GROUP_ID)[4:])
+        try:
+            entity = await tg_client.get_entity(norm_id)
+            print(f"   Private Group: {entity.title} (normalized)")
+            private_ok = True
+        except:
+            print(f"   ❌ Private Group: FAILED")
     
     await tg_client.disconnect()
     return signal_ok and private_ok
@@ -141,6 +154,7 @@ try:
         test_fail("TEST CASE 3: Telegram channel access failed")
 except Exception as e:
     test_fail(f"TEST CASE 3: Telegram failed - {str(e)[:40]}")
+
 
 # ============================================================
 # TEST CASE 4: Signal Parsing

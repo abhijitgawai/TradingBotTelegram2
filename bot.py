@@ -36,33 +36,66 @@ LISTEN_CHANNEL = SIGNAL_CHANNEL_ID if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GRO
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
-# Print config
-print("===============🤖 BOT CONFIGURATION===============")
-print(f"📡 Listening to: {'Signal Channel' if LISTEN_TO_SIGNAL_GROUP else 'Private Group (testing)'}")
-print(f"💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
-
-# Cache symbol precision from Binance (for accurate quantity rounding)
+# Cache symbol precision
 SYMBOL_PRECISION = {}
-try:
-    exchange_info = binance_client.exchange_info()
-    for s in exchange_info['symbols']:
-        SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
-    print(f"📋 Cached {len(SYMBOL_PRECISION)} symbol decimals")
-except Exception as e:
-    print(f"⚠️ Could not cache decimals, using fallback: {str(e)}")
-
-print(f"===============📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}===============")
 
 
+async def startup_tests():
+    """Run tests on startup to verify Telegram and Binance access"""
+    global SIGNAL_CHANNEL_ID, MY_PRIVATE_GROUP_ID
+    
+    # Print connected user
+    me = await tg_client.get_me()
+    print(f"   Telegram account in use: {me.first_name}")
+    
+    # Test Signal Channel (try raw first, then normalized)
+    try:
+        entity = await tg_client.get_entity(SIGNAL_CHANNEL_ID)
+        print(f"   Signal Channel: {entity.title} (raw)")
+    except:
+        norm_id = int('-' + str(SIGNAL_CHANNEL_ID)[4:])
+        try:
+            entity = await tg_client.get_entity(norm_id)
+            SIGNAL_CHANNEL_ID = norm_id
+            print(f"   Signal Channel: {entity.title} (normalized)")
+        except:
+            print(f"   ❌ Signal Channel: FAILED")
+    
+    # Test Private Group (try raw first, then normalized)
+    try:
+        entity = await tg_client.get_entity(MY_PRIVATE_GROUP_ID)
+        print(f"   Private Group: {entity.title} (raw)")
+    except:
+        norm_id = int('-' + str(MY_PRIVATE_GROUP_ID)[4:])
+        try:
+            entity = await tg_client.get_entity(norm_id)
+            MY_PRIVATE_GROUP_ID = norm_id
+            print(f"   Private Group: {entity.title} (normalized)")
+        except:
+            print(f"   ❌ Private Group: FAILED")
+    
+    # Cache symbol precision (also tests Binance API connection)
+    global SYMBOL_PRECISION
+    try:
+        exchange_info = binance_client.exchange_info()
+        for s in exchange_info['symbols']:
+            SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
+        print(f"   Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
+    except Exception as e:
+        print(f"   ⚠️ Could not cache decimals: {str(e)}")
+    
+    # Set LISTEN_CHANNEL after ID detection
+    global LISTEN_CHANNEL
+    LISTEN_CHANNEL = SIGNAL_CHANNEL_ID if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID
+    
+    # Register event handler with correct channel
+    tg_client.add_event_handler(handle_signal, events.NewMessage(chats=LISTEN_CHANNEL))
 
 
-
-
-@tg_client.on(events.NewMessage(chats=LISTEN_CHANNEL))
 async def handle_signal(event):
     print(f"✅ Signal detected!")
     text = event.raw_text
-    print("====Siginal====")
+    print("====Signal====")
     print(text)
     print("---------------")
    
@@ -114,7 +147,7 @@ async def handle_signal(event):
             quantity = int(quantity)
         print(f"   📌 Qty: {quantity}")
 
-        print("====Siginal====")
+        print("====Signal====")
 
         if PLACE_REAL_TRADES:
             # Set Isolated Margin Mode (uncomment if not using verify_setup.py)
@@ -155,8 +188,13 @@ async def handle_signal(event):
 
 # --- STARTUP LOGIC ---
 if __name__ == "__main__":
-    print("Bot is starting...")
+    print("===============🤖 BOT CONFIGURATION===============")
+    print(f"📡 Listening to: {'Signal Channel' if LISTEN_TO_SIGNAL_GROUP else 'Private Group (testing)'}")
+    print(f"💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
+    print(f"📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}")
+    
+    
     tg_client.start()
-    print("Bot is listening...")
+    tg_client.loop.run_until_complete(startup_tests())
+    print("===============================================")
     tg_client.run_until_disconnected()
-
