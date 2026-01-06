@@ -367,7 +367,7 @@ sudo systemctl status tradingbot
 sudo systemctl restart tradingbot && sudo journalctl -u tradingbot -f
 ```
 
-**All Commands:**
+**All Systemd Commands:**
 
 | Command | Purpose |
 |---------|---------|
@@ -375,9 +375,42 @@ sudo systemctl restart tradingbot && sudo journalctl -u tradingbot -f
 | `sudo systemctl restart tradingbot` | Restart bot |
 | `sudo systemctl stop tradingbot` | Stop bot |
 | `sudo systemctl start tradingbot` | Start bot |
-| `sudo journalctl -u tradingbot -f` | View live logs |
+| `sudo systemctl enable tradingbot` | Enable auto-start on boot |
+| `sudo systemctl disable tradingbot` | Disable auto-start |
+| `sudo systemctl daemon-reload` | Reload service file after editing |
+
+**Log Commands:**
+
+| Command | Purpose |
+|---------|---------|
+| `sudo journalctl -u tradingbot -f` | View live logs (follow mode) |
 | `sudo journalctl -u tradingbot -n 50` | Last 50 log lines |
+| `sudo journalctl -u tradingbot -n 100 --no-pager` | Last 100 lines without paging |
+| `sudo journalctl -u tradingbot --since "1 hour ago"` | Logs from last hour |
+| `sudo journalctl -u tradingbot --since today` | Today's logs |
+| `sudo journalctl -u tradingbot -p err` | Error logs only |
+
+**File Editing:**
+
+| Command | Purpose |
+|---------|---------|
 | `nano ~/TradingBotTelegram2/.env` | Edit config |
+| `cat ~/TradingBotTelegram2/.env` | View config |
+| `sudo nano /etc/systemd/system/tradingbot.service` | Edit service file |
+| `sudo cat /etc/systemd/system/tradingbot.service` | View service file |
+
+**Combined Commands:**
+
+```bash
+# Stop bot, pull latest code, restart
+sudo systemctl stop tradingbot && cd ~/TradingBotTelegram2 && git pull && sudo systemctl start tradingbot
+
+# Restart and immediately check status
+sudo systemctl restart tradingbot && sudo systemctl status tradingbot
+
+# View last 20 lines then follow live
+sudo journalctl -u tradingbot -n 20 -f
+```
 
 ---
 
@@ -483,7 +516,199 @@ This way:
 - Your ₹1000 deposit is converted to ~$12 credit (added to $300 free credits)
 - Google **cannot charge you** without a valid payment method
 - If you exceed limits, service pauses - you won't be billed unexpectedly
-- To be safe: Set up **Budget Alerts** in GCP Console → Billing → Budgets
+---
+
+## 🚀 GCP Quick Start - All Commands (Copy-Paste Ready)
+
+Complete command reference for first-time setup and daily operations on GCP VM.
+
+### First-Time Setup (Run Once)
+
+```bash
+# ============================================
+# STEP 1: System Update & Package Installation
+# ============================================
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip python3-venv python3-full git -y
+
+# ============================================
+# STEP 2: Clone Repository
+# ============================================
+# Using HTTPS (recommended for beginners)
+git clone https://github.com/abhijitgawai/TradingBotTelegram2.git
+cd TradingBotTelegram2
+
+# OR using SSH (if you have SSH keys setup)
+# git clone git@github.com:abhijitgawai/TradingBotTelegram2.git
+# cd TradingBotTelegram2
+
+# ============================================
+# STEP 3: Create & Activate Virtual Environment
+# ============================================
+python3 -m venv venv
+source venv/bin/activate
+
+# ============================================
+# STEP 4: Install Python Dependencies
+# ============================================
+pip install -r requirements.txt
+
+# ============================================
+# STEP 5: Create .env File with Real Credentials
+# ============================================
+nano .env
+# Paste your credentials, then save: Ctrl+X → Y → Enter
+
+# ============================================
+# STEP 6: Test Bot Manually (Optional)
+# ============================================
+python bot.py
+# Press Ctrl+C to stop after testing
+
+# ============================================
+# STEP 7: Find Your Username (for systemd)
+# ============================================
+whoami
+# Note the output (e.g., abhijeetgawai2000)
+
+# ============================================
+# STEP 8: Create Systemd Service File
+# ============================================
+sudo nano /etc/systemd/system/tradingbot.service
+
+# Paste this (replace USERNAME with your username from whoami):
+# [Unit]
+# Description=Trading Bot
+# After=network.target
+#
+# [Service]
+# User=USERNAME
+# WorkingDirectory=/home/USERNAME/TradingBotTelegram2
+# ExecStart=/home/USERNAME/TradingBotTelegram2/venv/bin/python bot.py
+# Restart=always
+# RestartSec=10
+# Environment=PYTHONUNBUFFERED=1
+#
+# [Install]
+# WantedBy=multi-user.target
+
+# Save: Ctrl+X → Y → Enter
+
+# ============================================
+# STEP 9: Enable & Start Service
+# ============================================
+sudo systemctl daemon-reload
+sudo systemctl enable tradingbot
+sudo systemctl start tradingbot
+sudo systemctl status tradingbot
+```
+
+---
+
+### Daily Operations
+
+```bash
+# View live logs
+sudo journalctl -u tradingbot -f
+
+# Restart bot
+sudo systemctl restart tradingbot
+
+# Stop bot
+sudo systemctl stop tradingbot
+
+# Start bot
+sudo systemctl start tradingbot
+
+# Check status
+sudo systemctl status tradingbot
+```
+
+---
+
+### Update Code from GitHub
+
+```bash
+# Navigate to project
+cd ~/TradingBotTelegram2
+
+# Backup .env
+cp .env .env.backup
+
+# Pull latest changes
+git stash
+git pull origin main
+
+# Restore .env
+cp .env.backup .env
+
+# Restart bot
+sudo systemctl restart tradingbot
+
+# View logs
+sudo journalctl -u tradingbot -f
+```
+
+---
+
+### One-Liner Commands
+
+```bash
+# Update & restart (most common)
+cd ~/TradingBotTelegram2 && git pull && sudo systemctl restart tradingbot && sudo journalctl -u tradingbot -f
+
+# Restart and view logs
+sudo systemctl restart tradingbot && sudo journalctl -u tradingbot -f
+
+# Stop, update, start
+sudo systemctl stop tradingbot && cd ~/TradingBotTelegram2 && git pull && sudo systemctl start tradingbot
+
+# View last 50 logs then follow live
+sudo journalctl -u tradingbot -n 50 -f
+```
+
+---
+
+### Edit Files on VM
+
+```bash
+# Edit .env
+nano ~/TradingBotTelegram2/.env
+
+# View .env
+cat ~/TradingBotTelegram2/.env
+
+# Edit systemd service
+sudo nano /etc/systemd/system/tradingbot.service
+# After editing: sudo systemctl daemon-reload && sudo systemctl restart tradingbot
+```
+
+---
+
+### Troubleshooting Commands
+
+```bash
+# Check if bot process is running
+ps aux | grep python
+
+# Check VM's public IP (for Binance whitelist)
+curl -s ifconfig.me && echo
+
+# Check disk space
+df -h
+
+# Check memory usage
+free -h
+
+# View system logs
+sudo journalctl -u tradingbot --since "1 hour ago"
+
+# View only error logs
+sudo journalctl -u tradingbot -p err
+
+# Kill stuck Python processes (emergency)
+pkill -f python
+```
 
 ---
 
