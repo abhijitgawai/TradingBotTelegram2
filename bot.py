@@ -33,8 +33,9 @@ MY_PRIVATE_GROUP_ID = int(os.getenv('MY_PRIVATE_GROUP_ID'))
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
-# Cache symbol precision
-SYMBOL_PRECISION = {}
+# Cache symbol precision (quantity and price)
+SYMBOL_PRECISION = {}  # quantityPrecision
+PRICE_PRECISION = {}   # pricePrecision (for tick size)
 
 
 async def startup_tests():
@@ -72,12 +73,13 @@ async def startup_tests():
             print(f"   ❌ Private Group: FAILED")
     
     # Cache symbol precision (also tests Binance API connection)
-    global SYMBOL_PRECISION
+    global SYMBOL_PRECISION, PRICE_PRECISION
     try:
         exchange_info = binance_client.exchange_info()
         for s in exchange_info['symbols']:
             SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
-        print(f"   Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
+            PRICE_PRECISION[s['symbol']] = s['pricePrecision']
+        print(f"   Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols (qty + price precision)")
     except Exception as e:
         print(f"   ⚠️ Could not cache decimals: {str(e)}")
     
@@ -136,9 +138,19 @@ async def handle_signal(event):
 
     # --- EXECUTION ---
     try:
+        # Helper function to round price to valid tick size
+        def round_price(price, symbol):
+            price_decimals = PRICE_PRECISION.get(symbol, 6)  # Default to 6 if not found
+            return round(price, price_decimals)
+        
+        # Round prices to valid tick size
+        entry_price_rounded = round_price(entry_price, symbol)
+        tp1_price_rounded = round_price(tp1_price, symbol)
+        
+        print(f"   📌 Entry (rounded): {entry_price_rounded}, 📌 TP1 (rounded): {tp1_price_rounded}")
         # Calculate Quantity
-        raw_qty = (MARGIN_USD * LEVERAGE) / entry_price
-        decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price <= 1 else 1)
+        raw_qty = (MARGIN_USD * LEVERAGE) / entry_price_rounded
+        decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price_rounded <= 1 else 1)
         quantity = round(raw_qty, decimals)
         if decimals == 0:
             quantity = int(quantity)
@@ -159,25 +171,25 @@ async def handle_signal(event):
             # Set Leverage
             binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
 
-            # Entry LIMIT Order
+            # Entry LIMIT Order (using rounded price)
             binance_client.new_order(
                 symbol=symbol, side=side, type='LIMIT',
-                timeInForce='GTC', quantity=quantity, price=entry_price
+                timeInForce='GTC', quantity=quantity, price=entry_price_rounded
             )
 
-            # TP LIMIT Order
+            # TP LIMIT Order (using rounded price)
             exit_side = "SELL" if side == "BUY" else "BUY"
             binance_client.new_order(
                 symbol=symbol, side=exit_side, type='LIMIT',
-                quantity=quantity, price=tp1_price,
+                quantity=quantity, price=tp1_price_rounded,
                 timeInForce='GTC', reduceOnly="True"
             )
 
             print(f"   ✅ Orders placed!")
-            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}")
+            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
         else:
             print(f"   🧪 SIMULATION")
-            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🧪 [SIM] {symbol} {side}\nEntry: {entry_price}\nTP1: {tp1_price}\nQty: {quantity}")
+            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
 
     except Exception as e:
         print(f"   ⚠️ Error: {str(e)}")
