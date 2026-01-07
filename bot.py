@@ -174,7 +174,8 @@ async def handle_signal(event):
             # Entry LIMIT Order (using rounded price)
             binance_client.new_order(
                 symbol=symbol, side=side, type='LIMIT',
-                timeInForce='GTC', quantity=quantity, price=entry_price_rounded
+                quantity=quantity, price=entry_price_rounded,
+                timeInForce='GTC'
             )
 
             # TP LIMIT Order (using rounded price)
