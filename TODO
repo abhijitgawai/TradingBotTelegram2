@@ -6,12 +6,11 @@ DONE - Are all limit sell/buy orders - slippage, fees, etc
 DONE - cross i dont want, i want all of tehse to be isolated trades
 
 DONE - instead of making isolated while taking trade. as we can fetch all symbols(600 something)
-cant we make all of them isolated at once using a loop.
-For now just let me know if we can do this or not
+DONE - cant we make all of them isolated at once using a loop.
 
 DONE - can it happen binance reject the request due to ip restrictions.
-to avaoid this can we make a test api call just after bot is triggered.
-Do below line already makes sure the request is not rejected due to ip restrictions.
+DONE - To avaoid this can we make a test api call just after bot is triggered.
+DONE - Do below line already makes sure the request is not rejected due to ip restrictions.
 exchange_info = binance_client.exchange_info()
 
 DONE - Is isolated logic removed from bot.py. It is safe to remove or we might need to keep for safety purpose.
@@ -21,13 +20,13 @@ DONE - Can we have precision logic pre runned like isolated ligic. Amcan we pre 
 DONE - when we listining to private group. and also priting messges on private group. can there be any race condition
 
 DONE - Private Group	❌ ID issue (needs to be fixed)
-Why this is failing. Check both ways. raw and normalized for priavate group.
-Do one thing when the bot starts add code to consider raw or normalized form for groupid at start only. for debug purpose print fail statemts but pritn only one statemts, siginals group using raw/private group using normalized. Just print one line in print statement.
+DONE - Why this is failing. Check both ways. raw and normalized for priavate group.
+DONE - Do one thing when the bot starts add code to consider raw or normalized form for groupid at start only. for debug purpose print fail statemts but pritn only one statemts, siginals group using raw/private group using normalized. Just print one line in print statement.
 
 DONE - write test case for using both raw and normalized id for private group and signal group. This will help me understanding which id to use for which group
 
 DONE - Change test case file also for always check -100 if not done already.
-At end of test case file show how much test cases passed and failed
+DONE - At end of test case file show how much test cases passed and failed
 
 DONE - 1. decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price <= 1 else 1)
 This do handles all situations right
@@ -42,26 +41,70 @@ DONE - generate 3 session string. gcp local if needed and new signal_analyzer.py
 
 
 
-1. TP/Profit Updates. if for 1 trade we might be counting multiple tp mesages as seperate. dont do it. for 1 trade even if we hit multiple tp. count it as 1 only
-2. for searching stop loss hit messages. there i am not sure hwo to find it. you have to find it using different approaches. you have chached all the messags rgiht. you can check from there as well
-3. Whenever we make script always use session_strign1 and always make sure we dont simulteniously use same session strign tfor two programmes
+DONE - TP/Profit Updates. if for 1 trade we might be counting multiple tp mesages as seperate. dont do it. for 1 trade even if we hit multiple tp. count it as 1 only
+DONE - for searching stop loss hit messages. there i am not sure hwo to find it. you have to find it using different approaches. you have chached all the messags rgiht. you can check from there as well
+DONE - Whenever we make script always use session_strign1 and always make sure we dont simulteniously use same session strign tfor two programmes
 
-Check payment billing
+DONE - Check payment billing
 
-add siginal analyzer to .gitignore and make sure we also untrack the files 
-while back testing is going on, we can start building two bots in different files
+DONE - add siginal analyzer to .gitignore and make sure we also untrack the files 
+DONE - while back testing is going on, we can start building two bots in different files
 
-We are currently taking one telegram chat only and doing this. I want to take 2 or in furutre more of telegram siginals groups
-What would be best way to structure my project. include all in bot.py and create different fuctions for different telegram siginals so it would be easy to restart the service. Or we can create a different file for different telegram signals and include all telegram related code there.
-The structure of siginasl are going to be different so thus different regx statements. but the order would be similar only and might include stop loss as well
+DONE - We are currently taking one telegram chat only and doing this. I want to take 2 or in furutre more of telegram siginals groups
+DONE - What would be best way to structure my project. include all in bot.py and create different fuctions for different telegram siginals so it would be easy to restart the service. Or we can create a different file for different telegram signals and include all telegram related code there.
+DONE - The structure of siginasl are going to be different so thus different regx statements. but the order would be similar only and might include stop loss as well
 Do not implement anything as of now. first understand all the requirements from new telegram channel. 
 Then understand the better way to implement it and then start the implementation
 
 One more project to take posotion as soon as the coin is listed
 
----
-## Completed Tasks (Recent Session - Jan 2026)
----
+DONE - 
+I want to keep logic of entering the trade as it is.
+But i want to change logic of take profit
+Create two variables in .env file 
+TAKE_PROFIT_PROBABILITY  - This variable will be used to give input for probability of TP which to take.
+TAKE_PROFIT_LOGIC - This will decide which of below opiton is to consider while taking Take Profit order.
+The logic of Take profit can be different.
+a. Currently applied take profit at TP1
+b. There are different TP with probability in sample signal
+I want to take TP for probability with highest value but lower than TAKE_PROFIT_PROBABILITY
+If i give TAKE_PROFIT_PROBABILITY as 80 then consider higest but lower than 80.
+Each TP has probability given in siginal so consider which TP we want to take, and accodingly decide TP price for Take PRofit order
+c. Trailing stop loss - We need to find the best way to implement Trailing stop loss. 
+Donot implement this way as of now. but we have to first understand best logic to implemmt Trailing stop loss 
+Variables for TRAILING_STOP_LOSS_PERCENT can be used
+Note - This variables names are just for reference, and different name can be given. 
+Also way of implementing can be change, just remember to implement logic so that readable to human.
+
+DONE -
+Change SIGNAL_CHANNEL_ID to SIGNAL_CHANNEL_ID_P
+And I want to add new variable SIGNAL_CHANNEL_ID_BK
+That means i want to listen to two different signal groups and take trades.
+The possibility is very less we get siginals on both at same time. so dont consider thsi case if needed.
+First of all donot start implementing anything. First ask doubts instead of assuming things.
+What way of implementation would be best. 
+I am thinking of bot.py as main file. which will start our project.
+Then implement like below
+LISTEN_TO_SIGNAL_GROUP keep as it logic, but extend it to others Siginals groups as well.
+SYMBOL_PRECISION keep logic same only.
+Test Signal Channel (try raw first, then normalized) extend thsi to both. Remeber print all in one line only. and dont add extra print lines.
+for siginal SIGNAL_CHANNEL_ID_P keep same logic.
+But for SIGNAL_CHANNEL_ID_BK, the siginal format is different.
+For this 
+
+DONE - Currently we are placing orders without the code enclosed in different function.
+Implement Enter_Trade and TP_Trade function for enter siginal and take profit siginal
+
+DONE - SIGNAL_CHANNEL_ID_P for this channel there is no stop loss.
+but for SIGNAL_CHANNEL_ID_BK we have stop loss also defined. 
+BUt i wnat to keep logic for both of them same.
+One will have additional order or parameter for stop loss or may be additional order, but keep the flow for same for both.
+
+DONE - maintain same order of  for below parameters in all of function calls
+symbol=symbol, side=exit_side, type='LIMIT',
+                quantity=quantity, price=tp1_price_rounded,
+                timeInForce='GTC', reduceOnly="True"
+
 
 DONE - Price precision error fix ("Price not increased by tick size")
 Added PRICE_PRECISION cache to bot.py alongside SYMBOL_PRECISION
@@ -99,3 +142,37 @@ DONE - Created Prompt.md file
 Full prompt to recreate the bot from scratch
 All problem/solution pairs documented
 Deployment checklist included
+
+DONE - SL_Trade function should be called with false
+
+DONE - Change .env
+
+DONE - add try catch to SL_Trade similar to TP_Trade   
+Currently we are making changes to bot2.py only.
+similar change only we have to make in bot1.py
+but executeSL for bot1.py is False
+
+DONE - Do startup tests. after that,
+when signal arrives, priorities should be given to Trade calls for bianance. Then we should think about sending details to telegram private group.
+Check if this is getting followed or not.
+it should not happen we are sending message to telegram group and the code breaks there, and this might break futurher execution of placing trade.
+
+DONE - If precision call is failed.
+still proceed with the trade with the values we have without worrying about precision.
+DONE - by any way is it even possible when code is compiling step by step. that for perticular symbol. For which we are going to place trade. precision is not available only
+Only can be done in future if required only then
+
+DONE - No check for tp_success before SL
+why cant we just place stop loss even if take profit is not added.
+Take best decision if we should check or not for tp_success for best profits.
+
+DONE - Is our principal 100dollars locked till trade is completed
+
+DONE - Give proper formatting of BOT_2_BK.py to parse telegram signal
+
+Test parsers for bot2.py
+
+Handle ip restrictions and handle verify_setup.py
+
+Find proper channel for parsing of messages.
+
