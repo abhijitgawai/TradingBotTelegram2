@@ -122,36 +122,36 @@ def TP_Trade(symbol, side, quantity, price, bot_id):
         return False
 
 
-def SL_Trade(symbol, side, quantity, bot_id, execute=False, stop_price=None):
+def SL_Trade(symbol, side, quantity, bot_id, executeSL=False, stop_price=None):
     """
-    Placeholder for future stop loss implementation.
-    TODO: Implement different SL types:
-    - Simple SL: Fixed stop loss price
-    - TP Ratio: TP1, TP2 with split percentages  
-    - Trailing SL: Dynamic stop loss based on price movement
-    - Probability-based: Select TP based on signal probability
+    Place stop loss order.
+    executeSL: If False, skip SL. If True, place SL order.
+    Returns True if successful, False otherwise.
     """
-    if execute == False:
-        print(f"   [{bot_id}] ℹ️ SL order skipped (not implemented yet): {symbol} @ {stop_price}")
-        return True  # No SL to place
+    if not executeSL:
+        print(f"   [{bot_id}] ℹ️ SL order skipped: {symbol} @ {stop_price}")
+        return True
     
-    if execute == True:
-        # if PLACE_REAL_TRADES:
-        #     binance_client.new_order(
-        #         symbol=symbol,
-        #         side=side,
-        #         type='LIMIT',
-        #         quantity=quantity,
-        #         price=stop_price,
-        #         timeInForce='GTC',
-        #         reduceOnly='True'
-        #     )
-        #     print(f"   [{bot_id}] ✅ SL order placed: {symbol} {side} @ {stop_price}")
-        #     return True
-        # else:
-        #     print(f"   [{bot_id}] 🧪 [SIM] SL order: {symbol} {side} @ {stop_price}")
-        #     return True 
-        print(f"   [{bot_id}] ℹ️ SL order skipped (not implemented yet): {symbol} @ {stop_price}")
+    if executeSL:
+        try:
+            if PLACE_REAL_TRADES:
+                binance_client.new_order(
+                    symbol=symbol,
+                    side=side,
+                    type='LIMIT',
+                    quantity=quantity,
+                    price=stop_price,
+                    timeInForce='GTC',
+                    reduceOnly='True'
+                )
+                print(f"   [{bot_id}] ✅ SL order placed: {symbol} {side} @ {stop_price}")
+                return True
+            else:
+                print(f"   [{bot_id}] 🧪 [SIM] SL order: {symbol} {side} @ {stop_price}")
+                return True
+        except Exception as e:
+            print(f"   [{bot_id}] ⚠️ SL order error: {str(e)}")
+            return False
     
 
 # =============================================================================
