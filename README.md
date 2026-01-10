@@ -225,22 +225,39 @@ python bot.py
 
 ## 📡 Signal Format
 
-The bot parses signals in this format:
+### BOT_1_P (Channel P) - No Stop Loss
 
 ```
 #COINNAME | Open Long
 Current price: 0.02926
 TP 1: 0.029556 - Probability 94%
-...
 ```
 
-**Extracted Data:**
-| Field | Example | Usage |
-|-------|---------|-------|
-| Symbol | `#CUDIS` → `CUDISUSDT` | Trading pair |
-| Side | `Open Long` → `BUY` | Order direction |
-| Price | `0.02926` | Limit order price |
-| TP1 | `0.029556` | Take profit price |
+| Field | Pattern | Example |
+|-------|---------|---------|
+| Symbol | `#COINNAME` | `#DOGE` → `DOGEUSDT` |
+| Side | `Open Long` / `Open Short` | `Open Long` → `BUY` |
+| Entry | `Current price: X.XXX` | `0.02926` |
+| TP1 | `TP 1: X.XXX` | `0.029556` |
+
+### BOT_2_BK (Channel BK) - Has Stop Loss
+
+```
+#COINNAME/USDT
+🟢 LONG (or 🔴 SHORT)
+Entry: 0.06527 - 0.06300
+Leverage: 20x
+Target 1: 0.06592
+StopLoss: 0.06180
+```
+
+| Field | Pattern | Example |
+|-------|---------|---------|
+| Symbol | `#COINNAME/USDT` | `#GMT` → `GMTUSDT` |
+| Side | `LONG` / `SHORT` | `LONG` → `BUY` |
+| Entry | `Entry: X.XXX` (first number) | `0.06527` |
+| TP1 | `Target 1: X.XXX` | `0.06592` |
+| SL | `StopLoss: X.XXX` | `0.06180` |
 
 ---
 
