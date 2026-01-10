@@ -18,9 +18,6 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     SYMBOL_PRECISION = precision['symbol']
     PRICE_PRECISION = precision['price']
     
-    # SL Configuration (None = no stop loss for this channel)
-    sl_price = None  # TODO: Parse from signal when format is defined
-    
     print(f"[{bot_id}] ✅ Signal detected!")
     text = event.raw_text
     print(f"[{bot_id}] ====Signal====")
@@ -66,7 +63,10 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     tp1_price = float(tp1_match.group(1))
     print(f"   [{bot_id}] 📌 TP1: {tp1_price}")
     
-    # 5. Extract SL (if sl_price is None, can try to parse from signal)
+    # 5. Extract SL (BOT_2_BK specific)
+    sl_price = None
+    sl_price_rounded = None
+    # TODO: Uncomment when signal format is defined
     # sl_match = re.search(r'SL: ([\d.]+)', text)
     # if sl_match:
     #     sl_price = float(sl_match.group(1))
@@ -77,7 +77,6 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
         # Round prices to valid tick size
         entry_price_rounded = round_price(entry_price, symbol)
         tp1_price_rounded = round_price(tp1_price, symbol)
-        sl_price_rounded = round_price(sl_price, symbol) if sl_price else None
         print(f"   [{bot_id}] 📌 Entry (rounded): {entry_price_rounded}, TP1 (rounded): {tp1_price_rounded}")
         
         # Calculate Quantity
@@ -92,22 +91,33 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
         if entry_success:
             # Place TP Order
             exit_side = "SELL" if side == "BUY" else "BUY"
-            TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
+            tp_success = TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
             
-            # Place SL Order (if SL price is present)
-            SL_Trade(symbol, exit_side, quantity, bot_id, execute=False, stop_price=sl_price_rounded)
             
             # Send success notification
             if PLACE_REAL_TRADES:
                 msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                if sl_price_rounded:
-                    msg += f"\nSL: {sl_price_rounded}"
                 await tg_client.send_message(private_group_id, msg)
             else:
                 msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                if sl_price_rounded:
-                    msg += f"\nSL: {sl_price_rounded}"
                 await tg_client.send_message(private_group_id, msg)
+        
+            # Round SL price if sl_price is defined
+            if sl_price:
+                try:
+                    sl_price_rounded = round_price(sl_price, symbol)
+                except Exception as e:
+                    print(f"   [{bot_id}] ⚠️ SL price error: {str(e)}")
+                    await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ SL price error: {str(e)}")
+                # Place SL Order (executeSL=True to enable, =False to skip)
+                SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=sl_price_rounded)
+                if sl_price_rounded:
+                    if PLACE_REAL_TRADES:
+                        msg = f"[{bot_id}] 🚀 {symbol} {side}\nSL: {sl_price_rounded}"
+                        await tg_client.send_message(private_group_id, msg)
+                    else:
+                        msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nSL: {sl_price_rounded}"
+                        await tg_client.send_message(private_group_id, msg)
     
     except Exception as e:
         print(f"   [{bot_id}] ⚠️ Error: {str(e)}")
