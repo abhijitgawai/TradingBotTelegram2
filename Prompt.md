@@ -2,10 +2,10 @@
 
 ## Project Overview
 Build a Python trading bot that:
-1. Listens to a Telegram channel for trading signals
-2. Parses signal messages to extract trade parameters
-3. Executes trades on Binance Futures via API
-4. Sends notifications to a private Telegram group
+1. Listens to **multiple Telegram channels** for trading signals
+2. Parses signal messages using channel-specific parsers (BOT_1_P, BOT_2_BK)
+3. Executes trades on Binance Futures via API (Entry + TP + SL)
+4. Sends notifications to corresponding private Telegram groups
 
 ---
 
@@ -24,19 +24,21 @@ Build a Python trading bot that:
 | `BINANCE_KEY` | Binance API key | Binance → API Management → Create API |
 | `BINANCE_SECRET` | Binance API secret | Same. Enable Futures, disable Withdraw. Whitelist IP! |
 
-### Channel Configuration
+### Channel Configuration (Dual Bot)
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `SIGNAL_CHANNEL_ID` | ID of channel that sends trading signals | `-1001234567890` |
-| `MY_PRIVATE_GROUP_ID` | Your private group for bot notifications | `-1009876543210` |
+| `SIGNAL_CHANNEL_ID_BOT_1_P` | Signal channel for BOT_1_P | `-1001234567890` |
+| `MY_PRIVATE_GROUP_ID_BOT_1_P` | Private group for BOT_1_P notifications | `-1009876543210` |
+| `SIGNAL_CHANNEL_ID_BOT_2_BK` | Signal channel for BOT_2_BK | `-1001234567890` |
+| `MY_PRIVATE_GROUP_ID_BOT_2_BK` | Private group for BOT_2_BK notifications | `-1009876543210` |
 
-**Note:** Always use `-100` format. Get IDs from Telegram Web URL.
-
-### Trading Parameters
+### Trading Parameters (Per Bot)
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `LEVERAGE` | Futures leverage multiplier | `5` |
-| `MARGIN_USD` | Amount in USD per trade | `100` |
+| `LEVERAGE_BOT_1_P` | Leverage for BOT_1_P | `5` |
+| `MARGIN_USD_BOT_1_P` | Margin per trade for BOT_1_P | `100` |
+| `LEVERAGE_BOT_2_BK` | Leverage for BOT_2_BK | `5` |
+| `MARGIN_USD_BOT_2_BK` | Margin per trade for BOT_2_BK | `100` |
 
 ### Testing Switches
 | Variable | Values | Purpose |
@@ -46,19 +48,27 @@ Build a Python trading bot that:
 
 ---
 
-## Signal Format Expected
+## Signal Formats
 
+### BOT_1_P (Channel P) - No Stop Loss
 ```
 #COINNAME | Open Long
 Current price: 0.02926
 TP 1: 0.029556 - Probability 94%
 ```
 
-**Extracted:**
-- Symbol: `#CUDIS` → `CUDISUSDT`
-- Side: `Open Long` → `BUY`
-- Price: `0.02926`
-- TP1: `0.029556`
+**Extracted:** Symbol: `DOGEUSDT`, Side: `BUY`, Entry: `0.02926`, TP1: `0.029556`
+
+### BOT_2_BK (Channel BK) - Has Stop Loss
+```
+#COINNAME/USDT
+🟢 LONG (or 🔴 SHORT)
+Entry: 0.06527 - 0.06300
+Target 1: 0.06592
+StopLoss: 0.06180
+```
+
+**Extracted:** Symbol: `GMTUSDT`, Side: `BUY`, Entry: `0.06527`, TP1: `0.06592`, SL: `0.06180`
 
 ---
 
@@ -322,17 +332,29 @@ sudo journalctl -u tradingbot -f
 
 | File | Purpose |
 |------|---------|
-| `bot.py` | Main bot logic |
+| `bot.py` | Main engine - routes signals to parsers, contains trade functions |
+| `BOT_1_P.py` | Parser for Channel P signals (no SL) |
+| `BOT_2_BK.py` | Parser for Channel BK signals (has SL) |
 | `verify_setup.py` | Test suite for API connections |
 | `generate_session.py` | One-time session string generator |
 | `.env` | Configuration (not in git) |
 | `requirements.txt` | Dependencies |
 
-## Dependencies
+## Project Architecture
+
 ```
-telethon
-binance-futures-connector
-python-dotenv
+bot.py (Engine)
+├── Enter_Trade()      # Place entry LIMIT order
+├── TP_Trade()         # Place take profit order
+├── SL_Trade()         # Place stop loss order (executeSL param)
+├── round_price()      # Round to valid tick size
+└── calculate_quantity() # Calculate order quantity
+
+BOT_1_P.py (Parser)
+└── handle_signal_bot_1_p()  # Parse Channel P format, no SL
+
+BOT_2_BK.py (Parser)
+└── handle_signal_bot_2_bk() # Parse Channel BK format, has SL
 ```
 
 ---
@@ -516,17 +538,21 @@ SESSION_STRING=your_session_string
 BINANCE_KEY=your_binance_key
 BINANCE_SECRET=your_binance_secret
 
-# Channels
-SIGNAL_CHANNEL_ID=-100xxxxxxxxxx
-MY_PRIVATE_GROUP_ID=-100xxxxxxxxxx
-
-# Trading
-LEVERAGE=5
-MARGIN_USD=100
-
-# Testing (both false = safe testing mode)
-LISTEN_TO_SIGNAL_GROUP=false
+# Testing Switches
+LISTEN_TO_SIGNAL_GROUP=true
 PLACE_REAL_TRADES=false
+
+# BOT 1 (Channel P) - No Stop Loss
+SIGNAL_CHANNEL_ID_BOT_1_P=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_1_P=-xxxxxxxxxx
+LEVERAGE_BOT_1_P=5
+MARGIN_USD_BOT_1_P=100
+
+# BOT 2 (Channel BK) - Has Stop Loss
+SIGNAL_CHANNEL_ID_BOT_2_BK=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_2_BK=-xxxxxxxxxx
+LEVERAGE_BOT_2_BK=5
+MARGIN_USD_BOT_2_BK=100
 
 # One-time setup (run verify_setup.py with this true)
 RUN_ISOLATED_SCRIPT=false
@@ -552,8 +578,10 @@ RUN_ISOLATED_SCRIPT=false
 ## 📁 Project Structure
 
 ```
-ShantoohBot2/
-├── bot.py              # Main bot logic
+TradingBotTelegram2/
+├── bot.py              # Main engine - trade functions, startup tests
+├── BOT_1_P.py          # Parser for Channel P (no SL)
+├── BOT_2_BK.py         # Parser for Channel BK (has SL)
 ├── verify_setup.py     # Test suite + isolated margin setup
 ├── generate_session.py # One-time session generator
 ├── requirements.txt    # Dependencies
