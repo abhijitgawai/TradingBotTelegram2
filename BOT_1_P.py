@@ -90,18 +90,23 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
             exit_side = "SELL" if side == "BUY" else "BUY"
             tp_success = TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
             
+            # BOT_1_P: No Stop Loss
             
-            # Send success notification
-            if PLACE_REAL_TRADES:
-                msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+            # Send notification AFTER all trades (wrapped in try-catch)
+            try:
+                if PLACE_REAL_TRADES:
+                    msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+                else:
+                    msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
                 await tg_client.send_message(private_group_id, msg)
-            else:
-                msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                await tg_client.send_message(private_group_id, msg)
-        
-            # BOT_1_P: No Stop Loss - always executeSL=False
-            # SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=sl_price_rounded)
+            except Exception as tg_error:
+                print(f"   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
     
     except Exception as e:
         print(f"   [{bot_id}] ⚠️ Error: {str(e)}")
-        await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ Error for {symbol}: {str(e)}")
+        try:
+            await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ Error for {symbol}: {str(e)}")
+        except:
+            print("   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
+            pass  # Don't let notification failure break anything
+

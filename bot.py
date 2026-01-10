@@ -52,19 +52,28 @@ PRICE_PRECISION = {}   # pricePrecision (for tick size)
 # =============================================================================
 
 def round_price(price, symbol):
-    """Round price to valid tick size for the symbol"""
-    price_decimals = PRICE_PRECISION.get(symbol, 6) # Default to 6 if not found
-    return round(price, price_decimals)
+    """Round price to valid tick size for the symbol. Decreases decimal if precision fails."""
+    try:
+        price_decimals = PRICE_PRECISION.get(symbol, 6)  # Default to 6 if not found
+        return round(price, price_decimals)
+    except Exception:
+        # Fallback: decrease by 1 decimal for safety (e.g., 6 -> 5 decimals)
+        fallback_decimals = max(0, PRICE_PRECISION.get(symbol, 6) - 1)
+        return round(price, fallback_decimals)
 
 
-def calculate_quantity(margin_usd, leverage, entry_price, symbol): # taken from bot.py
-    """Calculate quantity based on margin, leverage, and price"""
-    raw_qty = (margin_usd * leverage) / entry_price
-    decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price <= 1 else 1)
-    quantity = round(raw_qty, decimals)
-    if decimals == 0:
-        quantity = int(quantity)
-    return quantity
+def calculate_quantity(margin_usd, leverage, entry_price, symbol):
+    """Calculate quantity based on margin, leverage, and price. Returns basic int if precision fails."""
+    try:
+        raw_qty = (margin_usd * leverage) / entry_price
+        decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price <= 1 else 1)
+        quantity = round(raw_qty, decimals)
+        if decimals == 0:
+            quantity = int(quantity)
+        return quantity
+    except Exception:
+        # Fallback to basic integer calculation
+        return int((margin_usd * leverage) / entry_price)
 
 
 def Enter_Trade(symbol, side, quantity, price, leverage, bot_id):

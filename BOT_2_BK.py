@@ -93,32 +93,33 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
             exit_side = "SELL" if side == "BUY" else "BUY"
             tp_success = TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
             
-            
-            # Send success notification
-            if PLACE_REAL_TRADES:
-                msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                await tg_client.send_message(private_group_id, msg)
-            else:
-                msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                await tg_client.send_message(private_group_id, msg)
-        
-            # Round SL price if sl_price is defined
+            # Place SL Order (if sl_price is defined)
             if sl_price:
                 try:
                     sl_price_rounded = round_price(sl_price, symbol)
+                    SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=sl_price_rounded)
                 except Exception as e:
                     print(f"   [{bot_id}] ⚠️ SL price error: {str(e)}")
-                    await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ SL price error: {str(e)}")
-                # Place SL Order (executeSL=True to enable, =False to skip)
-                SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=sl_price_rounded)
-                if sl_price_rounded:
-                    if PLACE_REAL_TRADES:
-                        msg = f"[{bot_id}] 🚀 {symbol} {side}\nSL: {sl_price_rounded}"
-                        await tg_client.send_message(private_group_id, msg)
-                    else:
-                        msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nSL: {sl_price_rounded}"
-                        await tg_client.send_message(private_group_id, msg)
+            
+            # Send notification AFTER all trades (wrapped in try-catch)
+            try:
+                if PLACE_REAL_TRADES:
+                    msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+                    if sl_price_rounded:
+                        msg += f"\nSL: {sl_price_rounded}"
+                else:
+                    msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+                    if sl_price_rounded:
+                        msg += f"\nSL: {sl_price_rounded}"
+                await tg_client.send_message(private_group_id, msg)
+            except Exception as tg_error:
+                print(f"   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
     
     except Exception as e:
         print(f"   [{bot_id}] ⚠️ Error: {str(e)}")
-        await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ Error for {symbol}: {str(e)}")
+        try:
+            await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ Error for {symbol}: {str(e)}")
+        except:
+            print("   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
+            pass  # Don't let notification failure break anything
+
