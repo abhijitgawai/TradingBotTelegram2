@@ -4,19 +4,20 @@ from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from binance.um_futures import UMFutures
+from BOT_1_P import handle_signal_bot_1_p
+from BOT_2_BK import handle_signal_bot_2_bk
 
 # Load environment variables from .env file
 load_dotenv()
 
-# --- CONFIGURATION (from .env) ---
+# --- TELEGRAM CONFIG ---
 TELEGRAM_API_ID = int(os.getenv('TELEGRAM_API_ID'))
 TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
 SESSION_STRING = os.getenv('SESSION_STRING')
+
+# --- BINANCE CONFIG ---
 BINANCE_KEY = os.getenv('BINANCE_KEY')
 BINANCE_SECRET = os.getenv('BINANCE_SECRET')
-
-LEVERAGE = int(os.getenv('LEVERAGE', 5))
-MARGIN_USD = int(os.getenv('MARGIN_USD', 100))
 
 # --- TESTING CONFIGURATION (2 simple variables) ---
 # LISTEN_TO_SIGNAL_GROUP: If true, bot listens to signal channel. If false, listens to private group.
@@ -25,9 +26,17 @@ MARGIN_USD = int(os.getenv('MARGIN_USD', 100))
 LISTEN_TO_SIGNAL_GROUP = os.getenv('LISTEN_TO_SIGNAL_GROUP', 'false').lower() == 'true'
 PLACE_REAL_TRADES = os.getenv('PLACE_REAL_TRADES', 'false').lower() == 'true'
 
-# Channel IDs (always use -100 format in .env)
-SIGNAL_CHANNEL_ID = int(os.getenv('SIGNAL_CHANNEL_ID'))
-MY_PRIVATE_GROUP_ID = int(os.getenv('MY_PRIVATE_GROUP_ID'))
+# --- BOT 1 (Channel P) CONFIG ---
+SIGNAL_CHANNEL_ID_BOT_1_P = int(os.getenv('SIGNAL_CHANNEL_ID_BOT_1_P'))
+MY_PRIVATE_GROUP_ID_BOT_1_P = int(os.getenv('MY_PRIVATE_GROUP_ID_BOT_1_P'))
+LEVERAGE_BOT_1_P = int(os.getenv('LEVERAGE_BOT_1_P', 5))
+MARGIN_USD_BOT_1_P = int(os.getenv('MARGIN_USD_BOT_1_P', 100))
+
+# --- BOT 2 (Channel BK) CONFIG ---
+SIGNAL_CHANNEL_ID_BOT_2_BK = int(os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK'))
+MY_PRIVATE_GROUP_ID_BOT_2_BK = int(os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK'))
+LEVERAGE_BOT_2_BK = int(os.getenv('LEVERAGE_BOT_2_BK', 5))
+MARGIN_USD_BOT_2_BK = int(os.getenv('MARGIN_USD_BOT_2_BK', 100))
 
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
@@ -38,39 +47,146 @@ SYMBOL_PRECISION = {}  # quantityPrecision
 PRICE_PRECISION = {}   # pricePrecision (for tick size)
 
 
+# =============================================================================
+# CENTRALIZED TRADE FUNCTIONS
+# =============================================================================
+
+def round_price(price, symbol):
+    """Round price to valid tick size for the symbol"""
+    price_decimals = PRICE_PRECISION.get(symbol, 6) # Default to 6 if not found
+    return round(price, price_decimals)
+
+
+def calculate_quantity(margin_usd, leverage, entry_price, symbol): # taken from bot.py
+    """Calculate quantity based on margin, leverage, and price"""
+    raw_qty = (margin_usd * leverage) / entry_price
+    decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price <= 1 else 1)
+    quantity = round(raw_qty, decimals)
+    if decimals == 0:
+        quantity = int(quantity)
+    return quantity
+
+
+def Enter_Trade(symbol, side, quantity, price, leverage, bot_id):
+    """
+    Place entry LIMIT order.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        if PLACE_REAL_TRADES:
+            # Set Leverage
+            binance_client.change_leverage(symbol=symbol, leverage=leverage)
+            
+            # Entry LIMIT Order
+            binance_client.new_order(
+                symbol=symbol,
+                side=side,
+                type='LIMIT',
+                quantity=quantity,
+                price=price,
+                timeInForce='GTC'
+            )
+            print(f"   [{bot_id}] ✅ Entry order placed: {symbol} {side} @ {price}")
+            return True
+        else:
+            print(f"   [{bot_id}] 🧪 [SIM] Entry order: {symbol} {side} @ {price}")
+            return True
+    except Exception as e:
+        print(f"   [{bot_id}] ⚠️ Entry order error: {str(e)}")
+        return False
+
+
+def TP_Trade(symbol, side, quantity, price, bot_id):
+    """
+    Place take profit LIMIT order with reduceOnly.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        if PLACE_REAL_TRADES:
+            binance_client.new_order(
+                symbol=symbol,
+                side=side,
+                type='LIMIT',
+                quantity=quantity,
+                price=price,
+                timeInForce='GTC',
+                reduceOnly='True'
+            )
+            print(f"   [{bot_id}] ✅ TP order placed: {symbol} {side} @ {price}")
+            return True
+        else:
+            print(f"   [{bot_id}] 🧪 [SIM] TP order: {symbol} {side} @ {price}")
+            return True
+    except Exception as e:
+        print(f"   [{bot_id}] ⚠️ TP order error: {str(e)}")
+        return False
+
+
+def SL_Trade(symbol, side, quantity, bot_id, execute=False, stop_price=None):
+    """
+    Placeholder for future stop loss implementation.
+    TODO: Implement different SL types:
+    - Simple SL: Fixed stop loss price
+    - TP Ratio: TP1, TP2 with split percentages  
+    - Trailing SL: Dynamic stop loss based on price movement
+    - Probability-based: Select TP based on signal probability
+    """
+    if execute == False:
+        print(f"   [{bot_id}] ℹ️ SL order skipped (not implemented yet): {symbol} @ {stop_price}")
+        return True  # No SL to place
+    
+    if execute == True:
+        # if PLACE_REAL_TRADES:
+        #     binance_client.new_order(
+        #         symbol=symbol,
+        #         side=side,
+        #         type='LIMIT',
+        #         quantity=quantity,
+        #         price=stop_price,
+        #         timeInForce='GTC',
+        #         reduceOnly='True'
+        #     )
+        #     print(f"   [{bot_id}] ✅ SL order placed: {symbol} {side} @ {stop_price}")
+        #     return True
+        # else:
+        #     print(f"   [{bot_id}] 🧪 [SIM] SL order: {symbol} {side} @ {stop_price}")
+        #     return True 
+        print(f"   [{bot_id}] ℹ️ SL order skipped (not implemented yet): {symbol} @ {stop_price}")
+    
+
+# =============================================================================
+# STARTUP TESTS
+# =============================================================================
+
+async def test_channel_ids():
+    """
+    Test all 4 channel/group IDs to verify Telegram access.
+    Exits the bot if any channel fails.
+    """
+    channels_to_test = [
+        (SIGNAL_CHANNEL_ID_BOT_1_P, "Signal Channel BOT_1_P"),
+        (MY_PRIVATE_GROUP_ID_BOT_1_P, "Private Group BOT_1_P"),
+        (SIGNAL_CHANNEL_ID_BOT_2_BK, "Signal Channel BOT_2_BK"),
+        (MY_PRIVATE_GROUP_ID_BOT_2_BK, "Private Group BOT_2_BK"),
+    ]
+    
+    for channel_id, channel_name in channels_to_test:
+        try:
+            entity = await tg_client.get_entity(channel_id)
+            print(f"[BOT]    {channel_name}: {entity.title} ✅")
+        except Exception as e:
+            print(f"[BOT]    ❌ {channel_name}: FAILED - {str(e)}")
+
+
 async def startup_tests():
     """Run tests on startup to verify Telegram and Binance access"""
-    global SIGNAL_CHANNEL_ID, MY_PRIVATE_GROUP_ID
     
-    # Print connected user
+    # Print Telegram account
     me = await tg_client.get_me()
-    print(f"   Telegram account in use: {me.first_name}")
+    print(f"[BOT]    Telegram account: {me.first_name}")
     
-    # Test Signal Channel (try raw first, then normalized)
-    try:
-        entity = await tg_client.get_entity(SIGNAL_CHANNEL_ID)
-        print(f"   Signal Channel: {entity.title} (raw)")
-    except:
-        norm_id = int('-' + str(SIGNAL_CHANNEL_ID)[4:])
-        try:
-            entity = await tg_client.get_entity(norm_id)
-            SIGNAL_CHANNEL_ID = norm_id
-            print(f"   Signal Channel: {entity.title} (normalized)")
-        except:
-            print(f"   ❌ Signal Channel: FAILED")
-    
-    # Test Private Group (try raw first, then normalized)
-    try:
-        entity = await tg_client.get_entity(MY_PRIVATE_GROUP_ID)
-        print(f"   Private Group: {entity.title} (raw)")
-    except:
-        norm_id = int('-' + str(MY_PRIVATE_GROUP_ID)[4:])
-        try:
-            entity = await tg_client.get_entity(norm_id)
-            MY_PRIVATE_GROUP_ID = norm_id
-            print(f"   Private Group: {entity.title} (normalized)")
-        except:
-            print(f"   ❌ Private Group: FAILED")
+    # Test all 4 channel/group IDs
+    await test_channel_ids()
     
     # Cache symbol precision (also tests Binance API connection)
     global SYMBOL_PRECISION, PRICE_PRECISION
@@ -79,132 +195,65 @@ async def startup_tests():
         for s in exchange_info['symbols']:
             SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
             PRICE_PRECISION[s['symbol']] = s['pricePrecision']
-        print(f"   Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols (qty + price precision)")
+        print(f"[BOT]    Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
     except Exception as e:
-        print(f"   ⚠️ Could not cache decimals: {str(e)}")
+        print(f"[BOT]    ⚠️ Could not cache decimals: {str(e)}")
     
-    # Set LISTEN_CHANNEL after ID detection
-    global LISTEN_CHANNEL
-    LISTEN_CHANNEL = SIGNAL_CHANNEL_ID if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID
+    # Register event handlers
+    # Determine listen channels based on LISTEN_TO_SIGNAL_GROUP
+    listen_channel_bot_1_p = SIGNAL_CHANNEL_ID_BOT_1_P if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID_BOT_1_P
+    listen_channel_bot_2_bk = SIGNAL_CHANNEL_ID_BOT_2_BK if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID_BOT_2_BK
     
-    # Register event handler with correct channel
-    tg_client.add_event_handler(handle_signal, events.NewMessage(chats=LISTEN_CHANNEL))
-
-
-async def handle_signal(event):
-    print(f"✅ Signal detected!")
-    text = event.raw_text
-    print("====Signal====")
-    print(text)
-    print("---------------")
-   
-    # 1. Extract Symbol
-    symbol_match = re.search(r'#(\w+)', text)
+    # Create config objects to pass to handlers
+    config_bot_1_p = {
+        'bot_id': 'BOT_1_P',
+        'leverage': LEVERAGE_BOT_1_P,
+        'margin_usd': MARGIN_USD_BOT_1_P,
+        'private_group_id': MY_PRIVATE_GROUP_ID_BOT_1_P
+    }
     
-    if not symbol_match:
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, "❌ Symbol not found")
-        return
-    symbol = f"{symbol_match.group(1).upper()}USDT"
-    print(f"   📌 Symbol: {symbol}")
-
-    # 2. Extract Side
-    if "Open Long" in text:
-        side = "BUY"
-    elif "Open Short" in text:
-        side = "SELL"
-    else:
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"❌ Side not found for {symbol}")
-        return
-    print(f"   📌 Side: {side}")
-
-    # 3. Extract Entry Price
-    price_match = re.search(r'Current price: ([\d.]+)', text)
-    if not price_match:
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"❌ Price not found for {symbol}")
-        return
-    entry_price = float(price_match.group(1))
-    print(f"   📌 Entry: {entry_price}")
-
-    # 4. Extract TP1
-    tp1_match = re.search(r'TP 1: ([\d.]+)', text)
-    if not tp1_match:
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"❌ TP1 not found for {symbol}")
-        return
-    tp1_price = float(tp1_match.group(1))
-    print(f"   📌 TP1: {tp1_price}")
+    config_bot_2_bk = {
+        'bot_id': 'BOT_2_BK',
+        'leverage': LEVERAGE_BOT_2_BK,
+        'margin_usd': MARGIN_USD_BOT_2_BK,
+        'private_group_id': MY_PRIVATE_GROUP_ID_BOT_2_BK
+    }
+    
+    precision = {
+        'symbol': SYMBOL_PRECISION,
+        'price': PRICE_PRECISION
+    }
+    
+    # Register handlers with wrappers to pass config
+    @tg_client.on(events.NewMessage(chats=listen_channel_bot_1_p))
+    async def wrapper_bot_1_p(event):
+        await handle_signal_bot_1_p(event, tg_client, binance_client, config_bot_1_p, precision,
+                                     Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                     PLACE_REAL_TRADES)
+    
+    @tg_client.on(events.NewMessage(chats=listen_channel_bot_2_bk))
+    async def wrapper_bot_2_bk(event):
+        await handle_signal_bot_2_bk(event, tg_client, binance_client, config_bot_2_bk, precision,
+                                      Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                      PLACE_REAL_TRADES)
 
 
-    # await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"Mesage parsed with no error")
+# =============================================================================
+# STARTUP LOGIC
+# =============================================================================
 
-    # --- EXECUTION ---
-    try:
-        # Helper function to round price to valid tick size
-        def round_price(price, symbol):
-            price_decimals = PRICE_PRECISION.get(symbol, 6)  # Default to 6 if not found
-            return round(price, price_decimals)
-        
-        # Round prices to valid tick size
-        entry_price_rounded = round_price(entry_price, symbol)
-        tp1_price_rounded = round_price(tp1_price, symbol)
-        
-        print(f"   📌 Entry (rounded): {entry_price_rounded}, 📌 TP1 (rounded): {tp1_price_rounded}")
-        # Calculate Quantity
-        raw_qty = (MARGIN_USD * LEVERAGE) / entry_price_rounded
-        decimals = SYMBOL_PRECISION.get(symbol, 0 if entry_price_rounded <= 1 else 1)
-        quantity = round(raw_qty, decimals)
-        if decimals == 0:
-            quantity = int(quantity)
-        print(f"   📌 Qty: {quantity}")
-
-        print("====Signal====")
-
-        if PLACE_REAL_TRADES:
-            # Set Isolated Margin Mode (uncomment if not using verify_setup.py)
-            # try:
-            #     binance_client.change_margin_type(symbol=symbol, marginType='ISOLATED')
-            #     print(f"   ✅ Margin mode set to ISOLATED")
-            # except Exception as e:
-            #     if 'No need to change margin type' in str(e):
-            #         print(f"   ✅ Already in ISOLATED mode")
-            #     else:
-            #         print(f"   ⚠️ Margin type warning: {str(e)}")
-            # Set Leverage
-            binance_client.change_leverage(symbol=symbol, leverage=LEVERAGE)
-
-            # Entry LIMIT Order (using rounded price)
-            binance_client.new_order(
-                symbol=symbol, side=side, type='LIMIT',
-                quantity=quantity, price=entry_price_rounded,
-                timeInForce='GTC'
-            )
-
-            # TP LIMIT Order (using rounded price)
-            exit_side = "SELL" if side == "BUY" else "BUY"
-            binance_client.new_order(
-                symbol=symbol, side=exit_side, type='LIMIT',
-                quantity=quantity, price=tp1_price_rounded,
-                timeInForce='GTC', reduceOnly="True"
-            )
-
-            print(f"   ✅ Orders placed!")
-            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
-        else:
-            print(f"   🧪 SIMULATION")
-            await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
-
-    except Exception as e:
-        print(f"   ⚠️ Error: {str(e)}")
-        await tg_client.send_message(MY_PRIVATE_GROUP_ID, f"⚠️ Error for {symbol}: {str(e)}")
-
-# --- STARTUP LOGIC ---
 if __name__ == "__main__":
-    print("===============🤖 BOT CONFIGURATION===============")
-    print(f"📡 Listening to: {'✅ Signal Channel' if LISTEN_TO_SIGNAL_GROUP else '❌ Private Group (testing)'}")
-    print(f"💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
-    print(f"📊 Leverage: {LEVERAGE}x | Margin: ${MARGIN_USD}")
+    print("==============================")
     
+    # Determine listening sources
+    bot_1_p_source = "Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "Private Group"
+    bot_2_bk_source = "Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "Private Group"
+    
+    print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}'}}")
+    print(f"[BOT] 💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
+    print(f"[BOT]    BOT_1_P - Leverage: {LEVERAGE_BOT_1_P}x | Margin: ${MARGIN_USD_BOT_1_P} -------- BOT_2_BK - Leverage: {LEVERAGE_BOT_2_BK}x | Margin: ${MARGIN_USD_BOT_2_BK}")
     
     tg_client.start()
     tg_client.loop.run_until_complete(startup_tests())
-    print("===============================================")
+    print("==============================")
     tg_client.run_until_disconnected()

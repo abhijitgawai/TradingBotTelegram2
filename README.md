@@ -1,37 +1,54 @@
 # 🤖 Telegram Trading Signal Bot
 
-Automatically execute Binance Futures trades based on signals received from a Telegram channel.
+Automatically execute Binance Futures trades based on signals received from **multiple Telegram channels**.
 
 ## 📊 How It Works
 
 ```mermaid
 flowchart LR
-    A[📱 Signal Channel] -->|New Message| B[🤖 Bot]
-    B -->|Parse Signal| C{Extract Data}
-    C -->|Symbol, Side, Price, TP| D[📈 Binance API]
-    D -->|Place Orders| E[✅ Entry + TP Order]
-    B -->|Notify| F[👤 Your Private Group]
+    subgraph Signal Channels
+        A1[📱 Signal Channel BOT_1_P]
+        A2[📱 Signal Channel BOT_2_BK]
+    end
+    
+    A1 -->|New Message| B[🤖 bot.py]
+    A2 -->|New Message| B
+    
+    B -->|Parse| C1[BOT_1_P.py]
+    B -->|Parse| C2[BOT_2_BK.py]
+    
+    C1 -->|Symbol, Side, Price, TP| D[📈 Binance API]
+    C2 -->|Symbol, Side, Price, TP, SL| D
+    
+    D -->|Place Orders| E[✅ Entry + TP + SL]
+    
+    B -->|Notify| F1[👤 Private Group BOT_1_P]
+    B -->|Notify| F2[👤 Private Group BOT_2_BK]
 ```
 
 ### Flow Explanation
 
 | Step | What Happens |
 |------|--------------|
-| 1️⃣ | Signal arrives in **Signal Channel** (public/private channel you're monitoring) |
-| 2️⃣ | Bot parses the message → extracts Symbol, Side (Long/Short), Price, TP1 |
-| 3️⃣ | Bot places **Entry Order** + **Take Profit Order** on Binance Futures |
-| 4️⃣ | Bot sends confirmation (or error) to **Your Private Group** |
+| 1️⃣ | Signal arrives in **Signal Channel** (BOT_1_P or BOT_2_BK) |
+| 2️⃣ | `bot.py` routes to correct parser (BOT_1_P.py or BOT_2_BK.py) |
+| 3️⃣ | Parser extracts Symbol, Side (Long/Short), Price, TP1, (SL for BOT_2_BK) |
+| 4️⃣ | Bot places **Entry Order** + **Take Profit Order** on Binance Futures |
+| 5️⃣ | Bot sends confirmation (or error) to corresponding **Private Group** |
 
-> **Result:** You get notified in your private group about every trade! 🚀
+> **Result:** Each signal channel has its own private group for notifications! 🚀
 
 ## 📁 Project Structure
 
 ```
-ShantoohBot2/
-├── bot.py              # Main bot logic
+TradingBotTelegram2/
+├── bot.py              # Main bot - runs both BOT_1_P and BOT_2_BK
+├── BOT_1_P.py          # Parser for Signal Channel P (no SL)
+├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL placeholder)
+├── verify_setup.py     # Test suite - verify all connections
 ├── generate_session.py # Run once to get SESSION_STRING
 ├── requirements.txt    # Python dependencies
-├── .env                # API keys & config (template on GitHub, real values local only)
+├── .env                # API keys & config (not in git)
 ├── .gitignore          # Excludes sensitive files
 └── README.md           # This file
 ```
@@ -41,20 +58,51 @@ ShantoohBot2/
 Create a `.env` file with your credentials:
 
 ```env
+# --- Telegram Credentials ---
 TELEGRAM_API_ID=your_api_id
 TELEGRAM_API_HASH=your_api_hash
 SESSION_STRING=your_session_string
+
+# --- Binance Credentials ---
 BINANCE_KEY=your_binance_key
 BINANCE_SECRET=your_binance_secret
-SIGNAL_CHANNEL_ID=-100xxxxxxxxxx
-MY_PRIVATE_GROUP_ID=-100xxxxxxxxxx
-LEVERAGE=5
-MARGIN_USD=100
 
-# Testing Configuration (2 simple variables)
+# --- Testing Switches ---
 LISTEN_TO_SIGNAL_GROUP=true
 PLACE_REAL_TRADES=false
+
+# --- BOT 1 (Channel P) Config ---
+SIGNAL_CHANNEL_ID_BOT_1_P=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_1_P=-xxxxxxxxxx
+LEVERAGE_BOT_1_P=5
+MARGIN_USD_BOT_1_P=100
+
+# --- BOT 2 (Channel BK) Config ---
+SIGNAL_CHANNEL_ID_BOT_2_BK=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_2_BK=-xxxxxxxxxx
+LEVERAGE_BOT_2_BK=5
+MARGIN_USD_BOT_2_BK=100
 ```
+
+### Variable Reference:
+
+| Variable | Description |
+|----------|-------------|
+| `TELEGRAM_API_ID` | Your Telegram app ID from my.telegram.org |
+| `TELEGRAM_API_HASH` | Your Telegram app hash |
+| `SESSION_STRING` | Generated once using `generate_session.py` |
+| `BINANCE_KEY` | Binance API key (enable Futures, disable Withdraw) |
+| `BINANCE_SECRET` | Binance API secret |
+| `LISTEN_TO_SIGNAL_GROUP` | `true` = listen to signal channels, `false` = private groups |
+| `PLACE_REAL_TRADES` | `true` = real orders, `false` = simulation |
+| `SIGNAL_CHANNEL_ID_BOT_1_P` | Signal channel ID for BOT_1_P |
+| `MY_PRIVATE_GROUP_ID_BOT_1_P` | Private group for BOT_1_P notifications |
+| `LEVERAGE_BOT_1_P` | Leverage for BOT_1_P trades |
+| `MARGIN_USD_BOT_1_P` | Margin in USD per trade for BOT_1_P |
+| `SIGNAL_CHANNEL_ID_BOT_2_BK` | Signal channel ID for BOT_2_BK |
+| `MY_PRIVATE_GROUP_ID_BOT_2_BK` | Private group for BOT_2_BK notifications |
+| `LEVERAGE_BOT_2_BK` | Leverage for BOT_2_BK trades |
+| `MARGIN_USD_BOT_2_BK` | Margin in USD per trade for BOT_2_BK |
 
 ### Testing Modes:
 
@@ -522,6 +570,26 @@ This way:
 
 Complete command reference for first-time setup and daily operations on GCP VM.
 
+### Your VM Details
+
+| Property | Value |
+|----------|-------|
+| **VM Name** | `tradingbottelegram2` |
+| **Zone** | `asia-south1-a` |
+| **Machine Type** | `e2-micro` |
+| **External IP** | `xx.xx.xx.xx` |
+
+### SSH Into Your VM
+
+```bash
+# From your local machine (run this first!)
+gcloud compute ssh tradingbottelegram2 --zone=asia-south1-a
+```
+
+> **Tip:** If you get authentication errors, run `gcloud auth login` first.
+
+---
+
 ### First-Time Setup (Run Once)
 
 ```bash
@@ -648,6 +716,48 @@ sudo systemctl restart tradingbot
 # View logs
 sudo journalctl -u tradingbot -f
 ```
+
+---
+
+### If Repo is Private (Authentication Required)
+
+If you made your GitHub repo private, you need to set up a **Personal Access Token (PAT)** for git pull to work on GCP.
+
+#### Step 1: Generate Personal Access Token on GitHub
+
+1. Go to **GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)**
+2. Click **"Generate new token (classic)"**
+3. Name: `TradingBotTelegram2`
+4. Expiration: `90 days` (recommended)
+5. Scope: ✅ **repo** (check this box)
+6. Click **Generate token**
+7. **Copy the token immediately** (starts with `ghp_...`) - you won't see it again!
+
+#### Step 2: Update Remote URL on GCP VM
+
+SSH into your VM and run this command (replace `YOUR_TOKEN` with your actual token):
+
+```bash
+cd ~/TradingBotTelegram2
+git remote set-url origin https://abhijitgawai:YOUR_TOKEN@github.com/abhijitgawai/TradingBotTelegram2.git
+```
+
+**Example:**
+```bash
+git remote set-url origin https://abhijitgawai:ghp_abc123xyz789@github.com/abhijitgawai/TradingBotTelegram2.git
+```
+
+#### Step 3: Now Git Pull Works!
+
+```bash
+git pull
+```
+
+> **Security Notes:**
+> - Token is stored in `.git/config` on your private VM (safe)
+> - Set an expiration date on the token
+> - You can revoke the token anytime from GitHub settings
+> - When token expires, generate a new one and repeat Step 2
 
 ---
 

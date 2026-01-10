@@ -44,39 +44,29 @@ def mask(val, show=4):
 TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
 TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
 SESSION_STRING = os.getenv('SESSION_STRING')
-SIGNAL_CHANNEL_ID = os.getenv('SIGNAL_CHANNEL_ID')
-MY_PRIVATE_GROUP_ID = os.getenv('MY_PRIVATE_GROUP_ID')
 BINANCE_KEY = os.getenv('BINANCE_KEY')
 BINANCE_SECRET = os.getenv('BINANCE_SECRET')
-LEVERAGE = os.getenv('LEVERAGE', '5')
-MARGIN_USD = os.getenv('MARGIN_USD', '100')
+
+# New 4 channel/group IDs
+SIGNAL_CHANNEL_ID_BOT_1_P = os.getenv('SIGNAL_CHANNEL_ID_BOT_1_P')
+MY_PRIVATE_GROUP_ID_BOT_1_P = os.getenv('MY_PRIVATE_GROUP_ID_BOT_1_P')
+SIGNAL_CHANNEL_ID_BOT_2_BK = os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK')
+MY_PRIVATE_GROUP_ID_BOT_2_BK = os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK')
 
 env_vars = ['TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'SESSION_STRING', 
-            'SIGNAL_CHANNEL_ID', 'MY_PRIVATE_GROUP_ID', 'BINANCE_KEY', 'BINANCE_SECRET']
+            'SIGNAL_CHANNEL_ID_BOT_1_P', 'MY_PRIVATE_GROUP_ID_BOT_1_P',
+            'SIGNAL_CHANNEL_ID_BOT_2_BK', 'MY_PRIVATE_GROUP_ID_BOT_2_BK',
+            'BINANCE_KEY', 'BINANCE_SECRET']
 
 all_set = all(os.getenv(v) for v in env_vars)
 if all_set:
     test_pass("TEST CASE 1: All environment variables set")
 else:
-    test_fail("TEST CASE 1: Missing environment variables")
-
-# Check -100 format
-if SIGNAL_CHANNEL_ID and SIGNAL_CHANNEL_ID.startswith('-100'):
-    print(f"   ✅ SIGNAL_CHANNEL_ID uses -100 format")
-else:
-    print(f"   ⚠️ SIGNAL_CHANNEL_ID should start with -100")
-
-if MY_PRIVATE_GROUP_ID and MY_PRIVATE_GROUP_ID.startswith('-100'):
-    print(f"   ✅ MY_PRIVATE_GROUP_ID uses -100 format")
-else:
-    print(f"   ⚠️ MY_PRIVATE_GROUP_ID should start with -100")
+    missing = [v for v in env_vars if not os.getenv(v)]
+    test_fail(f"TEST CASE 1: Missing: {', '.join(missing)}")
 
 # Convert types
 TELEGRAM_API_ID = int(TELEGRAM_API_ID) if TELEGRAM_API_ID else None
-SIGNAL_CHANNEL_ID = int(SIGNAL_CHANNEL_ID) if SIGNAL_CHANNEL_ID else None
-MY_PRIVATE_GROUP_ID = int(MY_PRIVATE_GROUP_ID) if MY_PRIVATE_GROUP_ID else None
-LEVERAGE = int(LEVERAGE)
-MARGIN_USD = int(MARGIN_USD)
 
 # ============================================================
 # TEST CASE 2: Binance API Connection
@@ -104,60 +94,53 @@ except Exception as e:
     test_fail(f"TEST CASE 2: Binance API failed - {str(e)[:40]}")
 
 # ============================================================
-# TEST CASE 3: Telegram Connection
+# TEST CASE 3: Telegram Connection & Channel IDs
 # ============================================================
 print("\n" + "=" * 60)
-print("TEST CASE 3: Telegram Connection")
+print("TEST CASE 3: Telegram Connection & Channel IDs")
 print("=" * 60)
 
 from telethon import TelegramClient
 from telethon.sessions import StringSession
+
+# Channel IDs already loaded in TEST CASE 1
 
 async def test_telegram():
     tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
     await tg_client.start()
     
     me = await tg_client.get_me()
-    print(f"   Telegram account in use: {me.first_name}")
+    print(f"   Telegram account: {me.first_name}")
     
-    signal_ok = False
-    private_ok = False
+    # Test all 4 channel/group IDs
+    channels_to_test = [
+        (SIGNAL_CHANNEL_ID_BOT_1_P, "Signal Channel BOT_1_P"),
+        (MY_PRIVATE_GROUP_ID_BOT_1_P, "Private Group BOT_1_P"),
+        (SIGNAL_CHANNEL_ID_BOT_2_BK, "Signal Channel BOT_2_BK"),
+        (MY_PRIVATE_GROUP_ID_BOT_2_BK, "Private Group BOT_2_BK"),
+    ]
     
-    # Test Signal Channel (try raw first, then normalized - same as bot.py)
-    try:
-        entity = await tg_client.get_entity(SIGNAL_CHANNEL_ID)
-        print(f"   Signal Channel: {entity.title} (raw)")
-        signal_ok = True
-    except:
-        norm_id = int('-' + str(SIGNAL_CHANNEL_ID)[4:])
+    all_passed = True
+    for channel_id, channel_name in channels_to_test:
+        if not channel_id:
+            print(f"   ❌ {channel_name}: NOT SET IN .env")
+            all_passed = False
+            continue
+        
         try:
-            entity = await tg_client.get_entity(norm_id)
-            print(f"   Signal Channel: {entity.title} (normalized)")
-            signal_ok = True
-        except:
-            print(f"   ❌ Signal Channel: FAILED")
-    
-    # Test Private Group (try raw first, then normalized - same as bot.py)
-    try:
-        entity = await tg_client.get_entity(MY_PRIVATE_GROUP_ID)
-        print(f"   Private Group: {entity.title} (raw)")
-        private_ok = True
-    except:
-        norm_id = int('-' + str(MY_PRIVATE_GROUP_ID)[4:])
-        try:
-            entity = await tg_client.get_entity(norm_id)
-            print(f"   Private Group: {entity.title} (normalized)")
-            private_ok = True
-        except:
-            print(f"   ❌ Private Group: FAILED")
+            entity = await tg_client.get_entity(int(channel_id))
+            print(f"   ✅ {channel_name}: {entity.title}")
+        except Exception as e:
+            print(f"   ❌ {channel_name}: FAILED - {str(e)}")
+            all_passed = False
     
     await tg_client.disconnect()
-    return signal_ok and private_ok
+    return all_passed
 
 try:
     telegram_ok = asyncio.run(test_telegram())
     if telegram_ok:
-        test_pass("TEST CASE 3: Telegram connected")
+        test_pass("TEST CASE 3: Telegram & all channel IDs verified")
     else:
         test_fail("TEST CASE 3: Telegram channel access failed")
 except Exception as e:
@@ -214,6 +197,8 @@ print("TEST CASE 6: Margin & Leverage")
 print("=" * 60)
 
 TEST_SYMBOL = "DOGEUSDT"
+LEVERAGE_BOT_1_P = int(os.getenv('LEVERAGE_BOT_1_P', 5))
+
 try:
     # Set Isolated
     try:
@@ -223,9 +208,9 @@ try:
         if 'No need to change' in str(e):
             print(f"   Already ISOLATED")
     
-    # Set Leverage
-    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=LEVERAGE)
-    print(f"   Leverage: {LEVERAGE}x")
+    # Set Leverage (using BOT_1_P leverage as test)
+    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=LEVERAGE_BOT_1_P)
+    print(f"   Leverage: {LEVERAGE_BOT_1_P}x")
     test_pass("TEST CASE 6: Margin & Leverage set")
 except Exception as e:
     test_fail(f"TEST CASE 6: Failed - {str(e)[:40]}")
