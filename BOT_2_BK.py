@@ -1,7 +1,8 @@
 """
-BOT_2_BK Parser - Channel BK (Has Stop Loss - Future)
-TODO: Implement different signal format for this channel.
-For now, uses same logic as BOT_1_P.
+BOT_2_BK Parser - Channel BK (Has Stop Loss)
+Signal format:
+#COINNAME/USDT | 🟢 LONG or 🔴 SHORT
+Entry: X.XXX - X.XXX | Target 1: X.XXX | StopLoss: X.XXX
 """
 
 import re
@@ -33,11 +34,11 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     symbol = f"{symbol_match.group(1).upper()}USDT"
     print(f"   [{bot_id}] 📌 Symbol: {symbol}")
     
-    # 2. Extract Side
+    # 2. Extract Side (🟢 LONG or 🔴 SHORT)
     side = None
-    if "Open Long" in text:
+    if "LONG" in text.upper():
         side = "BUY"
-    if "Open Short" in text:
+    if "SHORT" in text.upper():
         side = "SELL"
     if side is None:
         await tg_client.send_message(private_group_id, f"[{bot_id}] ❌ Side not found for {symbol}")
@@ -45,8 +46,8 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
         return
     print(f"   [{bot_id}] 📌 Side: {side}")
     
-    # 3. Extract Entry Price
-    price_match = re.search(r'Current price: ([\d.]+)', text)
+    # 3. Extract Entry Price (first number after "Entry:")
+    price_match = re.search(r'Entry:\s*([\d.]+)', text)
     if not price_match:
         await tg_client.send_message(private_group_id, f"[{bot_id}] ❌ Price not found for {symbol}")
         print(f"[{bot_id}] ❌ Price not found for {symbol}")
@@ -54,8 +55,8 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     entry_price = float(price_match.group(1))
     print(f"   [{bot_id}] 📌 Entry: {entry_price}")
     
-    # 4. Extract TP1
-    tp1_match = re.search(r'TP 1: ([\d.]+)', text)
+    # 4. Extract TP1 (Target 1)
+    tp1_match = re.search(r'Target 1:\s*([\d.]+)', text)
     if not tp1_match:
         await tg_client.send_message(private_group_id, f"[{bot_id}] ❌ TP1 not found for {symbol}")
         print(f"[{bot_id}] ❌ TP1 not found for {symbol}")
@@ -63,14 +64,13 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     tp1_price = float(tp1_match.group(1))
     print(f"   [{bot_id}] 📌 TP1: {tp1_price}")
     
-    # 5. Extract SL (BOT_2_BK specific)
+    # 5. Extract StopLoss (BOT_2_BK has SL in signal)
     sl_price = None
     sl_price_rounded = None
-    # TODO: Uncomment when signal format is defined
-    # sl_match = re.search(r'SL: ([\d.]+)', text)
-    # if sl_match:
-    #     sl_price = float(sl_match.group(1))
-    #     print(f"   [{bot_id}] 📌 SL: {sl_price}")
+    sl_match = re.search(r'StopLoss:\s*([\d.]+)', text)
+    if sl_match:
+        sl_price = float(sl_match.group(1))
+        print(f"   [{bot_id}] 📌 SL: {sl_price}")
     
     # --- EXECUTION ---
     try:
@@ -97,7 +97,7 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
             if sl_price:
                 try:
                     sl_price_rounded = round_price(sl_price, symbol)
-                    SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=sl_price_rounded)
+                    SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=True, stop_price=sl_price_rounded)
                 except Exception as e:
                     print(f"   [{bot_id}] ⚠️ SL price error: {str(e)}")
             
