@@ -188,14 +188,35 @@ async def startup_tests():
     # Test all 4 channel/group IDs
     await test_channel_ids()
     
-    # Cache symbol precision (also tests Binance API connection)
+    # Test Binance API connection with private endpoint (verifies IP whitelist)
+    try:
+        account = binance_client.account()
+        wallet_balance = float(account['totalWalletBalance'])
+        print(f"[BOT]    Binance API: ✅ Connected (Balance: {wallet_balance:.2f} USDT)")
+        
+        # Validate margin settings against wallet balance
+        if MARGIN_USD_BOT_1_P > wallet_balance:
+            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_1_P (${MARGIN_USD_BOT_1_P}) > Balance (${wallet_balance:.2f})")
+        else:
+            print(f"[BOT]    BOT_1_P Margin: ✅ ${MARGIN_USD_BOT_1_P} < Balance")
+        
+        if MARGIN_USD_BOT_2_BK > wallet_balance:
+            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_2_BK (${MARGIN_USD_BOT_2_BK}) > Balance (${wallet_balance:.2f})")
+        else:
+            print(f"[BOT]    BOT_2_BK Margin: ✅ ${MARGIN_USD_BOT_2_BK} < Balance")
+            
+    except Exception as e:
+        print(f"[BOT]    ❌ Binance API: FAILED - {str(e)}")
+        print(f"[BOT]    Check: API key, IP whitelist, Futures enabled")
+    
+    # Cache symbol precision
     global SYMBOL_PRECISION, PRICE_PRECISION
     try:
         exchange_info = binance_client.exchange_info()
         for s in exchange_info['symbols']:
             SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
             PRICE_PRECISION[s['symbol']] = s['pricePrecision']
-        print(f"[BOT]    Binance API: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
+        print(f"[BOT]    Binance Symbols: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
     except Exception as e:
         print(f"[BOT]    ⚠️ Could not cache decimals: {str(e)}")
     

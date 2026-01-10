@@ -78,9 +78,14 @@ print("=" * 60)
 from binance.um_futures import UMFutures
 client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
+# Load margin settings for validation
+MARGIN_USD_BOT_1_P = int(os.getenv('MARGIN_USD_BOT_1_P', 100))
+MARGIN_USD_BOT_2_BK = int(os.getenv('MARGIN_USD_BOT_2_BK', 100))
+
 try:
     account = client.account()
-    print(f"   Balance: {account['totalWalletBalance']} USDT")
+    wallet_balance = float(account['totalWalletBalance'])
+    print(f"   Balance: {wallet_balance:.2f} USDT")
     
     # Check Position Mode (must be One-Way, not Hedge)
     mode = client.get_position_mode()
@@ -89,9 +94,20 @@ try:
     else:
         print("   ✅ Position Mode: One-Way")
     
+    # Validate margin settings against wallet balance
+    if MARGIN_USD_BOT_1_P > wallet_balance:
+        print(f"   ⚠️ MARGIN_USD_BOT_1_P (${MARGIN_USD_BOT_1_P}) > Balance (${wallet_balance:.2f})")
+    else:
+        print(f"   ✅ BOT_1_P Margin: ${MARGIN_USD_BOT_1_P} < Balance")
+    
+    if MARGIN_USD_BOT_2_BK > wallet_balance:
+        print(f"   ⚠️ MARGIN_USD_BOT_2_BK (${MARGIN_USD_BOT_2_BK}) > Balance (${wallet_balance:.2f})")
+    else:
+        print(f"   ✅ BOT_2_BK Margin: ${MARGIN_USD_BOT_2_BK} < Balance")
+    
     test_pass("TEST CASE 2: Binance API connected")
 except Exception as e:
-    test_fail(f"TEST CASE 2: Binance API failed - {str(e)[:40]}")
+    test_fail(f"TEST CASE 2: Binance API failed - {str(e)}")
 
 # ============================================================
 # TEST CASE 3: Telegram Connection & Channel IDs
@@ -144,7 +160,7 @@ try:
     else:
         test_fail("TEST CASE 3: Telegram channel access failed")
 except Exception as e:
-    test_fail(f"TEST CASE 3: Telegram failed - {str(e)[:40]}")
+    test_fail(f"TEST CASE 3: Telegram failed - {str(e)}")
 
 
 # ============================================================
@@ -187,33 +203,26 @@ try:
     print(f"   DOGEUSDT precision: {PRECISION.get('DOGEUSDT', 'N/A')} decimals")
     test_pass("TEST CASE 5: Symbol precision cached")
 except Exception as e:
-    test_fail(f"TEST CASE 5: Cache failed - {str(e)[:40]}")
+    test_fail(f"TEST CASE 5: Cache failed - {str(e)}")
 
 # ============================================================
-# TEST CASE 6: Margin & Leverage
+# TEST CASE 6: Leverage Change
 # ============================================================
 print("\n" + "=" * 60)
-print("TEST CASE 6: Margin & Leverage")
+print("TEST CASE 6: Leverage Change (tests trading permissions)")
 print("=" * 60)
 
-TEST_SYMBOL = "DOGEUSDT"
-LEVERAGE_BOT_1_P = int(os.getenv('LEVERAGE_BOT_1_P', 5))
+TEST_SYMBOL = "BTCUSDT"
+TEST_LEVERAGE = 5
 
 try:
-    # Set Isolated
-    try:
-        client.change_margin_type(symbol=TEST_SYMBOL, marginType='ISOLATED')
-        print(f"   Changed to ISOLATED")
-    except Exception as e:
-        if 'No need to change' in str(e):
-            print(f"   Already ISOLATED")
-    
-    # Set Leverage (using BOT_1_P leverage as test)
-    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=LEVERAGE_BOT_1_P)
-    print(f"   Leverage: {LEVERAGE_BOT_1_P}x")
-    test_pass("TEST CASE 6: Margin & Leverage set")
+    # Change leverage (this tests trading permissions and IP whitelist)
+    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=TEST_LEVERAGE)
+    actual_leverage = result.get('leverage', TEST_LEVERAGE)
+    print(f"   Changed {TEST_SYMBOL} leverage to {actual_leverage}x")
+    test_pass("TEST CASE 6: Leverage change works (trading permissions OK)")
 except Exception as e:
-    test_fail(f"TEST CASE 6: Failed - {str(e)[:40]}")
+    test_fail(f"TEST CASE 6: Leverage change failed - {str(e)}")
 
 # ============================================================
 # SUMMARY

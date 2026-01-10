@@ -18,6 +18,9 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     SYMBOL_PRECISION = precision['symbol']
     PRICE_PRECISION = precision['price']
     
+    # SL Configuration (None = no stop loss for this channel)
+    sl_price = None  # TODO: Parse from signal when format is defined
+    
     print(f"[{bot_id}] ✅ Signal detected!")
     text = event.raw_text
     print(f"[{bot_id}] ====Signal====")
@@ -63,10 +66,7 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     tp1_price = float(tp1_match.group(1))
     print(f"   [{bot_id}] 📌 TP1: {tp1_price}")
     
-    # 5. Extract SL (TODO: Implement for BOT_2_BK)
-    # For now, SL is None - will be implemented later
-    sl_price = None
-    # TODO: Parse SL from signal when format is defined
+    # 5. Extract SL (if sl_price is None, can try to parse from signal)
     # sl_match = re.search(r'SL: ([\d.]+)', text)
     # if sl_match:
     #     sl_price = float(sl_match.group(1))

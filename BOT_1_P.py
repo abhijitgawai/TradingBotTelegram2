@@ -20,6 +20,9 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
     SYMBOL_PRECISION = precision['symbol']
     PRICE_PRECISION = precision['price']
     
+    # SL Configuration (None = no stop loss for this channel)
+    sl_price = None  # BOT_1_P does not use stop loss
+    
     print(f"[{bot_id}] ✅ Signal detected!")
     text = event.raw_text
     print(f"[{bot_id}] ====Signal====")
@@ -70,6 +73,7 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
         # Round prices to valid tick size
         entry_price_rounded = round_price(entry_price, symbol)
         tp1_price_rounded = round_price(tp1_price, symbol)
+        sl_price_rounded = round_price(sl_price, symbol) if sl_price else None
         print(f"   [{bot_id}] 📌 Entry (rounded): {entry_price_rounded}, TP1 (rounded): {tp1_price_rounded}")
         
         # Calculate Quantity
@@ -86,16 +90,20 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
             exit_side = "SELL" if side == "BUY" else "BUY"
             TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
             
-            # No SL for BOT_1_P - pass None
-            SL_Trade(symbol, exit_side, quantity, bot_id, execute=False, stop_price=None)
+            # Place SL Order (if sl_price is set)
+            SL_Trade(symbol, exit_side, quantity, bot_id, execute=False, stop_price=sl_price_rounded)
             
             # Send success notification
             if PLACE_REAL_TRADES:
-                await tg_client.send_message(private_group_id,
-                    f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
+                msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+                if sl_price_rounded:
+                    msg += f"\nSL: {sl_price_rounded}"
+                await tg_client.send_message(private_group_id, msg)
             else:
-                await tg_client.send_message(private_group_id,
-                    f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}")
+                msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+                if sl_price_rounded:
+                    msg += f"\nSL: {sl_price_rounded}"
+                await tg_client.send_message(private_group_id, msg)
     
     except Exception as e:
         print(f"   [{bot_id}] ⚠️ Error: {str(e)}")
