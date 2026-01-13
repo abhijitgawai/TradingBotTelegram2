@@ -147,10 +147,9 @@ def SL_Trade(symbol, side, quantity, bot_id, executeSL=False, stop_price=None):
                 binance_client.new_order(
                     symbol=symbol,
                     side=side,
-                    type='LIMIT',
+                    type='STOP_MARKET',
                     quantity=quantity,
-                    price=stop_price,
-                    timeInForce='GTC',
+                    stopPrice=stop_price,
                     reduceOnly='True'
                 )
                 print(f"   [{bot_id}] ✅ SL order placed: {symbol} {side} @ {stop_price}")

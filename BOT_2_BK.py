@@ -126,6 +126,6 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
         try:
             await tg_client.send_message(private_group_id, f"[{bot_id}] ⚠️ Error for {symbol}: {str(e)}")
         except:
-            print("   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
+            print(f"   [{bot_id}] ⚠️ Telegram notification failed")
             pass  # Don't let notification failure break anything
 
