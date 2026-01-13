@@ -1,0 +1,2104 @@
+[2026-01-04 10:03:16]
+📥 #DOOD | Open Long
+Current price: 0.006119
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 8.81
+
+TP 1: 0.0061828 - Probability 84% (PNL -80%)
+TP 2: 0.0062466 - Probability 84% (PNL 80%)
+TP 3: 0.0063042 - Probability 84% (PNL 240%)
+TP 4: 0.0063693 - Probability 84% (PNL 400%)
+TP 5: 0.0066135 - Probability 74% (PNL 720%)
+TP 6: 0.0073463 - Probability 58% (PNL 1634%)
+DCA: 1. 0.0056907 2. 0.0052011 3. 0.0045893
+
+ID: #Long_DOOD_4_01_2026_03_45
+==================================================
+
+[2025-12-19 14:23:38]
+📥 #CUDIS | Open Long
+Current price: 0.02926
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 4.35
+
+TP 1: 0.029556 - Probability 94% (PNL 130%)
+TP 2: 0.029861 - Probability 84% (PNL 120%)
+TP 3: 0.030157 - Probability 74% (PNL 68%)
+TP 4: 0.030438 - Probability 71% (PNL 178%)
+TP 5: 0.031626 - Probability 52% (PNL 98%)
+TP 6: 0.035133 - Probability 35% (PNL 784%)
+DCA: 1. 0.027212 2. 0.024871 3. 0.021945
+
+ID: #Long_CUDIS_19_12_2025_06_45
+==================================================
+
+[2025-12-06 20:16:31]
+📥 #FARTCOIN | Open Long
+Current price: 0.4098
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 14.01
+
+TP 1: 0.41424 - Probability 93% (PNL 250%)
+TP 2: 0.41809 - Probability 87% (PNL 420%)
+TP 3: 0.42234 - Probability 84% (PNL 730%)
+TP 4: 0.42632 - Probability 79% (PNL 880%)
+TP 5: 0.44282 - Probability 54% (PNL 400%)
+TP 6: 0.49205 - Probability 28% (PNL -26%)
+DCA: 1. 0.38111 2. 0.34833 3. 0.30735
+
+ID: #Long_FARTCOIN_6_12_2025_14_15
+==================================================
+
+[2025-12-03 17:48:31]
++145% #VANA 🔥
+==================================================
+
+[2025-11-29 17:54:20]
+📥 #VANA | Open Long
+Current price: 2.83
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 5.43
+
+TP 1: 2.8604 - Probability 92% (PNL 100%)
+TP 2: 2.8888 - Probability 89% (PNL 340%)
+TP 3: 2.9159 - Probability 81% (PNL 349%)
+TP 4: 2.9441 - Probability 68% (PNL 60%)
+TP 5: 3.0574 - Probability 43% (PNL -338%)
+TP 6: 3.3981 - Probability 30% (PNL 500%)
+DCA: 1. 2.6319 2. 2.4055 3. 2.1225
+
+ID: #Long_VANA_29_11_2025_12_00
+==================================================
+
+[2025-11-20 18:22:08]
+📥 #GOAT | Open Long
+Current price: 0.04324
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 21.65
+
+TP 1: 0.043681 - Probability 95% (PNL 190%)
+TP 2: 0.044116 - Probability 95% (PNL 540%)
+TP 3: 0.044558 - Probability 95% (PNL 890%)
+TP 4: 0.044982 - Probability 89% (PNL 1000%)
+TP 5: 0.046736 - Probability 73% (PNL 1388%)
+TP 6: 0.0519 - Probability 38% (PNL 1201%)
+DCA: 1. 0.040213 2. 0.036754 3. 0.03243
+
+ID: #Long_GOAT_20_11_2025_12_45
+==================================================
+
+[2025-11-20 12:13:13]
+📥 #OBT | Open Long
+Current price: 0.002959
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 7.22
+
+TP 1: 0.002989 - Probability 92% (PNL 70%)
+TP 2: 0.0030188 - Probability 84% (PNL 100%)
+TP 3: 0.0030495 - Probability 84% (PNL 310%)
+TP 4: 0.0030791 - Probability 80% (PNL 400%)
+TP 5: 0.0031984 - Probability 68% (PNL 742%)
+TP 6: 0.0035534 - Probability 28% (PNL 486%)
+DCA: 1. 0.0027519 2. 0.0025151 3. 0.0022192
+
+ID: #Long_OBT_20_11_2025_03_45
+==================================================
+
+[2025-11-17 18:35:17]
+The peak profit on #PUFFER reached +153%. Congratulations on another successful trade 😉
+==================================================
+
+[2025-11-16 21:00:41]
+📥 #PUFFER | Open Long
+Current price: 0.09877
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 7.4
+
+TP 1: 0.099771 - Probability 97% (PNL 250%)
+TP 2: 0.10079 - Probability 91% (PNL 380%)
+TP 3: 0.10176 - Probability 79% (PNL 250%)
+TP 4: 0.10275 - Probability 68% (PNL 40%)
+TP 5: 0.10671 - Probability 59% (PNL 480%)
+TP 6: 0.1186 - Probability 29% (PNL 303%)
+DCA: 1. 0.091856 2. 0.083955 3. 0.074077
+
+ID: #Long_PUFFER_16_11_2025_15_00
+==================================================
+
+[2025-11-10 13:46:21]
+📥 #FLR | Open Long
+Current price: 0.01617
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 3.74
+
+TP 1: 0.016337 - Probability 92% (PNL 80%)
+TP 2: 0.016497 - Probability 85% (PNL 146%)
+TP 3: 0.016663 - Probability 77% (PNL 146%)
+TP 4: 0.016824 - Probability 65% (PNL 6%)
+TP 5: 0.01747 - Probability 54% (PNL 220%)
+TP 6: 0.019417 - Probability 31% (PNL 616%)
+DCA: 1. 0.015038 2. 0.013744 3. 0.012127
+
+ID: #Long_FLR_10_11_2025_07_30
+==================================================
+
+[2025-11-08 21:30:20]
+📥 #ACE | Open Long
+Current price: 0.3057
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 4.1
+
+TP 1: 0.30887 - Probability 91% (PNL 40%)
+TP 2: 0.31206 - Probability 82% (PNL 40%)
+TP 3: 0.3151 - Probability 77% (PNL 110%)
+TP 4: 0.31798 - Probability 73% (PNL 160%)
+TP 5: 0.33045 - Probability 55% (PNL 160%)
+TP 6: 0.36693 - Probability 45% (PNL 1040%)
+DCA: 1. 0.2843 2. 0.25984 3. 0.22928
+
+ID: #Long_ACE_8_11_2025_15_45
+==================================================
+
+[2025-11-08 12:51:20]
+Peak profit on #PRCL reached +145%,
+and if you averaged in at the recommended levels, your total gain is around +250%.
+Congrats on another solid win! 🚀
+==================================================
+
+[2025-11-05 12:53:29]
+👆 The #CUDIS signal didn’t just hit the targets - it obliterated them ⚡️🔥
+After a flawless entry, the coin exploded +5110%, leaving the market in the dust 😎
+A clean, powerful, mathematically perfect pump - just the way we like it 🚀
+==================================================
+
+[2025-11-04 20:17:33]
+📥 #PRCL | Open Long
+Current price: 0.04354
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 5.36
+
+TP 1: 0.043994 - Probability 94% (PNL 150%)
+TP 2: 0.044427 - Probability 82% (PNL 60%)
+TP 3: 0.044854 - Probability 79% (PNL 220%)
+TP 4: 0.045313 - Probability 73% (PNL 240%)
+TP 5: 0.047043 - Probability 58% (PNL 400%)
+TP 6: 0.052279 - Probability 30% (PNL 328%)
+DCA: 1. 0.040492 2. 0.037009 3. 0.032655
+
+ID: #Long_PRCL_4_11_2025_14_15
+==================================================
+
+[2025-11-03 21:24:36]
+The indicator is on top again - predicted the dump 8 hours in advance 📉
+The free signal on #EPT has already delivered +120% profit 😉
+Congratulations! 🙌
+==================================================
+
+[2025-11-03 13:35:15]
+📥 #EPT | Open Short
+Current price: 0.003428
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 5.9
+
+TP 1: 0.0033933 - Probability 94% (PNL 80%)
+TP 2: 0.0033578 - Probability 88% (PNL 140%)
+TP 3: 0.0033245 - Probability 76% (PNL 70%)
+TP 4: 0.0032898 - Probability 76% (PNL 200%)
+TP 5: 0.0031516 - Probability 76% (PNL 720%)
+TP 6: 0.0027392 - Probability 41% (PNL 631%)
+SL: 0.0037022 or DCA
+
+ID: #Short_EPT_3_11_2025_03_00
+==================================================
+
+[2025-10-31 13:46:08]
+On October 24 we gave you a free signal on #AVL - the coin keeps pumping and has already delivered +548% profit 🙌
+Take a look at how precisely the indicator caught the previous moves:
+First short +170%,
+then long +751%,
+followed by another short +664%,
+and the latest free signal also brought +548%.
+Sniper precision - as always 🔫😉
+==================================================
+
+[2025-10-28 14:10:38]
+📥 #TAO | Open Long
+Current price: 434.93
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 14.83
+
+TP 1: 439.57 - Probability 97% (PNL 250%)
+TP 2: 443.87 - Probability 88% (PNL 280%)
+TP 3: 448.25 - Probability 88% (PNL 580%)
+TP 4: 452.7 - Probability 85% (PNL 760%)
+TP 5: 470.01 - Probability 71% (PNL 1154%)
+TP 6: 522.22 - Probability 29% (PNL 1033%)
+DCA: 1. 404.48 2. 369.69 3. 326.2
+
+ID: #Long_TAO_28_10_2025_08_15
+==================================================
+
+[2025-10-26 13:06:34]
+#SHELL +121%
+#FORTH +124%
+
+Another clean victory  🤑
+==================================================
+
+[2025-10-24 12:47:35]
+📥 #AVL | Open Long
+Current price: 0.1313
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 10.72
+
+TP 1: 0.13264 - Probability 100% (PNL 240%)
+TP 2: 0.13401 - Probability 96% (PNL 380%)
+TP 3: 0.13527 - Probability 88% (PNL 390%)
+TP 4: 0.13667 - Probability 88% (PNL 600%)
+TP 5: 0.14189 - Probability 63% (PNL 526%)
+TP 6: 0.15766 - Probability 33% (PNL 454%)
+DCA: 1. 0.12211 2. 0.1116 3. 0.098475
+
+ID: #Long_AVL_24_10_2025_06_45
+==================================================
+
+[2025-10-24 11:15:39]
+📥 #SHELL | Open Long
+Current price: 0.09675
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 4.74
+
+TP 1: 0.097771 - Probability 95% (PNL 120%)
+TP 2: 0.098777 - Probability 90% (PNL 220%)
+TP 3: 0.09967 - Probability 76% (PNL 80%)
+TP 4: 0.10063 - Probability 76% (PNL 240%)
+TP 5: 0.10455 - Probability 57% (PNL 240%)
+TP 6: 0.1162 - Probability 33% (PNL 316%)
+DCA: 1. 0.089978 2. 0.082238 3. 0.072563
+
+ID: #Long_SHELL_24_10_2025_01_30
+==================================================
+
+[2025-10-20 15:21:11]
+📥 #1000FLOKI | Open Long
+Current price: 0.07262
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 16.9
+
+TP 1: 0.073402 - Probability 97% (PNL 210%)
+TP 2: 0.074144 - Probability 90% (PNL 300%)
+TP 3: 0.074823 - Probability 90% (PNL 570%)
+TP 4: 0.075577 - Probability 87% (PNL 720%)
+TP 5: 0.078474 - Probability 80% (PNL 1440%)
+TP 6: 0.087215 - Probability 37% (PNL 1346%)
+DCA: 1. 0.067537 2. 0.061727 3. 0.054465
+
+ID: #Long_1000FLOKI_20_10_2025_09_00
+==================================================
+
+[2025-10-19 16:09:59]
+📥 #FORTH | Open Long
+Current price: 2.3403
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 7.72
+
+TP 1: 2.364 - Probability 94% (PNL 170%)
+TP 2: 2.3879 - Probability 91% (PNL 400%)
+TP 3: 2.4112 - Probability 86% (PNL 500%)
+TP 4: 2.4343 - Probability 71% (PNL 238%)
+TP 5: 2.5281 - Probability 46% (PNL -31%)
+TP 6: 2.809 - Probability 23% (PNL 32%)
+DCA: 1. 2.1765 2. 1.9893 3. 1.7552
+
+ID: #Long_FORTH_19_10_2025_10_30
+==================================================
+
+[2025-10-17 11:57:47]
+Another quick win, another sniper shot 🎯
+#CUDIS delivered +425% profit in just 6 hours.
+
+While others play guessing games, we quietly collect target after target.
+
+The market isn’t chaos when you know the code. Focus, timing, execution - that’s the real edge 😉
+==================================================
+
+[2025-10-17 00:09:39]
+📥 #CUDIS | Open Long
+Current price: 0.06486
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 2.96
+
+TP 1: 0.065571 - Probability 95% (PNL 120%)
+TP 2: 0.066201 - Probability 86% (PNL 120%)
+TP 3: 0.066865 - Probability 71% (PNL -12%)
+TP 4: 0.067468 - Probability 67% (PNL 18%)
+TP 5: 0.0701 - Probability 52% (PNL 98%)
+TP 6: 0.077873 - Probability 33% (PNL 464%)
+DCA: 1. 0.06032 2. 0.055131 3. 0.048645
+
+ID: #Long_CUDIS_16_10_2025_15_00
+==================================================
+
+[2025-10-16 12:23:41]
+📥 #OBT | Open Long
+Current price: 0.004404
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 4.02
+
+TP 1: 0.0044501 - Probability 90% (PNL 30%)
+TP 2: 0.0044929 - Probability 81% (PNL 20%)
+TP 3: 0.0045383 - Probability 81% (PNL 190%)
+TP 4: 0.0045815 - Probability 76% (PNL 240%)
+TP 5: 0.004759 - Probability 62% (PNL 422%)
+TP 6: 0.0052859 - Probability 24% (PNL 47%)
+DCA: 1. 0.0040957 2. 0.0037434 3. 0.003303
+
+ID: #Long_OBT_16_10_2025_06_45
+==================================================
+
+[2025-10-14 21:31:28]
+📥 #SERAPH | Open Long
+Current price: 0.073
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 6.58
+
+TP 1: 0.073761 - Probability 95% (PNL 149%)
+TP 2: 0.074502 - Probability 91% (PNL 259%)
+TP 3: 0.075228 - Probability 82% (PNL 291%)
+TP 4: 0.075944 - Probability 77% (PNL 351%)
+TP 5: 0.078862 - Probability 59% (PNL 488%)
+TP 6: 0.08762 - Probability 18% (PNL -128%)
+DCA: 1. 0.06789 2. 0.06205 3. 0.05475
+
+ID: #Long_SERAPH_14_10_2025_15_45
+==================================================
+
+[2025-10-12 20:54:03]
+📥 #MUBARAK | Open Long
+Current price: 0.02846
+Settings: BYBIT. Timeframe: 45 min
+Strategy score: 7.74
+
+TP 1: 0.028755 - Probability 93% (PNL 72%)
+TP 2: 0.029056 - Probability 89% (PNL 512%)
+TP 3: 0.029326 - Probability 81% (PNL 500%)
+TP 4: 0.029623 - Probability 68% (PNL 533%)
+TP 5: 0.030753 - Probability 47% (PNL 445%)
+TP 6: 0.034166 - Probability 18% (PNL 648%)
+DCA: 1. 0.026468 2. 0.024191 3. 0.021345
+
+ID: #Long_MUBARAK_12_10_2025_15_00
+==================================================
+
+[2025-08-19 13:42:12]
+#API3 hit the top. Did the indicator catch this move? Of course 😎
+It went long 3 days ago - already delivering +1193%.
+Entry with $500 → $6,465 in just 3 days 💰
+==================================================
+
+[2025-08-16 22:38:16]
+Done, everything went as planned – the gap is filled - 116800 ✅
+#BTC
+==================================================
+
+[2025-08-16 14:56:08]
+#TRUMP
+
+#BTC
+#ETH
+#SOL
+#TON
+==================================================
+
+[2025-08-13 12:54:08]
+#AVAIL is slowly building momentum and steadily climbing 🔼
+The main move is just around the corner ⌛️
+
+4 targets already reached:
+0.0191573 ✓
+0.019291 ✓
+0.019482 ✓
+0.019673 ✓
+==================================================
+
+[2025-08-10 21:43:00]
+New CME gap will be formed at ~116800$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-08-05 10:43:18]
+🔼 Top-1 on Bybit is a pump of #ILV
+Did the indicator catch it? - Of course, as always, it warned in advance about the upcoming pump 💯
+
+The result? +636% profit in just a few hours 😎💰
+==================================================
+
+[2025-07-30 09:43:14]
+Here you go 🕺
+The #BTC gap at 117200 has been filled ✓
+We hope you found this https://t.me/c/1456872361/5597 useful.
+==================================================
+
+[2025-07-29 14:36:39]
+💫 #AVAIL Here you go. 3 targets hit:
+0.0191573 ✓
+0.019291 ✓
+0.019482 ✓
+
+More to come ⌛️
+==================================================
+
+[2025-07-29 13:12:19]
+#AVAIL Long details.
+Targets: 0.0191573, 0.019291, 0.019482, 0.019673, 0.02101+ 
+Deposit: 5 − 10%
+Leverage: 5 − 10x cross
+
+❗️ Add more at these levels:
+→ 1. 0.017763 − 0.018527
+→ 2. 0.015662 − 0.016808
+→ 3. 0.01337 − 0.014325
+
+Once TP 2 − 3 hit, you can move the remainder of the position to breakeven or slightly lower than the entry point and take profit as it grows.
+==================================================
+
+[2025-07-29 13:10:26]
+#AVAIL 👀
+==================================================
+
+[2025-07-28 08:21:49]
+New CME gap will be formed at ~117200$.
+
+We hope that it will not be filled in the coming days 🙃
+
+FYI: ±90% of CME gaps are filled sooner or later (it may be in a week, or maybe in a month).
+Keep this in mind.
+#BTC
+==================================================
+
+[2025-07-24 09:14:11]
+😎 Some of the reports just came in for long positions the indicator opened before the pump even started.
+
+The results:
+#SCA +52.00% | 10/07/2025 | Long
+#BTC +144.61% | 02/07/2025 | Long
+#CLOUD +347.47% | 05/07/2025 | Short
+#AVAIL +23.93% | 15/07/2025 | Short
+#BTC +142.62% | 25/06/2025 | Long
+#1INCH +1080.35% | 06/07/2025| Long
+#AAVE +283.18% | 24/06/2025 | Long
+#AI +500.78% | 10/07/2025 | Long
+#AVAIL +25.68% | 20/07/2025 | Long
+#AVAIL +6.76% | 22/07/2025 | Short
+#BADGER +339.46% | 24/06/2025 | Long
+#ALGO +800.73% | 09/07/2025 | Long
+#MORPHO +581.42% | 03/07/2025 | Long
+#CETUS +374.05% | 09/07/2025 | Long
+#SNT +281.26% | 07/07/2025 | Long
+#DOGS +229.94% | 10/07/2025 | Long
+#SUN +135.76% | 09/07/2025 | Long
+#AVAIL +104.13% | 22/07/2025 | Long
+#YGG +319.72% | 09/07/2025 | Long
+#IO +172.35% | 10/07/2025 | Long
+#NTRN +317.43% | 09/07/2025 | Long
+#1000RATS +93.35% | 16/07/2025 | Long
+#BOME +560.80% | 09/07/2025 | Long
+#VELO +446.23% | 10/07/2025 | Long
+#DOT +319.55% | 02/07/2025 | Long
+#ARB +528.43% | 29/06/2025 | Long
+#ILV +409.47% | 02/07/2025 | Long
+#GALA +391.01% | 09/07/2025 | Long
+#WAXP +299.70% | 08/07/2025 | Long
+#OSMO +425.58% | 06/07/2025 | Long
+#RDNT +399.87% | 10/07/2025 | Long
+#TRB +192.34% | 09/07/2025 | Long
+#GLM +431.01% | 02/07/2025 | Long
+#MANA +407.77% | 02/07/2025 | Long
+#HNT +686.43% | 10/07/2025 | Long
+#PONKE +316.43% | 10/07/2025 | Long
+#ICP +238.92% | 09/07/2025 | Long
+#ONT +347.34% | 02/07/2025 | Long
+#GMT +299.42% | 09/07/2025 | Long
+#POL +439.88% | 29/06/2025 | Long
+#ORDI +459.39% | 09/07/2025 | Long
+#CHZ +296.82% | 02/07/2025 | Long
+#ZRX +382.31% | 02/07/2025 | Long
+#SPELL +257.65% | 28/06/2025 | Long
+#PEOPLE +332.25% | 09/07/2025 | Long
+#DYM +441.07% | 09/07/2025 | Long
+#LUNA2 +276.75% | 03/07/2025 | Long
+#CTSI +385.93% | 10/07/2025 | Long
+#ZEN +346.92% | 09/07/2025 | Long
+
+As always — one step ahead! 🔥
+==================================================
+
+[2025-07-20 20:52:24]
+🔥 Let's review the current indicator positions on top coins:
+— #BTC: long opened on June 25 at 107,000, profit +142%
+— #SOL: June 25 at 144, profit +251%
+— #ETH: July 2 at 2,530, profit +485%
+— #XRP: June 25 at 2.18, profit +662%
+
+As always - early, as always - laser-accurate 😉
+
+ Waiting for the indicator to flip short. As always, clients will be notified in advance about the upcoming trend reversal 😎
+==================================================
+
+[2025-07-14 16:24:10]
++503$ on our free signal #CETUS 💰
+==================================================
+
+[2025-07-14 16:24:07]
++220$ on our free signal #MORPHO 💲
+==================================================
+
+[2025-07-14 09:17:09]
+Flawless Victory 😎
+Profit +504.85% 💰
+
+#MORPHO
+==================================================
+
+[2025-07-12 16:56:43]
+Last 4 free signals:
+
+#STG +90% https://t.me/c/1456872361/5468
+#SNT +835% https://t.me/c/1456872361/5495
+#MORPHO +285% https://t.me/c/1456872361/5551
+#CETUS +278% https://t.me/c/1456872361/5529
+
+All green, all before the pump. All for free.
+Clients get ~5 signals like this every day — even earlier than the public channel 😉
+
+How to purchase:
+1 month: 0.01533 BTC 
+3 months: 0.0333 BTC
+1 year: 0.0833 BTC
+Contact support @predictum_support or go directly through the website Predictum.ai
+==================================================
+
+[2025-07-10 21:13:38]
+#CETUS took some time to accumulate, but only 1 additional order was triggered.
+As we said - a dip is a gift.
+Thanks to it, the position is already in profit: +103% ✅
+==================================================
+
+[2025-07-10 08:59:54]
+BOOOM! 💥 #MORPHO took off - just as expected.
++178% profit for all of you, guys 🔥
+The indicator nailed it again with sniper precision - signal dropped days before the pump and brought insane gains again 😎
+==================================================
+
+[2025-07-09 08:51:48]
+#MORPHO +60%
+==================================================
+
+[2025-07-07 12:03:41]
+#MORPHO +48.44% 💲
+More to come ⌛
+==================================================
+
+[2025-07-05 20:29:18]
+Waiting. Additional limit orders are set.
+#MORPHO
+==================================================
+
+[2025-07-03 12:24:11]
+Everything went according to plan, as expected.
+1 DCA order was filled, improving the entry price. The position is already in profit +55% 🔼
+More ahead ⌛️
+
+ #CETUS
+==================================================
+
+[2025-06-26 19:14:03]
+⌛️ As usual - we set 3 limit orders with increasing volume and wait for them to fill.
+Every dip is a gift 🎁
+#CETUS
+==================================================
+
+[2025-06-24 16:45:19]
+🔥 4 TPs destroyed:
+TP 1: 0.09755 ✓
+TP 2: 0.09852 ✓
+TP 3: 0.09948 ✓
+TP 4: 0.10045 ✓
+#CETUS
+==================================================
+
+[2025-06-24 15:06:08]
+Moving.
+#CETUS
+==================================================
+
+[2025-06-24 14:04:20]
+⏳ #CETUS | Prepare to Long
+Current price: 0.09469
+Preliminary entry point: 0.09658
+==================================================
+
+[2025-06-19 22:11:07]
+🥲 New day, and #SNT keeps pumping - another +300% added in just 24 hours.
+That’s a total of +835% since the FREE signal was dropped.
+
+SNT is still in the TOP 3, even 5 days after the alert 😉
+That’s how the most accurate indicator on the market works 😎
+==================================================
+
+[2025-06-18 17:56:15]
+🧠 The entire market is going down - but the coin spotted by the indicator is still pumping upward.
+
+ROE +573% 😉
+
+🚀 Predictūm Crackōs — nothing’s changed.
+The most accurate indicator in the game - still unmatched.
+
+#SNT
+==================================================
+
+[2025-06-17 15:02:04]
+Profits keep coming, baby 😎 
++431% profit for all of you guys 💲
+
+#SNT
+==================================================
+
+[2025-06-16 19:01:36]
+June 14: $1200 invested in #SNT
+June 16: +$3990 in pure profit withdrawn ✅
+
+$1200 → $5190 in just 2 days 🕺
+
+Predictūm Crackōs — pure magic for just 0.01533 BTC/month 🪄
+🔓 Get access → https://predictum.ai
+==================================================
+
+[2025-06-16 12:15:10]
+Blown away! +241% 🚀
+
+This signal was shared for FREE here — https://t.me/c/1456872361/5495
+
+#SNT
+==================================================
+
+[2025-06-16 00:11:56]
+#SNT Printed more 🖨💰
++153% profit in a single day 😎
+==================================================
+
+[2025-06-15 00:43:58]
+Another Flawless Victory 🥂🥂
++117% profit for all of us 💵
+
+P.S That was a free taste.
+With a subscription (0.0219 BTC/month), you get signals like this daily - no delays, no noise, just precision 😉
+
+#SNT
+==================================================
+
+[2025-06-14 18:39:42]
++83% #SNT 
+Easy peasy 🤘
+==================================================
+
+[2025-06-14 17:41:57]
+BOOOM. Fast +49% #SNT 🔥
+==================================================
+
+[2025-06-14 17:24:48]
+⏳ #SNT | Prepare to Long
+Current price: 0.03086
+Preliminary entry point: 0.03148
+==================================================
+
+[2025-06-13 14:39:31]
+You were warned — https://t.me/c/1456872361/5470
+Gap at 104300 — done ✅
+#BTC
+==================================================
+
+[2025-06-11 21:49:40]
+#STG Here you go 😎
+4 targets destroyed:
+0.1839502 ✓
+0.185234 ✓
+0.187068 ✓
+0.188902 ✓
+
+🚀
+==================================================
+
+[2025-06-09 13:42:11]
+New CME gap was formed at ~104300$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-06-07 22:56:13]
+#STG setup still valid - targets unchanged.
+Dip = gift.
+Waiting ⌛️
+==================================================
+
+[2025-06-05 12:52:24]
+#STG Long details.
+Targets: 0.1839502, 0.185234, 0.187068, 0.188902, 0.20174+ 
+Deposit: 5 − 10%
+Leverage: 5 − 10x cross
+
+❗️ Add more at these levels:
+→ 1. 0.170562 − 0.177898
+→ 2. 0.150388 − 0.161392
+→ 3. 0.12838 − 0.13755
+
+Once TP 2 − 3 hit, you can move the remainder of the position to breakeven or slightly lower than the entry point and take profit as it grows.
+==================================================
+
+[2025-06-02 23:51:53]
+CME institutional long positions continue to accumulate,
+while shorts are gradually being reduced.
+Despite the current market correction, institutions are expecting further growth in the mid-term.
+The likely target for this year: $120K+.
+
+#BTC
+==================================================
+
+[2025-06-02 01:17:28]
+Statistics for 30 days ↓ 
+#ICP +4.13% | 25/05/2025 | Short
+#BCH +137.09% | 21/05/2025 | Long
+#BTC +68.56% | 18/05/2025
+#OGN +66.80% | 28/05/2025 | Long
+#RPL +57.91% | 25/05/2025 | Short
+#AVAIL +73.40% | 22/05/2025 | Long
+#SOL +63.36% | 22/05/2025 | Long
+#MOODENG +6529.90% | 08/05/2025 | Long
+#WLD +294.18% | 22/05/2025 | Long
+#CORE +79.68% | 21/05/2025 | Long
+#PONKE +845.25% | 08/05/2025 | Long
+#VELO +167.21% | 15/05/2025
+#AAVE +165.42% | 19/05/2025 | Long
+#CYBER +35.47% | 28/05/2025 | Long
+#SUN +11.16% | 22/05/2025 | Long
+#BTC +155.63% | 07/05/2025
+#XRD +37.59% | 26/05/2025 | Long
+#DRIFT +61.97% | 29/05/2025 | Long
+#OGN +45.44% | 30/05/2025 | Short
+#OGN +2.66% | 30/05/2025 | Long
+#1INCH +48.08% | 22/05/2025 | Long
+#BNB +63.55% | 21/05/2025 | Long
+#ORCA +114.08% | 27/05/2025 | Long
+#JUP +247.96% | 21/05/2025 | Long
+#CVC +372.86% | 12/05/2025 | Long
+#RPL +65.41% | 31/05/2025
+#1000RATS +214.02% | 30/05/2025 | Short
+==================================================
+
+[2025-06-02 01:17:28]
+Statistics for 30 days ↓ 
+#TRUMP +165.63% | 20/05/2025
+#CYBER +36.36% | 22/05/2025 | Long
+#GALA +57.54% | 22/05/2025 | Long
+#LUNA2 +40.63% | 22/05/2025 | Long
+#ZEN +53.88% | 22/05/2025 | Long
+#DUSK +72.34% | 22/05/2025 | Long
+#YGG +57.19% | 22/05/2025 | Long
+#BEAM +51.76% | 22/05/2025 | Long
+#ONT +24.56% | 22/05/2025 | Long
+#RVN +36.26% | 22/05/2025 | Long
+#WAXP +23.47% | 23/05/2025 | Long
+#ZRX +44.29% | 22/05/2025 | Long
+#MNT +24.52% | 22/05/2025 | Long
+#SPELL +6.70% | 23/05/2025 | Short
+#OGN +29.05% | 22/05/2025 | Long
+#DOT +43.42% | 22/05/2025 | Long
+#GMT +50.09% | 22/05/2025 | Long
+#TLM +145.69% | 22/05/2025 | Long
+#GLM +13.13% | 22/05/2025 | Long
+#OSMO +53.91% | 22/05/2025 | Long
+#CTSI +57.55% | 22/05/2025 | Long
+#STEEM +39.41% | 22/05/2025 | Long
+#ALGO +65.10% | 21/05/2025 | Long
+#CHZ +43.06% | 21/05/2025 | Long
+#MNT +7.97% | 24/05/2025 | Short
+#TWT +44.40% | 22/05/2025 | Long
+#LINK +47.86% | 22/05/2025 | Long
+#PEOPLE +1392.48% | 08/05/2025
+#ORCA +47.98% | 22/05/2025 | Long
+#ICP +64.29% | 22/05/2025 | Long
+#IO +518.88% | 08/05/2025 | Long
+#AVAX +84.12% | 22/05/2025 | Long
+#QNT +8.40% | 21/05/2025 | Long
+#MNT +14.41% | 25/05/2025 | Long
+#IO +16.31% | 25/05/2025 | Short
+#PEOPLE +23.36% | 25/05/2025 | Short
+#1000TURBO +18.35% | 25/05/2025 | Short
+#AI +28.89% | 25/05/2025 | Short
+#DOGS +37.45% | 25/05/2025 | Short
+#GALA +8.64% | 25/05/2025 | Short
+#XRD +38.27% | 24/05/2025 | Short
+#ETC +43.87% | 22/05/2025 | Long
+#YGG +22.01% | 25/05/2025 | Short
+#RDNT +21.04% | 25/05/2025 | Short
+#DENT +28.39% | 25/05/2025 | Short
+#1000APU +64.56% | 25/05/2025 | Short
+#GMT +11.53% | 25/05/2025 | Short
+#POL +58.20% | 21/05/2025 | Long
+#HNT +50.65% | 22/05/2025 | Long
+#1000RATS +25.78% | 25/05/2025 | Short
+==================================================
+
+[2025-06-02 01:17:28]
+Statistics for 30 days ↓ 
+#1INCH +55.57% | 17/05/2025
+#LINK +66.30% | 15/05/2025 | Short
+#GMT +51.10% | 15/05/2025 | Short
+#ICP +70.25% | 15/05/2025 | Short
+#STEEM +29.50% | 15/05/2025 | Short
+#DENT +40.45% | 17/05/2025
+#GALA +66.22% | 16/05/2025 | Short
+#OGN +65.77% | 16/05/2025 | Short
+#SOL +50.26% | 17/05/2025 | Short
+#DUSK +51.52% | 15/05/2025 | Short
+#AVAX +82.22% | 16/05/2025 | Short
+#DYM +110.19% | 16/05/2025 | Short
+#ORCA +62.88% | 17/05/2025 | Short
+#YGG +99.83% | 15/05/2025 | Short
+#MBL +66.66% | 15/05/2025
+#TLM +96.16% | 15/05/2025 | Short
+#MNT +33.94% | 15/05/2025 | Short
+#SPELL +9.56% | 18/05/2025 | Short
+#DOT +62.35% | 15/05/2025
+#API3 +54.57% | 17/05/2025 | Short
+#ONT +107.73% | 15/05/2025
+#AERO +140.90% | 15/05/2025 | Short
+#CTSI +67.18% | 16/05/2025 | Short
+#RDNT +82.56% | 17/05/2025
+#SUN +31.14% | 17/05/2025 | Short
+#CETUS +177.67% | 21/05/2025 | Long
+#SCA +32.27% | 22/05/2025 | Long
+#LUNA2 +54.92% | 16/05/2025 | Short
+#CYBER +83.38% | 15/05/2025 | Short
+#STG +87.16% | 15/05/2025
+#GLM +79.00% | 15/05/2025
+#BEAM +118.09% | 15/05/2025 | Short
+#MANA +98.31% | 15/05/2025 | Short
+#WAXP +87.48% | 15/05/2025 | Short
+#LTC +27.80% | 19/05/2025
+#BB +18.20% | 22/05/2025 | Long
+#BOME +11.22% | 23/05/2025 | Long
+#RPL +6.32% | 22/05/2025 | Long
+#MORPHO +9.76% | 23/05/2025 | Long
+#AI +32.40% | 23/05/2025 | Long
+#API3 +1.58% | 23/05/2025 | Long
+#DOGS +50.81% | 22/05/2025 | Long
+#POLYX +16.75% | 23/05/2025 | Long
+#STG +10.58% | 22/05/2025 | Long
+#1000TURBO +35.81% | 23/05/2025 | Long
+#MANA +22.62% | 23/05/2025 | Long
+#ARB +28.83% | 22/05/2025 | Long
+#AERO +19.30% | 22/05/2025 | Long
+#NTRN +34.67% | 22/05/2025 | Long
+#DYM +75.94% | 22/05/2025 | Long
+==================================================
+
+[2025-06-02 01:17:28]
+Statistics for 30 days ↓ 
+#ORDI +40.97% | 16/05/2025 | Short
+#CLOUD +1.87% | 17/05/2025 | Short
+#XRD +38.11% | 15/05/2025 | Short
+#MORPHO +20.10% | 17/05/2025 | Short
+#ARB +7.12% | 17/05/2025 | Short
+#INJ +21.97% | 17/05/2025 | Short
+#RPL +27.58% | 17/05/2025 | Short
+#POLYX +11.10% | 17/05/2025 | Short
+#1000TURBO +97.44% | 15/05/2025 | Short
+#BADGER +57.78% | 17/05/2025 | Long
+#AVAIL +17.82% | 17/05/2025 | Short
+#SPELL +203.75% | 09/05/2025 | Long
+#ARB +9.31% | 18/05/2025 | Short
+#BB +71.29% | 18/05/2025 | Long
+#AAVE +366.62% | 07/05/2025 | Long
+#BOME +977.67% | 08/05/2025
+#AAVE +2.84% | 19/05/2025 | Short
+#ORDI +2.82% | 19/05/2025 | Short
+#BOME +4.96% | 19/05/2025 | Short
+#ARB +6.91% | 19/05/2025 | Short
+#INJ +15.42% | 19/05/2025 | Short
+#RPL +29.54% | 19/05/2025 | Short
+#AVAIL +3.45% | 19/05/2025 | Short
+#1000APU +674.11% | 08/05/2025
+#DRIFT +60.00% | 17/05/2025 | Short
+#1000APU +9.02% | 20/05/2025 | Short
+#BNB +19.40% | 16/05/2025 | Short
+#AI +24.42% | 19/05/2025 | Short
+#AI +24.42% | 19/05/2025 | Short
+#ETH +33.43% | 18/05/2025 | Short
+#JUP +55.24% | 15/05/2025 | Short
+#BCH +46.39% | 15/05/2025 | Short
+#CLOUD +46.44% | 19/05/2025 | Short
+#CETUS +75.34% | 15/05/2025 | Short
+#POLYX +12.54% | 19/05/2025 | Short
+#BIGTIME +6.33% | 19/05/2025 | Short
+#WLD +63.20% | 16/05/2025 | Short
+#POL +94.92% | 14/05/2025 | Short
+#QNT +44.25% | 16/05/2025 | Short
+#CHZ +77.78% | 15/05/2025 | Short
+#WLD +24.43% | 21/05/2025 | Long
+#CORE +34.78% | 16/05/2025 | Short
+#ALGO +53.20% | 15/05/2025
+#NTRN +87.05% | 16/05/2025 | Short
+#TWT +35.76% | 15/05/2025 | Short
+#OSMO +45.96% | 15/05/2025 | Short
+#ZRX +87.42% | 15/05/2025
+#ZEN +81.36% | 16/05/2025 | Short
+#ETC +65.11% | 15/05/2025
+#RVN +76.69% | 15/05/2025
+==================================================
+
+[2025-06-02 01:17:27]
+Statistics for 30 days ↓ 
+#AERO +170.08% | 08/05/2025 | Long
+#BADGER +174.70% | 09/05/2025 | Long
+#CHZ +193.69% | 08/05/2025
+#YGG +234.68% | 08/05/2025
+#MANA +264.78% | 08/05/2025
+#CYBER +180.37% | 08/05/2025 | Long
+#MNT +135.58% | 08/05/2025
+#JUP +309.48% | 08/05/2025
+#OSMO +184.12% | 08/05/2025
+#LINK +209.07% | 08/05/2025 | Long
+#OSMO +8.63% | 15/05/2025 | Short
+#JUP +0.25% | 15/05/2025 | Short
+#NTRN +150.56% | 09/05/2025 | Long
+#DUSK +271.32% | 08/05/2025
+#ICP +237.39% | 08/05/2025
+#STEEM +90.10% | 09/05/2025 | Long
+#GMT +176.58% | 09/05/2025 | Long
+#ARK +30.15% | 14/05/2025 | Long
+#TLM +281.81% | 09/05/2025 | Long
+#1000RATS +190.85% | 15/05/2025 | Short
+#DOGS +453.42% | 09/05/2025
+#DYM +577.78% | 09/05/2025
+#ZEN +244.65% | 08/05/2025
+#AVAX +222.25% | 08/05/2025
+#BNB +154.26% | 06/05/2025 | Long
+#CORE +109.70% | 09/05/2025
+#WLD +292.90% | 08/05/2025
+#BB +462.70% | 08/05/2025 | Long
+#OGN +221.66% | 08/05/2025
+#CTSI +236.27% | 08/05/2025
+#ORDI +644.64% | 09/05/2025
+#GALA +373.18% | 08/05/2025
+#LUNA2 +290.88% | 09/05/2025 | Long
+#SOL +213.76% | 08/05/2025 | Long
+#API3 +228.93% | 08/05/2025
+#INJ +351.65% | 08/05/2025
+#SCA +244.86% | 13/05/2025 | Long
+#TRB +235.40% | 08/05/2025
+#SUN +128.95% | 08/05/2025 | Long
+#ARB +464.71% | 08/05/2025
+#RPL +584.18% | 08/05/2025
+#AI +253.74% | 09/05/2025 | Long
+#POLYX +301.19% | 09/05/2025 | Long
+#BADGER +27.00% | 15/05/2025 | Short
+#XRP +187.17% | 08/05/2025
+#MORPHO +220.55% | 08/05/2025
+#CLOUD +607.56% | 09/05/2025 | Long
+#BB +48.28% | 16/05/2025 | Short
+#DOGS +99.86% | 16/05/2025 | Short
+#AI +31.50% | 17/05/2025 | Short
+==================================================
+
+[2025-06-02 01:17:27]
+Statistics for 30 days ↓ 
+#ORCA +35.88% | 03/05/2025 | Long
+#AVAIL +2.07% | 02/05/2025 | Short
+#ARK +2.81% | 04/05/2025 | Long
+#AVAIL +45.10% | 04/05/2025 | Long
+#CORE +71.23% | 03/05/2025 | Short
+#SCA +6.68% | 05/05/2025 | Short
+#AERO +24.81% | 06/05/2025 | Short
+#BCH +9.09% | 05/05/2025 | Short
+#CYBER +120.00% | 03/05/2025 | Short
+#CYBER +22.46% | 07/05/2025 | Long
+#VELO +52.91% | 03/05/2025 | Short
+#SNT +7.08% | 07/05/2025 | Long
+#PONKE +90.16% | 03/05/2025 | Short
+#BADGER +22.19% | 06/05/2025 | Short
+#BEAM +28.96% | 06/05/2025 | Short
+#BB +145.47% | 03/05/2025 | Short
+#CETUS +82.29% | 03/05/2025 | Short
+#INJ +44.31% | 04/05/2025 | Short
+#1000RATS +144.03% | 03/05/2025 | Short
+#MORPHO +39.64% | 07/05/2025 | Short
+#AR +24.18% | 06/05/2025 | Short
+#SUN +17.52% | 06/05/2025 | Short
+#MOODENG +134.87% | 03/05/2025 | Short
+#IO +107.46% | 04/05/2025 | Short
+#1000APU +152.23% | 03/05/2025 | Short
+#SCA +68.95% | 06/05/2025 | Short
+#DOGS +93.59% | 04/05/2025 | Short
+#SPELL +118.77% | 03/05/2025 | Short
+#STEEM +83.22% | 04/05/2025 | Short
+#CVC +101.22% | 04/05/2025 | Short
+#AVAIL +139.70% | 04/05/2025 | Short
+#1000RATS +77.47% | 08/05/2025
+#ARK +104.84% | 04/05/2025 | Short
+#XRD +27.27% | 10/05/2025 | Long
+#1000RATS +0.35% | 12/05/2025 | Long
+#SNT +86.47% | 08/05/2025
+#SNT +36.03% | 12/05/2025 | Short
+#REZ +174.26% | 10/05/2025 | Long
+#ORCA +22.65% | 10/05/2025 | Long
+#AVAIL +162.14% | 10/05/2025 | Long
+#HNT +80.00% | 08/05/2025
+#1000RATS +147.35% | 14/05/2025 | Long
+#POL +149.18% | 08/05/2025
+#CETUS +95.88% | 08/05/2025 | Long
+#BCH +129.64% | 07/05/2025 | Long
+#BIGTIME +87.32% | 10/05/2025 | Long
+#BEAM +228.43% | 08/05/2025
+#AR +102.66% | 09/05/2025 | Long
+#TWT +139.03% | 08/05/2025
+#WAXP +111.83% | 09/05/2025
+==================================================
+
+[2025-05-27 16:17:03]
++17K$ 😎 #JUP
+The market’s been absolutely beautiful lately.
+While others overthink - we just execute.
+Killer profits, delivered by the indicator. Every. Single. Day.
+==================================================
+
+[2025-05-26 13:04:17]
+Pyramided into #JUP and BOOOOOM — already +$10K in profit 🤑💰🔥
+And that was just one signal from the indicator. A free one, btw (link).
+Crackōs drops 3–5 heaters like this daily 😉🧠
+
+Get access → https://predictum.ai
+==================================================
+
+[2025-05-24 20:40:59]
+This post about #BTC was published on March 29
+The price at the time was 82,630.
+It reached 111,968.
+
+The one who listens - hears. And profits 😉
+==================================================
+
+[2025-05-24 15:11:32]
++1761 USDT on #JUP 🔥
+==================================================
+
+[2025-05-24 15:11:30]
++423% on #JUP 👏
+==================================================
+
+[2025-05-24 15:11:28]
++770% on #JUP 🏋️‍♂️
+==================================================
+
+[2025-05-24 15:11:23]
++301% on #JUP 💪
+==================================================
+
+[2025-05-23 14:00:07]
+#JUP +3730$ 🤘
+==================================================
+
+[2025-05-22 22:41:56]
+BOOM. All 5 targets destroyed ✅
+0.516545 ✓
+0.52015 ✓
+0.5253 ✓
+0.53045 ✓
+0.5665 ✓
+
+#JUP
+==================================================
+
+[2025-05-22 15:02:50]
+#JUP printed more 🤑
+Profit +1700$ in 1 day on this FREE signal — https://t.me/c/1456872361/5432
+==================================================
+
+[2025-05-21 23:05:16]
+Fast +941$ on #JUP 💰
+==================================================
+
+[2025-05-21 22:43:40]
+#JUP +50% easy peasy 😎
+4 targets hit ✓
+==================================================
+
+[2025-05-21 12:27:21]
+#JUP Here you go 😉
+3 targets achieved:
+0.516545 ✓
+0.52015 ✓
+0.5253 ✓
+More to come ⌛️
+==================================================
+
+[2025-05-21 11:02:34]
+#JUP Long details.
+Targets: 0.516545, 0.52015, 0.5253, 0.53045, 0.5665+ 
+Deposit: 5 − 10%
+Leverage: 5 − 10x cross
+
+❗️ Add more at these levels:
+→ 1. 0.47895 − 0.49955
+→ 2. 0.4223 − 0.4532
+→ 3. 0.3605 − 0.38625
+
+Once TP 2 − 3 hit, you can move the remainder of the position to breakeven or slightly lower than the entry point and take profit as it grows.
+==================================================
+
+[2025-05-21 10:59:32]
+#JUP something is cooking 📈
+==================================================
+
+[2025-05-11 10:03:46]
+Invested 1,076.754 USDT
+Cashed out +6,385.489 USDT
+One FREE signal 😉 #RPL
+
+ No guessing. No noise. Just signals that print.
+ Get access to the indicator now → https://predictum.ai 🔑
+==================================================
+
+[2025-05-11 09:46:43]
+BOOOM! 🔼🔼🔼
+#RPL
+==================================================
+
+[2025-05-10 16:53:50]
++1063$ on our free #RPL signal 🤑
+==================================================
+
+[2025-05-09 15:27:46]
+#MOODENG 💥
+==================================================
+
+[2025-05-09 09:23:59]
+Stuck to the plan on #RPL, added on the dip - boom, the coin took off 🚀
++$1500 USDT profit (ROI 150%) 💥
+
+Want the same kind of profits? Welcome aboard 👇🏽
+You have two options:
+— Option 1: everything pre-set, best signals from top strategies delivered instantly for 0.0219 BTC/month.
+Payment: contact support @predictum_support or go directly through the website Predictum.ai
+
+— Option 2: hold the INDYQ token 50+ days and get full indicator access, but set up alerts and choose tokens yourself.
+==================================================
+
+[2025-05-07 12:19:49]
+Here you go 🕺
+The #BTC gap at 97,000 has been filled ✓
+We hope you found this https://t.me/c/1456872361/5409 useful.
+==================================================
+
+[2025-05-06 10:03:22]
+New CME gap was formed at ~97000$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-05-04 12:09:06]
+Stacking more #RPL, bids down to 3.11.
+Dip = better opportunity, as always ⏳
+==================================================
+
+[2025-05-02 16:05:01]
+🔼 Another pump, another win.
+Top-1 on Bybit today - #STO.
+The indicator sniped the entry right at the start of the move - result: 
++414% in just minutes.
+Still skimming the cream off the market 🥛
+==================================================
+
+[2025-04-30 18:35:53]
+#RPL Bam! Fast +41%  😎
+==================================================
+
+[2025-04-30 17:15:40]
+#RPL something is cooking 📈
+==================================================
+
+[2025-04-29 15:58:23]
+Reminder: the indicator is no longer available for direct purchase.
+Access is now granted only by holding the #INDYQ token for 50 days.
+
+🚫 Don’t like it? Just sell the token and access will be revoked.
+💙 Like it? Keep using it as long as your token value stays above the equivalent of 0.0219 BTC.
+
+For those who don’t want to wait and prefer instant access - there’s a hidden Easter egg on our website.
+Activate it, and a Bitcoin payment window will appear.
+How to activate it? That’s for you to figure out.
+==================================================
+
+[2025-04-29 02:27:55]
+🔥 TOP-3 today: #MEMEFI, #TOKEN, #PRCL 
+Look at how our indicator crushed it with these coins:
+MEMEFI +5430%
+TOKEN +583%
+PRCL +318%
+
+No move missed. No opportunity wasted 💰
+Are you in? Let's crush the next one together! 🤑
+==================================================
+
+[2025-04-26 12:20:19]
+#TRUMP +250% 😎
+==================================================
+
+[2025-04-25 22:43:17]
+#INDYQ Weekly timeframe 🕺
+==================================================
+
+[2025-04-25 15:52:40]
+#TRUMP +130% (with 10x leverage) since yesterday's post 💲
+==================================================
+
+[2025-04-24 14:04:51]
+Teaser of the upcoming move.
+#TRUMP
+==================================================
+
+[2025-04-20 14:28:07]
+Important Announcement About Our Shares and Token #INDYQ
+
+Our goal is not quick hype, but steady growth and strength of the token. Below are honest answers to frequently asked questions.
+
+❌ When is the listing on CEX?
+Never.
+CEX exchanges are manipulators. We’re building a system free from manipulation.
+Want pump & dump? Take meme coins.
+#INDYQ is not for games. It’s not a toy, it’s a weapon.
+
+🤝 Why do you hold 51% of the tokens?
+Because everything is transparent with us.
+In other projects, developers supposedly hold "0.01%" — but in reality, they hold the entire supply on 1000 anonymous wallets.
+It’s like Zuckerberg owning 0.1% of Facebook stocks. Sounds nice, but do you believe it?
+We’re open: 51% — controlling stake.
+
+💰 When will you sell?
+No sneaky dumps. Everything is public:
+First sale: when we can secure a $1M profit without crashing the price more than 20%.
+Second: $5M, same cap.
+Third: $10M profit.
+After that — only if it doesn’t upset the balance.
+Everything is transparent and in the best interest of the community.
+
+🚀 What about marketing?
+We haven’t even launched the ads yet.
+We’re not burning budgets on fake bots and bought reviews.
+We’re preparing a campaign that will keep Twitter, Telegram, and even your grandpa awake.
+Right now, we’re in the preparation phase. You’re at the early stage.
+
+🧠 Remember:
+Exchanges sell air. We sell assets.
+Other teams deal in shadows. We deal in control.
+While others print tokens, we stay strong.
+#INDYQ is not for everyone. Only for those who can think one step ahead.
+
+
+HOW TO PURCHASE THE #INDYQ SHARES?
+1) Install a Phantom or Solflare wallet
+2) Transfer SOL (Solana) to your wallet
+3) Go to Jupiter
+4) Enter the desired amount of tokens you want to buy
+5) Done! You are now a shareholder of Predictūm 🤝
+
+Token address: 6QVCgGdzwjUYRtQmBG6ZTBFM3Qah3fuPumWXmi4zXAFT ✅
+==================================================
+
+[2025-04-19 09:25:43]
+#XRDUSDT.P is skyrocketing! 🚀
+Already up +336% 💰
+Hope you’re loving this FREE signal! Don’t miss the next one 🤔
+==================================================
+
+[2025-04-17 19:45:32]
+Watch how our AI-powered indicator nailed the move on the №1 coin on Bybit - #10000000AIDOGEUSDT.P 🚀
+
+No guesswork, just pure precision 😎
+Want to trade like a boss? Jump in, or keep watching! 😂
+==================================================
+
+[2025-04-15 12:56:35]
+🚀 FAQ — Everything You Need to Know About Predictūm Crackōs 
+
+◆ HOW DOES IT WORK? ◆
+Our AI-powered indicator runs on TradingView, providing entry points, stop-losses, and take-profits.
+Follow the signals, open positions, and watch the profits roll in.
+
+📈 Why TradingView?
+It’s essential for visualizing signals, stats, and understanding the mechanics behind every trade.
+
+✈️ Where do the signals come?
+Signals are sent directly to your Telegram for easy and instant access.
+
+📹 Video review: https://t.me/c/1456872361/5262
+
+___________
+
+◆ WHO IS THIS FOR?  ◆
+Built for traders, memecoin chasers, conspiracy theorists, and those who thrive in the shadows.
+Get the signals you wish you saw yesterday.
+
+___________
+
+◆ HOW MUCH CAN I MAKE?  ◆
+💰 Earnings vary based on your deposit, skills, and trades. Check out these real examples:
+https://t.me/c/1456872361/1920 → +200,306$ in 3 months
+https://t.me/c/1456872361/4142 1000$ → 11,035$ (ROE +1003.5%) 
+___________
+
+◆ WHAT MAKES IT DIFFERENT? ◆
+1) Finds scams before they hit your bags.
+2) It follows the money, not emotions.
+3) Spots coins before influencers tweet them.
+
+___________
+
+◆ READY TO JOIN THE GAME? ◆
+OPTION 1 — For Beginners 😎
+
+Handpicked Premium Telegram signals from battle-tested strategies - BTC, ETH, SOL, alts & memes. Locked, loaded, ready to print 💰
+
+1. Pay → Signals start instantly
+2. Click once → Trade auto-executes
+3. Cash out → Job done 💰
+
+You get:
+➊ Premium signal channel
+➋ Auto-trading (Bybit) - details
+➌ Private chat
+⚠️ No access to the indicator itself
+
+How to purchase:
+1 month: 0.01533 BTC
+3 months: 0.0333 BTC
+1 year: 0.0833 BTC
+Contact support @predictum_support or go directly through the website Predictum.ai
+
+
+
+OPTION 2 — For Advanced Users 💪🏽
+
+Want full control and flexibility?
+Unlock top-tier strategies, build your own alerts, and connect your custom systems with ease.
+
+You get:
+➊ Full access to the indicator
+➋ Webhook integration  "TradingView → Telegram" in 10 seconds - use ours or your own
+➌ Private chat
+
+How to get access:
+Hold INDYQ 50+ days while continuously covering the equivalent of 0.0219 BTC.
+No subscriptions. Just loyalty.
+
+
+
+FREE Trial version
+Limited access to the indicator interface on TradingView. No Telegram signals.
+Designed to understand the indicator's mechanics, review past signals, and get an overall feel of the system.
+Details - https://t.me/c/1456872361/5369
+
+___________
+
+◆ INDYQ SHARES ◆
+
+#INDYQ is a digital asset embedded in the Predictūm ecosystem. Unlike meme coins, it’s backed by a real product – the advanced crypto indicator, which has been successfully operating since 2019 and has already proven its effectiveness 
+More info: https://t.me/c/1456872361/5282
+
+___________
+
+◆ WHAT DO I GET AFTER PAYMENT? ◆
+1) 📫 Telegram bot with indicator signals.
+2) 🔓 Full access to the TradingView platform — track the indicator’s history, stats, and structure.
+3) 🤝 Access to the Brotherhood chat — where traders collaborate and share profitable setups.
+4) ✅ A proven strategy for using the indicator.
+
+___________
+
+
+◆ REVIEWS ◆
+💬 Check out what users say: @predictum_reviews
+
+___________
+
+◆ CONTACT ◆
+Any inquiries: @predictum_support ✅
+
+___________
+
+◆ WEBSITE ◆
+Explore more: https://predictum.ai ✅
+==================================================
+
+[2025-04-14 23:18:37]
+#XRDUSDT.P is back 🏃🏽
+==================================================
+
+[2025-04-12 00:32:24]
+As we said — 84,100 has been reached ✅
+This information was posted here  — https://t.me/predictum/5334
+#BTC
+==================================================
+
+[2025-04-10 03:04:32]
+Not much time left until the #INDYQ move 📈😉 — click
+==================================================
+
+[2025-04-10 02:17:26]
+#XRDUSDT.P +47% easy peasy
+==================================================
+
+[2025-04-09 19:10:56]
+Bam. Fast +30% 🤔
+More to come ⏳
+
+#XRDUSDT.P
+==================================================
+
+[2025-04-09 19:02:42]
+#XRDUSDT.P on the starting line. Something is brewing... 🔥
+==================================================
+
+[2025-04-07 01:26:00]
+🔽 Decent dump? Yeah.
+Sniped the move from top to bottom like it was scripted 🧠🔫
+Zero hesitation. Full precision. That’s how we play 😉
+
+#BTC dipping below 80K isn’t exactly a party...
+But here’s the upside: a CME gap is forming around 84100, and there’s a 90% chance it gets filled sooner or later 🎯
+==================================================
+
+[2025-04-04 21:48:34]
+The boys are waiting for a better price like it's a gift — then instantly buying the dip. Absolute legends. 😎✊🏽
+
+Chart: https://dexscreener.com/solana/6QVCgGdzwjUYRtQmBG6ZTBFM3Qah3fuPumWXmi4zXAFT
+
+HOW TO PURCHASE THE #INDYQ SHARES?
+1) Install a Phantom or Solflare wallet
+2) Transfer SOL (Solana) to your wallet
+3) Go to Jupiter
+4) Enter the desired amount of tokens you want to buy
+5) Done! You are now a shareholder of Predictūm 🤝
+==================================================
+
+[2025-04-01 19:39:16]
+// transmission.log  
+>> UPDATE: MODULE_4/6 ONLINE  
+>> STATUS: WEB INTERFACE ACTIVATED 🌐
+
+We’ve launched the official site.
+No more barriers. No more waiting.
+
+Now you can:
+✅ Subscribe directly
+✅ Check your eligibility for FREE access — by holding #INDYQ
+
+>> ACCESS HUB READY  
+>> PERMISSION: HOLDERS ONLY 🧠🔐  
+
+This isn’t just an update. It’s a portal into the system.
+
+You know what to do 👇
+https://predictum.ai ✅
+==================================================
+
+[2025-03-31 23:18:36]
+Since the launch of our Predictūm Agents reward system:
+— ✅ 1453 task completed
+— 💸 $7807 paid out (check Etherscan)
+
+Reminder: This is a Telegram bot that pays you for completing simple tasks.
+Right now, the mission is easy — shill our token #INDYQ in chats.
+Every comment = $5 reward.
+
+Anyone can join — no upfront investment needed.
+
+You promote the token. You get paid.
+And if you’re also a holder — it’s a double win-win 😉
+
+Become an Agent and get your first payout today
+✅@Predictum_Agents_Bot 👈
+==================================================
+
+[2025-03-30 03:05:44]
+👀🧠 Institutions on CME just started adding long positions — for the first time since Jan 21, 2025 📈
+
+#BTC
+==================================================
+
+[2025-03-28 21:39:59]
+Well well well… look who got filled 😏
+CME gap at 84190 — sealed in just 3 days 🔥📉
+
+#BTC
+==================================================
+
+[2025-03-26 22:43:56]
++852$ on our free #PONKEUSDT.P signal 👏
+love you sir
+
+your signal is boom
+
+I have no other signal entry except your signal sir. I have only your signal entry and I wait for your signal all the time sir.
+==================================================
+
+[2025-03-26 20:46:08]
+#PONKEUSDT.P TP1–TP5: all clapped 💥
+Yes, it was a free signal.
+No, this doesn’t happen once. It happens daily 😉
+👉 Get access or keep watching from the sidelines.
+==================================================
+
+[2025-03-26 13:46:07]
+PONKE’s going turbo - already +131% 🚀
+Indicator farming like a meme farm on steroids 😂
+We don’t chase green candles - we manufacture them 🔥
+
+#PONKEUSDT.P
+==================================================
+
+[2025-03-25 22:25:25]
+A new CME gap just formed at 84190.
+There's a ~90% probability it gets filled — sooner or later.
+
+Let’s just hope it’s not in the coming weeks 😅📉
+
+#BTC
+==================================================
+
+[2025-03-24 13:55:06]
+Everyone’s busy copying...
+We’re busy printing 🧠📈
+
+#PONKEUSDT.P just dropped another +80.88% 🤑
+Right after flipping long - after shredding +340.54% short.
+This ain’t an indicator. It’s a financial schizophrenic with an aimbot 🔫🚀
+
+Oh, and yeah - this was a free signal. Dropped right here: https://t.me/predictum/5298
+==================================================
+
+[2025-03-24 01:55:36]
+We're approaching the 1 million $ mark!
+
+Chart: https://dexscreener.com/solana/6QVCgGdzwjUYRtQmBG6ZTBFM3Qah3fuPumWXmi4zXAFT
+
+HOW TO PURCHASE THE #INDYQ SHARES?
+1) Install a Phantom or Solflare wallet
+2) Transfer SOL (Solana) to your wallet
+3) Go to Jupiter
+4) Enter the desired amount of tokens you want to buy
+5) Done! You are now a shareholder of Predictūm 🤝
+==================================================
+
+[2025-03-23 02:30:57]
+And even more profit rolled in - just as expected 😎
+Easy +64% profit 🤑
+
+Cheers!
+#PONKEUSDT.P
+==================================================
+
+[2025-03-22 21:45:04]
+TP4: +35.10% — and we’re not done yet 😏📈
+#PONKEUSDT.P
+==================================================
+
+[2025-03-22 16:04:06]
+Another TP down ✅
+0.1069572 ✓
+Fast +23.85% 💰
+#PONKEUSDT.P
+==================================================
+
+[2025-03-22 15:46:51]
+Only 5 minutes and the signal already hit two targets 💥
+0.10517458 ✓
+0.1059086 ✓
+
+Fast and clean 😎
+#PONKEUSDT.P
+==================================================
+
+[2025-03-22 15:38:52]
+#PONKEUSDT.P Long details.
+Targets: 0.10517458, 0.1059086, 0.1069572, 0.1080058, 0.115346+ 
+Deposit: 5 − 10%
+Leverage: 5 − 10x cross
+
+❕ Add more at these levels:
+→ 1. 0.0975198 − 0.1017142
+→ 2. 0.0859852 − 0.0922768
+→ 3. 0.073402 − 0.078645
+
+Once TP 2 − 3 hit, you can move the remainder of the position to breakeven or slightly lower than the entry point and take profit as it grows.
+==================================================
+
+[2025-03-22 15:30:31]
+👀🔼
+Something is cooking on #PONKEUSDT.P
+==================================================
+
+[2025-03-20 14:11:27]
+Done, everything went as planned – the gap is filled - 86400 ✅
+#BTC
+==================================================
+
+[2025-03-20 03:59:39]
+We are approaching the gap at 86400 as quickly as we are approaching the release of our cheat code to the markets - the Crackōs indicator 🔥
+
+#BTC
+==================================================
+
+[2025-03-18 13:15:13]
+The gap at 84100 has been filled, as expected ✅
+
+#BTC
+==================================================
+
+[2025-03-17 23:05:41]
+This is you when your #INDYQ shares blast off like a rocket into the stratosphere 🚀💥🌎
+But for this, you need to complete one "difficult" task: trust and wait 😉
+==================================================
+
+[2025-03-17 17:11:49]
+A new small gap on CME has formed at 84100.
+Now we have two unfilled gaps at 84100 and 86400. Both are expected to be filled with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-03-17 00:16:47]
+#INDYQ Market cap:
+1. 500K$ — done ✅
+2. 1M$ — ⏳
+3. 5M$ — ⏳
+4. 10M$ — ⏳
+5. 50M$ — ⏳
+
+Chart: https://dexscreener.com/solana/6QVCgGdzwjUYRtQmBG6ZTBFM3Qah3fuPumWXmi4zXAFT
+
+Predictūm Crackōs 🦾
+==================================================
+
+[2025-03-15 15:44:48]
+PART 2/6 🔥
+
+Have you ever dreamed of becoming a shareholder in a company? Now you can! 🍾
+
+Introducing #INDYQ – tokenized shares of Predictūm!
+#INDYQ isn’t just a token, it’s a digital share in our company, offering you unique privileges and investment opportunities 😎
+
+💰  What are the benefits of owning #INDYQ?
+
+1. FREE ACCESS TO THE CRACKŌS INDICATOR
+Exclusively for #INDYQ holders  💎
+
+How it works:
+— You buy #INDYQ (any amount).
+— Hold it for at least 50 days.
+— After 50 days, if your balance of #INDYQ covers the cost of a 1-month subscription, you get access to the indicator ✅
+— Your subscription automatically renews as long as the value of your #INDYQ covers the subscription cost.
+— For verification, send 1 cent → gain access.
+— As soon as you sell your #INDYQ, access to the indicator is automatically revoked.
+
+ 2. A LONG-TERM INVESTMENT
+Benefit from the growth 📈
+You’re investing not just in a token, but in a real product!
+It’s like investing in Apple shares in its early days 💲
+
+⚫️ The value of the token grows with the project.
+⚫️ You become part of the ecosystem, not just a buyer.
+⚫️ In the future – new opportunities and bonuses for #INDYQ holders!
+
+📊 How are #INDYQ tokens allocated?
+Founders & Executives: 51% (controlling stake)
+Community & Public Holders: 30%
+Strategic Partners & Early Supporters: 10%
+Development & Expansion Fund: 5%
+Marketing & Community Growth: 4%
+
+#INDYQ is a digital asset embedded in the Predictūm ecosystem. Unlike meme coins, it’s backed by a real product – the advanced crypto indicator, which has been successfully operating since 2019 and has already proven its effectiveness 🦾
+
+HOW TO PURCHASE THE #INDYQ SHARES?
+1) Install a Phantom or Solflare wallet
+2) Transfer SOL (Solana) to your wallet
+3) Go to Jupiter
+4) Enter the desired amount of tokens you want to buy
+5) Done! You are now a shareholder of Predictūm 🤝
+
+Token address: 6QVCgGdzwjUYRtQmBG6ZTBFM3Qah3fuPumWXmi4zXAFT ✅
+
+Enjoy! 🍾
+==================================================
+
+[2025-03-14 14:30:59]
+Oh boy ... #LAI printed +2167% profit 🔥 
+
+The full power of the new Crackōs indicator in action 🦾
+If you had invested just $500, you would now have $11,335.00 💰
+
+And that's just one signal. The indicator generates 3 to 10 signals per day 🚀
+==================================================
+
+[2025-03-13 13:58:44]
+Enjoying the exceptional performance of the Crackōs indicator 🏝
+Just look at how precisely Crackōs entered a long position on #LAI – pure perfection! +677% profit in 5 hours 🚀
+==================================================
+
+[2025-03-12 14:31:13]
+There are 2 major unfilled gaps left on #ETH: at 2600 and 3300.
+Both are 90% likely to be filled 🔜
+==================================================
+
+[2025-03-09 22:47:56]
+New CME gap will be formed at ~86400$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-02-28 23:38:54]
+😂 While the whole market is down, our free signal on #1000RATSUSDT is still pumping strong 🚀
+Profit already at +577%!
+
+And this is just the very first version of the indicator.
+🍿 When the next update drops — the entire crypto market will never be the same 😜
+==================================================
+
+[2025-02-28 00:08:29]
+We hope you guys filled your pockets with profits! 😉
+Profit +324% on this FREE signal — https://t.me/predictum/5240
+
+#1000RATSUSDT
+==================================================
+
+[2025-02-25 22:24:56]
+TOP-1 💪
+#1000RATSUSDT
+==================================================
+
+[2025-02-25 21:36:57]
+Crushing it!🔥
+#1000RATSUSDT went parabolic 🚀
+Profit +203% in 5 hours. How about that? 
+
+Hope you enjoyed it! 😏
+==================================================
+
+[2025-02-23 22:22:42]
+Kraken hints...? 🙃
+#ETH
+==================================================
+
+[2025-02-20 20:37:22]
+Here you go, the gap at 97500 was filled as expected ✅
+#BTC
+==================================================
+
+[2025-02-18 14:35:25]
+The market is boring? We profit. The market is dumping? We profit. The market is pumping? We profit 😎
+
+For indicator users, neither the market direction nor the market sentiment matters. We earn 24/7 💶
+
+Random results for today:
+#SOL +259% | Short 📉
+#FARTCOIN +267% | Short 📉
+#1000MUMU +306% | Short 📉
+#GRIFFAIN +184% | Short 📉
+#AI16Z +196% | Short 📉
+#10000COQ +1086% | Long 📈
+#BAN +1618% | Long 📈
+
+Join our satisfied traders 1⃣
+
+PRICING:
+— Time-based (regular/PRO):
+1 month: 0.0259 BTC
+3 months: 0.0559 BTC
+1 year: 0.139 BTC
+
+— 🆕 Pay per profit (PRO version) (details):
+50 profitable signals — 0.0229 BTC
+150 profitable signals — 0.0499 BTC
+500 profitable signals — 0.129 BTC
+
+Contact @predictum_support ✅
+==================================================
+
+[2025-02-17 15:12:29]
+New CME gap was formed at ~97500$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-02-15 15:37:04]
+Statistics for 7 days ↓ 
+#LEVER +141.18% | 09/02/2025 | Long
+#OMNI +121.9% | 08/02/2025 | Long
+#IMX +110.35% | 08/02/2025 | Long
+#JTO +47.61% | 10/02/2025 | Long
+#KAS +179.55% | 09/02/2025 | Long
+#STX +51.12% | 10/02/2025 | Long
+#OMNI +81.18% | 10/02/2025 | Long
+#LEVER +159.02% | 10/02/2025 | Long
+#EOS +30.35% | 11/02/2025 | Short
+#SXP +37.01% | 11/02/2025 | Short
+#BIGTIME +63.58% | 11/02/2025 | Short
+#RENDER +50.88% | 11/02/2025 | Long
+#ALGO +62.01% | 11/02/2025 | Long
+#JTO +19.07% | 10/02/2025 | Short
+#STX +31.16% | 12/02/2025 | Short
+#RLC +76.71% | 10/02/2025 | Long
+#LEVER +10% | 12/02/2025 | Short
+#JTO +44.4% | 14/02/2025 | Long
+#RLC +15.62% | 13/02/2025 | Short
+#OM +146.79% | 13/02/2025 | Long
+==================================================
+
+[2025-02-14 22:36:18]
+Yeah baby 😎🤑 
+#JTOUSDT.P pumped hard as expected 🔥
+HUGE +344% profit 😉
+This FREE signal was shared here — https://t.me/predictum/5209
+
+Hope you enjoyed 🍾
+==================================================
+
+[2025-02-14 13:24:38]
+With Predictūm - every trade is a masterpiece!  🖼
+
+#JTOUSDT.P printed +196.86% 🔥
+
+Another HUGE win for all of us 😉
+==================================================
+
+[2025-02-13 21:26:34]
++111% on our free #JTOUSDT.P signal 🔥
+==================================================
+
+[2025-02-13 21:26:31]
++87.32% on #JTOUSDT.P 💪
+
+another great signal, thanks!
+==================================================
+
+[2025-02-13 14:24:53]
+Like clockwork – another day, more profits 🤑💰
+All 5 targets obliterated ✅
+2.6812196 ✓
+2.699932 ✓
+2.726664 ✓
+2.753396 ✓ 
+2.94052 ✓
+
+Profit +164% easy peasy 🔥
+
+This FREE signal was shared here — https://t.me/predictum/5209
+
+#JTOUSDT.P
+==================================================
+
+[2025-02-13 01:28:31]
+#JTOUSDT.P BANG! BANG! +85% 🔥
+==================================================
+
+[2025-02-12 20:05:23]
+Here you go 🏆
+4 targets neutralized:
+2.6812196 ✓
+2.699932 ✓
+2.726664 ✓
+2.753396 ✓ 
+
+Fast +40.87% profit for you all 🔥
+#JTOUSDT.P
+==================================================
+
+[2025-02-12 13:46:19]
+Two targets done ✅ 
+Waiting for more gains ⏳
+
+2.6812196 ✓
+2.699932 ✓
+
+#JTOUSDT.P
+==================================================
+
+[2025-02-11 17:22:55]
+#JTOUSDT.P Long details.
+Targets: 2.6812196, 2.699932, 2.726664, 2.753396, 2.94052+ 
+Deposit: 5 − 10%
+Leverage: 5 − 10x cross
+
+❕ Add more at these levels:
+→ 1. 2.486076 - 2.593004
+→ 2. 2.192024 - 2.352416
+→ 3. 1.87124 - 2.0049
+
+Once TP 2 − 3 hit, you can move the remainder of the position to breakeven or slightly lower than the entry point and take profit as it grows.
+==================================================
+
+[2025-02-10 21:30:17]
+There’s still a huge unfilled gap on #ETH at 3300, with a 90% probability of being filled 🔜
+==================================================
+
+[2025-02-09 23:32:57]
+hey, just want to thank you for the great free signal you sent!
++50.47% on #DODOX  👏
+==================================================
+
+[2025-02-09 23:31:57]
++52.56% on our free #DODOX signal 👏🏽
+==================================================
+
+[2025-02-09 13:44:29]
+BAMMM!💥
+#DODOX  is on absolute fire 🤑
+4/5 targets smashed and printed +103.65% profit for all of you guys 😎
+
+Stay tuned, legends. More victories ahead ✊
+==================================================
+
+[2025-02-09 00:57:27]
+💪 Another victory secured.
+#DODOX signal was shared for FREE yesterday https://t.me/Predictum_PRO/1037
+Profit +49.79% no stress, just pure gains 😉
+
+More to come 💰
+==================================================
+
+[2025-02-05 21:01:05]
+We hope you're continuing to accumulate #TRUMP ? 👆🏽
+Remember: Every dip is a gift.
+
++ #MELANIA
+==================================================
+
+[2025-02-04 13:55:34]
+As expected, everything went according to plan, and the gap at 102200 was filled ✅
+Right after the price reached 102200, the dump began 💎
+
+#BTC
+==================================================
+
+[2025-02-02 21:08:31]
+New CME gap will be formed at ~102200$.
+
+The gap will be filled sooner or later with a 90% probability 🔜
+#BTC
+==================================================
+
+[2025-01-30 12:59:06]
+Told you guys 😉
+105100 done ✅
+
+We hope this information has been useful to you 🍻
+#BTC
+==================================================
+
+[2025-01-29 22:39:58]
+👀 Upcoming key events for the markets:
+Today, 19:00 UTC — Fed Interest Rate Decision
+Today, 19:30 UTC — Fed Press Conference
+
+Get ready for increased volatility 📉📈
+
+#TRUMP is always ready for another dip 😂
+==================================================
+
+[2025-01-27 12:52:38]
+New CME gap was formed at ~105100$.
+
+FYI: ±90% of CME gaps are filled sooner or later (it may be in a week, or maybe in a month).
+Keep this in mind.
+#BTC
+==================================================
+
+[2025-01-26 23:30:44]
++116% easy peasy  😎
+#JTO
+==================================================
+
+[2025-01-26 19:22:17]
+🍾 Another victory for all of us! The signal for #JTO was given for FREE yesterday right here — https://t.me/Predictum_PRO/1028
+The price hit TP1, then pulled back, triggering a buy order, making the average entry point even better.
+Today, we’re riding a +73.59% profit and enjoying the achieved 3 TPs 🤑
+==================================================
+
+[2025-01-26 13:06:05]
+#TRUMP has already printed +100% (with 10x leverage) 💰
+==================================================
+
+[2025-01-25 23:52:53]
+😉 Owning #TRUMP in your portfolio is your ticket to making 2025 the most legendary year of your crypto journey. Even if the coin gets delisted from all exchanges.
+Every dip – be it 10%, 30%, 90%, or even 99% – is not just a buying opportunity; it’s a gift.
+But please, every one of you, every single one! Make sure to message us personally and send a thank you when the time comes this year.
+
++ #MELANIA
+==================================================
+
+[2025-01-20 21:04:30]
++956% on #CHILLGUY  🔥
+==================================================
+
+[2025-01-20 19:16:57]
+nothing can beat Predictum signal
++310$ on our free signal #CHILLGUY  👏
+==================================================
+
+[2025-01-20 01:36:26]
++4.3k$ #CHILLGUY
+==================================================
+
+[2025-01-17 21:33:04]
+🍷 New day, more gains
+
+#1000CAT +180%
+#HIPPO +167%
+#WIF +281%
+#MEW +158%
+
+Congrats if you followed this FREE signal 🤔
+==================================================
+
+[2025-01-16 12:57:24]
+#CHILLGUY +111% ✅
+#HIPPO +140% ✅
+#1000RATS +101% ✅
+#MOODENG +123% ✅
+#1000CAT +130% ✅
+#WIF +206% ✅
+#MEW +112% ✅
+
+Congrats guys! 😎
+==================================================
+
+[2025-01-14 12:46:12]
+😎 As expected, everything played out perfectly.
+The dip gave us a sweet spot to load up at a better price, and now all the bags are in solid profit.
+Not all orders in the targeted zones got filled, so if we see another pullback, we’ll scoop up even more coins. Cheers!
+
+#CHILLGUY +44%
+#HIPPO +27%
+#MOODENG +51%
+#1000CAT +41%
+#WIF +33%
+#MEW +25%
+
+More profits 🔜
+==================================================
+
