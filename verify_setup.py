@@ -240,20 +240,25 @@ if RUN_ISOLATED_SCRIPT:
     try:
         exchange_info = client.exchange_info()
         symbols = [s['symbol'] for s in exchange_info['symbols'] if s['status'] == 'TRADING']
+        total = len(symbols)
         success_count = 0
         skip_count = 0
         fail_count = 0
         
-        for symbol in symbols:
+        for i, symbol in enumerate(symbols):
             try:
                 client.change_margin_type(symbol=symbol, marginType='ISOLATED')
                 success_count += 1
+                print(f"   [{i+1}/{total}] ✅ {symbol} → ISOLATED")
             except Exception as e:
                 if "No need to change margin type" in str(e):
                     skip_count += 1
+                    print(f"   [{i+1}/{total}] ⏭️ {symbol} (already ISOLATED)")
                 else:
                     fail_count += 1
+                    print(f"   [{i+1}/{total}] ❌ {symbol} - {str(e)[:50]}")
         
+        print(f"\n   Summary:")
         print(f"   ✅ Changed: {success_count} symbols")
         print(f"   ⏭️ Already ISOLATED: {skip_count} symbols")
         print(f"   ❌ Failed: {fail_count} symbols")
