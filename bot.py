@@ -255,13 +255,14 @@ async def startup_tests():
     }
     
     # Register handlers with wrappers to pass config
-    @tg_client.on(events.NewMessage(chats=listen_channel_bot_1_p))
+    # outgoing=False prevents race condition when testing (bot won't react to its own messages)
+    @tg_client.on(events.NewMessage(chats=listen_channel_bot_1_p, outgoing=False))
     async def wrapper_bot_1_p(event):
         await handle_signal_bot_1_p(event, tg_client, binance_client, config_bot_1_p, precision,
                                      Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
                                      PLACE_REAL_TRADES)
     
-    @tg_client.on(events.NewMessage(chats=listen_channel_bot_2_bk))
+    @tg_client.on(events.NewMessage(chats=listen_channel_bot_2_bk, outgoing=False))
     async def wrapper_bot_2_bk(event):
         await handle_signal_bot_2_bk(event, tg_client, binance_client, config_bot_2_bk, precision,
                                       Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
