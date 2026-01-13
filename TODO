@@ -41,9 +41,6 @@ DONE - adding systemmd cammands to git
 DONE - generate 3 session string. gcp local if needed and new signal_analyzer.py
 
 
-
-
-
 DONE - TP/Profit Updates. if for 1 trade we might be counting multiple tp mesages as seperate. dont do it. for 1 trade even if we hit multiple tp. count it as 1 only
 DONE - for searching stop loss hit messages. there i am not sure hwo to find it. you have to find it using different approaches. you have chached all the messags rgiht. you can check from there as well
 DONE - Whenever we make script always use session_strign1 and always make sure we dont simulteniously use same session strign tfor two programmes
@@ -179,7 +176,15 @@ cant do anything here. need to add manually ips only in biannace
 
 DONE - Find proper channel for parsing of messages.
 
-Test parsers for bot2.py
+DONE - Testing mechanism for parsing of different telegram groups
+
+DONE - Trade is not taken even when entry price is lower or higher and if it is either short or long.
+are we looking when the exact price of Entry and price of coin matches only then trade is taken or what
+
+DONE - My principal amount is getting locked even when we are not entred the trade
+Entry order locks your margin but won't fill (price too low)
+
+DONE - Test parsers for bot2.py
 Add 2nd prarser for bot2.py as well
 
 One more project to take posotion as soon as the coin is listed
@@ -195,4 +200,4 @@ Need someexcel to keep track of what trade is taken and how is trading going on
 
 Handling deployment and stop or start of bot through telegram only
 
-Testing mechanism for parsing of different telegram groups
+
