@@ -277,8 +277,8 @@ if __name__ == "__main__":
     print("==============================")
     
     # Determine listening sources
-    bot_1_p_source = "Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "Private Group"
-    bot_2_bk_source = "Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "Private Group"
+    bot_1_p_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
+    bot_2_bk_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
     
     print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}'}}")
     print(f"[BOT] 💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
