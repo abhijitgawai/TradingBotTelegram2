@@ -266,19 +266,19 @@ bot2_signals = [
     """,
     
     """
-        📍**Coin : ****#DUSK****/USDT
-        ****🟢**** LONG 
-        ****➡️**** Entry: 0.05913 - 0.05760
-        ****🌐**** Leverage: 20x
+        📍Coin : #DUSK/USDT
+        🟢 LONG 
+        ➡️ Entry: 0.05913 - 0.05760
+        🌐 Leverage: 20x
 
-        ****😵**** Target 1: 0.05973
-        ****😵**** Target 2: 0.06030
-        ****😵**** Target 3: 0.06090
-        ****😵**** Target 4: 0.06152
-        ****😵**** Target 5: 0.06214
-        ****😵**** Target 6: 0.06287
+        😵 Target 1: 0.05973
+        😵 Target 2: 0.06030
+        😵 Target 3: 0.06090
+        😵 Target 4: 0.06152
+        😵 Target 5: 0.06214
+        😵 Target 6: 0.06287
 
-        ****❌**** StopLoss: 0.05554**
+        ❌ StopLoss: 0.05554
     """,
 ]
 
