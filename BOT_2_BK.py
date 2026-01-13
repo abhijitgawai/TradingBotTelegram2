@@ -19,8 +19,14 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     SYMBOL_PRECISION = precision['symbol']
     PRICE_PRECISION = precision['price']
     
-    print(f"[{bot_id}] ✅ Signal detected!")
     text = event.raw_text
+    
+    # Skip bot's own messages (prevents race condition during testing)
+    if text.startswith(f"[{bot_id}]"):
+        print(f"[{bot_id}] ❌ Own message")
+        return
+    
+    print(f"[{bot_id}] ✅ Signal detected!")
     print(f"[{bot_id}] ====Signal====")
     print(text)
     print(f"[{bot_id}] ---------------")
