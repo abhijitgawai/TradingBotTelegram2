@@ -56,10 +56,19 @@ MY_PRIVATE_GROUP_ID_BOT_1_P = os.getenv('MY_PRIVATE_GROUP_ID_BOT_1_P')
 SIGNAL_CHANNEL_ID_BOT_2_BK = os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK')
 MY_PRIVATE_GROUP_ID_BOT_2_BK = os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK')
 
+# Trading parameters
+LEVERAGE_BOT_1_P = os.getenv('LEVERAGE_BOT_1_P')
+LEVERAGE_BOT_2_BK = os.getenv('LEVERAGE_BOT_2_BK')
+MARGIN_USD_BOT_1_P = os.getenv('MARGIN_USD_BOT_1_P')
+MARGIN_USD_BOT_2_BK = os.getenv('MARGIN_USD_BOT_2_BK')
+
+# All required environment variables
 env_vars = ['TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'SESSION_STRING', 
             'SIGNAL_CHANNEL_ID_BOT_1_P', 'MY_PRIVATE_GROUP_ID_BOT_1_P',
             'SIGNAL_CHANNEL_ID_BOT_2_BK', 'MY_PRIVATE_GROUP_ID_BOT_2_BK',
-            'BINANCE_KEY', 'BINANCE_SECRET']
+            'BINANCE_KEY', 'BINANCE_SECRET',
+            'LEVERAGE_BOT_1_P', 'LEVERAGE_BOT_2_BK',
+            'MARGIN_USD_BOT_1_P', 'MARGIN_USD_BOT_2_BK']
 
 all_set = all(os.getenv(v) for v in env_vars)
 if all_set:
@@ -67,6 +76,9 @@ if all_set:
 else:
     missing = [v for v in env_vars if not os.getenv(v)]
     test_fail(f"TEST CASE 1: Missing: {', '.join(missing)}")
+    print("\n⛔ CRITICAL: Cannot continue without required environment variables.")
+    print("   Please set all variables in .env file and try again.")
+    exit(1)
 
 # Convert types
 TELEGRAM_API_ID = int(TELEGRAM_API_ID) if TELEGRAM_API_ID else None
@@ -81,9 +93,11 @@ print("=" * 60)
 from binance.um_futures import UMFutures
 client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 
-# Load margin settings for validation
-MARGIN_USD_BOT_1_P = int(os.getenv('MARGIN_USD_BOT_1_P', 100))
-MARGIN_USD_BOT_2_BK = int(os.getenv('MARGIN_USD_BOT_2_BK', 100))
+# Convert margin/leverage to int (already loaded as strings above)
+MARGIN_USD_BOT_1_P = int(MARGIN_USD_BOT_1_P)
+MARGIN_USD_BOT_2_BK = int(MARGIN_USD_BOT_2_BK)
+LEVERAGE_BOT_1_P = int(LEVERAGE_BOT_1_P)
+LEVERAGE_BOT_2_BK = int(LEVERAGE_BOT_2_BK)
 
 try:
     account = client.account()
@@ -167,28 +181,161 @@ except Exception as e:
 
 
 # ============================================================
-# TEST CASE 4: Signal Parsing
+# TEST CASE 4: Signal Parsing (BOT_1_P and BOT_2_BK)
 # ============================================================
 print("\n" + "=" * 60)
 print("TEST CASE 4: Signal Parsing")
 print("=" * 60)
 
-test_signal = """📥 #DOGE | Open Long
+# BOT_1_P sample signals
+bot1_signals = [
+    """📥 #DOGE | Open Long
 Current price: 0.31500
-TP 1: 0.31800 - Probability 95%
-"""
+TP 1: 0.31800 - Probability 95%""",
+    
+    """
+        📥 #CUDIS | Open Long
+        Current price: 0.02926
+        Settings: BYBIT. Timeframe: 45 min
+        Strategy score: 4.35
 
-symbol_match = re.search(r'#(\w+)', test_signal)
-side_found = "Open Long" in test_signal or "Open Short" in test_signal
-price_match = re.search(r'Current price: ([\d.]+)', test_signal)
-tp1_match = re.search(r'TP 1: ([\d.]+)', test_signal)
+        TP 1: 0.029556 - Probability 94% (PNL 130%)
+        TP 2: 0.029861 - Probability 84% (PNL 120%)
+        TP 3: 0.030157 - Probability 74% (PNL 68%)
+        TP 4: 0.030438 - Probability 71% (PNL 178%)
+        TP 5: 0.031626 - Probability 52% (PNL 98%)
+        TP 6: 0.035133 - Probability 35% (PNL 784%)
+        DCA: 1. 0.027212 2. 0.024871 3. 0.021945
 
-if symbol_match and side_found and price_match and tp1_match:
-    print(f"   Symbol: {symbol_match.group(1)}USDT")
-    print(f"   Entry: {price_match.group(1)}, TP1: {tp1_match.group(1)}")
-    test_pass("TEST CASE 4: Signal parsing works")
+        ID: #Long_CUDIS_19_12_2025_06_45
+    """,
+    
+    """
+        📥 #EPT | Open Short
+        Current price: 0.003428
+        Settings: BYBIT. Timeframe: 45 min
+        Strategy score: 5.9
+
+        TP 1: 0.0033933 - Probability 94% (PNL 80%)
+        TP 2: 0.0033578 - Probability 88% (PNL 140%)
+        TP 3: 0.0033245 - Probability 76% (PNL 70%)
+        TP 4: 0.0032898 - Probability 76% (PNL 200%)
+        TP 5: 0.0031516 - Probability 76% (PNL 720%)
+        TP 6: 0.0027392 - Probability 41% (PNL 631%)
+        SL: 0.0037022 or DCA
+
+        ID: #Short_EPT_3_11_2025_03_00
+    
+    """,
+]
+
+# BOT_2_BK sample signals
+bot2_signals = [
+    """
+        📥 #EPT | Open Short
+        Current price: 0.003428
+        Settings: BYBIT. Timeframe: 45 min
+        Strategy score: 5.9
+
+        TP 1: 0.0033933 - Probability 94% (PNL 80%)
+        TP 2: 0.0033578 - Probability 88% (PNL 140%)
+        TP 3: 0.0033245 - Probability 76% (PNL 70%)
+        TP 4: 0.0032898 - Probability 76% (PNL 200%)
+        TP 5: 0.0031516 - Probability 76% (PNL 720%)
+        TP 6: 0.0027392 - Probability 41% (PNL 631%)
+        SL: 0.0037022 or DCA
+
+        ID: #Short_EPT_3_11_2025_03_00
+    
+    """,
+    
+    """
+    
+        📥 #EPT | Open Short
+        Current price: 0.003428
+        Settings: BYBIT. Timeframe: 45 min
+        Strategy score: 5.9
+
+        TP 1: 0.0033933 - Probability 94% (PNL 80%)
+        TP 2: 0.0033578 - Probability 88% (PNL 140%)
+        TP 3: 0.0033245 - Probability 76% (PNL 70%)
+        TP 4: 0.0032898 - Probability 76% (PNL 200%)
+        TP 5: 0.0031516 - Probability 76% (PNL 720%)
+        TP 6: 0.0027392 - Probability 41% (PNL 631%)
+        SL: 0.0037022 or DCA
+
+        ID: #Short_EPT_3_11_2025_03_00
+    """,
+    
+    """
+        📥 #EPT | Open Short
+        Current price: 0.003428
+        Settings: BYBIT. Timeframe: 45 min
+        Strategy score: 5.9
+
+        TP 1: 0.0033933 - Probability 94% (PNL 80%)
+        TP 2: 0.0033578 - Probability 88% (PNL 140%)
+        TP 3: 0.0033245 - Probability 76% (PNL 70%)
+        TP 4: 0.0032898 - Probability 76% (PNL 200%)
+        TP 5: 0.0031516 - Probability 76% (PNL 720%)
+        TP 6: 0.0027392 - Probability 41% (PNL 631%)
+        SL: 0.0037022 or DCA
+
+        ID: #Short_EPT_3_11_2025_03_00
+    """,
+]
+
+def test_bot1_signal(signal):
+    """Test BOT_1_P signal parsing"""
+    symbol = re.search(r'#(\w+)', signal)
+    side = "Open Long" in signal or "Open Short" in signal
+    price = re.search(r'Current price: ([\d.]+)', signal)
+    tp1 = re.search(r'TP 1: ([\d.]+)', signal)
+    return symbol and side and price and tp1
+
+def test_bot2_signal(signal):
+    """Test BOT_2_BK signal parsing"""
+    symbol = re.search(r'#(\w+)', signal)
+    side = "LONG" in signal.upper() or "SHORT" in signal.upper()
+    price = re.search(r'Entry:\s*([\d.]+)', signal)
+    tp1 = re.search(r'Target 1:\s*([\d.]+)', signal)
+    sl = re.search(r'StopLoss:\s*([\d.]+)', signal)
+    return symbol and side and price and tp1 and sl
+
+# Test BOT_1_P signals
+bot1_passed = 0
+bot1_failed = 0
+for i, signal in enumerate(bot1_signals):
+    if test_bot1_signal(signal):
+        symbol = re.search(r'#(\w+)', signal).group(1)
+        print(f"   [BOT_1_P] Signal {i+1}: ✅ {symbol}USDT")
+        bot1_passed += 1
+    else:
+        print(f"   [BOT_1_P] Signal {i+1}: ❌ Failed")
+        bot1_failed += 1
+
+# Test BOT_2_BK signals
+bot2_passed = 0
+bot2_failed = 0
+for i, signal in enumerate(bot2_signals):
+    if test_bot2_signal(signal):
+        symbol = re.search(r'#(\w+)', signal).group(1)
+        print(f"   [BOT_2_BK] Signal {i+1}: ✅ {symbol}USDT")
+        bot2_passed += 1
+    else:
+        print(f"   [BOT_2_BK] Signal {i+1}: ❌ Failed")
+        bot2_failed += 1
+
+# Summary
+total_passed = bot1_passed + bot2_passed
+total_signals = len(bot1_signals) + len(bot2_signals)
+print(f"   ---")
+print(f"   BOT_1_P: {bot1_passed}/{len(bot1_signals)} passed | BOT_2_BK: {bot2_passed}/{len(bot2_signals)} passed")
+
+if bot1_failed == 0 and bot2_failed == 0:
+    test_pass(f"TEST CASE 4: All {total_signals} signals parsed successfully")
 else:
-    test_fail("TEST CASE 4: Signal parsing failed")
+    test_fail(f"TEST CASE 4: {bot1_failed + bot2_failed} signals failed")
 
 # ============================================================
 # TEST CASE 5: Symbol Precision Cache
