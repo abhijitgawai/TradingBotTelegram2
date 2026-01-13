@@ -182,7 +182,11 @@ async def test_channel_ids():
     for channel_id, channel_name in channels_to_test:
         try:
             entity = await tg_client.get_entity(channel_id)
-            print(f"[BOT]    {channel_name}: {entity.title} ✅")
+            # Use end=' | ' for Signal channels to combine with Private on same line
+            if "Signal" in channel_name:
+                print(f"[BOT]    {channel_name}: ✅", end=' | ')
+            else:
+                print(f"{channel_name}: ✅")
         except Exception as e:
             print(f"[BOT]    ❌ {channel_name}: FAILED - {str(e)}")
 

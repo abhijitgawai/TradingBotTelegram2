@@ -44,7 +44,7 @@ flowchart LR
 TradingBotTelegram2/
 ├── bot.py              # Main bot - runs both BOT_1_P and BOT_2_BK
 ├── BOT_1_P.py          # Parser for Signal Channel P (no SL)
-├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL placeholder)
+├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL)
 ├── verify_setup.py     # Test suite - verify all connections
 ├── generate_session.py # Run once to get SESSION_STRING
 ├── requirements.txt    # Python dependencies
