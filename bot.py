@@ -205,14 +205,14 @@ async def startup_tests():
         
         # Validate margin settings against wallet balance
         if MARGIN_USD_BOT_1_P > wallet_balance:
-            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_1_P (${MARGIN_USD_BOT_1_P}) > Balance (${wallet_balance:.2f})")
+            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_1_P (${MARGIN_USD_BOT_1_P}) > Balance (${wallet_balance:.2f})", end = ' | ')
         else:
-            print(f"[BOT]    BOT_1_P Margin: ✅ ${MARGIN_USD_BOT_1_P} < Balance")
+            print(f"[BOT]    BOT_1_P Margin: ✅ ${MARGIN_USD_BOT_1_P} < Balance", end = ' | ')
         
         if MARGIN_USD_BOT_2_BK > wallet_balance:
-            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_2_BK (${MARGIN_USD_BOT_2_BK}) > Balance (${wallet_balance:.2f})")
+            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_2_BK (${MARGIN_USD_BOT_2_BK}) > Balance (${wallet_balance:.2f})", end = ' | ')
         else:
-            print(f"[BOT]    BOT_2_BK Margin: ✅ ${MARGIN_USD_BOT_2_BK} < Balance")
+            print(f"[BOT]    BOT_2_BK Margin: ✅ ${MARGIN_USD_BOT_2_BK} < Balance", end = ' | ')
             
     except Exception as e:
         print(f"[BOT]    ❌ Binance API: FAILED - {str(e)}")
@@ -225,7 +225,7 @@ async def startup_tests():
         for s in exchange_info['symbols']:
             SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
             PRICE_PRECISION[s['symbol']] = s['pricePrecision']
-        print(f"[BOT]    Binance Symbols: ✅ Cached {len(SYMBOL_PRECISION)} symbols")
+        print(f"[BOT]    Binance Symbols: ✅ Cached {len(SYMBOL_PRECISION)} symbols", '========================')
     except Exception as e:
         print(f"[BOT]    ⚠️ Could not cache decimals: {str(e)}")
     
@@ -274,17 +274,15 @@ async def startup_tests():
 # =============================================================================
 
 if __name__ == "__main__":
-    print("==============================")
     
     # Determine listening sources
     bot_1_p_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
     bot_2_bk_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
     
-    print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}'}}")
+    print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}'}} ========================")
     print(f"[BOT] 💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
     print(f"[BOT]    BOT_1_P - Leverage: {LEVERAGE_BOT_1_P}x | Margin: ${MARGIN_USD_BOT_1_P} -------- BOT_2_BK - Leverage: {LEVERAGE_BOT_2_BK}x | Margin: ${MARGIN_USD_BOT_2_BK}")
     
     tg_client.start()
     tg_client.loop.run_until_complete(startup_tests())
-    print("==============================")
     tg_client.run_until_disconnected()
