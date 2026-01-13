@@ -229,59 +229,56 @@ TP 1: 0.31800 - Probability 95%""",
     """,
 ]
 
-# BOT_2_BK sample signals
+# BOT_2_BK sample signals (different format from BOT_1_P)
 bot2_signals = [
     """
-        📥 #EPT | Open Short
-        Current price: 0.003428
-        Settings: BYBIT. Timeframe: 45 min
-        Strategy score: 5.9
+        📍**Coin : ****#MTL****/USDT
+        ****🔴**** SHORT 
+        ****➡️**** Entry: 0.4310 - 0.4460
+        ****🌐**** Leverage: 20x
 
-        TP 1: 0.0033933 - Probability 94% (PNL 80%)
-        TP 2: 0.0033578 - Probability 88% (PNL 140%)
-        TP 3: 0.0033245 - Probability 76% (PNL 70%)
-        TP 4: 0.0032898 - Probability 76% (PNL 200%)
-        TP 5: 0.0031516 - Probability 76% (PNL 720%)
-        TP 6: 0.0027392 - Probability 41% (PNL 631%)
-        SL: 0.0037022 or DCA
+        ****😵**** Target 1: 0.4270
+        ****😵**** Target 2: 0.4228
+        ****😵****l Target 3: 0.4186
+        ****😵**** Target 4: 0.4145
+        ****😵**** Target 5: 0.4104
+        ****😵**** Target 6: 0.4062
 
-        ID: #Short_EPT_3_11_2025_03_00
-    
+        ****❌**** StopLoss: 0.4530**
+
     """,
     
     """
-    
-        📥 #EPT | Open Short
-        Current price: 0.003428
-        Settings: BYBIT. Timeframe: 45 min
-        Strategy score: 5.9
+        📍**Coin : ****#ZIL****/USDT
+        ****🔴**** SHORT 
+        ****➡️**** Entry: 0.005825 - 0.006000
+        ****🌐**** Leverage: 20x
 
-        TP 1: 0.0033933 - Probability 94% (PNL 80%)
-        TP 2: 0.0033578 - Probability 88% (PNL 140%)
-        TP 3: 0.0033245 - Probability 76% (PNL 70%)
-        TP 4: 0.0032898 - Probability 76% (PNL 200%)
-        TP 5: 0.0031516 - Probability 76% (PNL 720%)
-        TP 6: 0.0027392 - Probability 41% (PNL 631%)
-        SL: 0.0037022 or DCA
+        ****😵**** Target 1: 0.005775
+        ****😵**** Target 2: 0.005717
+        ****😵**** Target 3: 0.005660
+        ****😵**** Target 4: 0.005604
+        ****😵**** Target 5: 0.005538
+        ****😵**** Target 6: 0.005480
 
-        ID: #Short_EPT_3_11_2025_03_00
+        ****❌**** StopLoss: 0.006260**
+
     """,
     
     """
-        📥 #EPT | Open Short
-        Current price: 0.003428
-        Settings: BYBIT. Timeframe: 45 min
-        Strategy score: 5.9
+        📍**Coin : ****#DUSK****/USDT
+        ****🟢**** LONG 
+        ****➡️**** Entry: 0.05913 - 0.05760
+        ****🌐**** Leverage: 20x
 
-        TP 1: 0.0033933 - Probability 94% (PNL 80%)
-        TP 2: 0.0033578 - Probability 88% (PNL 140%)
-        TP 3: 0.0033245 - Probability 76% (PNL 70%)
-        TP 4: 0.0032898 - Probability 76% (PNL 200%)
-        TP 5: 0.0031516 - Probability 76% (PNL 720%)
-        TP 6: 0.0027392 - Probability 41% (PNL 631%)
-        SL: 0.0037022 or DCA
+        ****😵**** Target 1: 0.05973
+        ****😵**** Target 2: 0.06030
+        ****😵**** Target 3: 0.06090
+        ****😵**** Target 4: 0.06152
+        ****😵**** Target 5: 0.06214
+        ****😵**** Target 6: 0.06287
 
-        ID: #Short_EPT_3_11_2025_03_00
+        ****❌**** StopLoss: 0.05554**
     """,
 ]
 
@@ -294,7 +291,7 @@ def test_bot1_signal(signal):
     return symbol and side and price and tp1
 
 def test_bot2_signal(signal):
-    """Test BOT_2_BK signal parsing"""
+    """Test BOT_2_BK signal parsing (Entry:, Target 1:, StopLoss:)"""
     symbol = re.search(r'#(\w+)', signal)
     side = "LONG" in signal.upper() or "SHORT" in signal.upper()
     price = re.search(r'Entry:\s*([\d.]+)', signal)

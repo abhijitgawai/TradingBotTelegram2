@@ -1,7 +1,7 @@
 """
 BOT_2_BK Parser - Channel BK (Has Stop Loss)
 Signal format:
-#COINNAME/USDT | 🟢 LONG or 🔴 SHORT
+#SYMBOL/USDT | 🟢 LONG or 🔴 SHORT
 Entry: X.XXX - X.XXX | Target 1: X.XXX | StopLoss: X.XXX
 """
 
@@ -46,7 +46,7 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
         return
     print(f"   [{bot_id}] 📌 Side: {side}")
     
-    # 3. Extract Entry Price (first number after "Entry:")
+    # 3. Extract Entry Price (first number after Entry:)
     price_match = re.search(r'Entry:\s*([\d.]+)', text)
     if not price_match:
         await tg_client.send_message(private_group_id, f"[{bot_id}] ❌ Price not found for {symbol}")
@@ -64,7 +64,7 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
     tp1_price = float(tp1_match.group(1))
     print(f"   [{bot_id}] 📌 TP1: {tp1_price}")
     
-    # 5. Extract StopLoss (BOT_2_BK has SL in signal)
+    # 5. Extract StopLoss
     sl_price = None
     sl_price_rounded = None
     sl_match = re.search(r'StopLoss:\s*([\d.]+)', text)

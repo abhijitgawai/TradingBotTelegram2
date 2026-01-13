@@ -56,7 +56,6 @@ DONE - The structure of siginasl are going to be different so thus different reg
 Do not implement anything as of now. first understand all the requirements from new telegram channel. 
 Then understand the better way to implement it and then start the implementation
 
-One more project to take posotion as soon as the coin is listed
 
 DONE - 
 I want to keep logic of entering the trade as it is.
@@ -170,9 +169,27 @@ DONE - Is our principal 100dollars locked till trade is completed
 
 DONE - Give proper formatting of BOT_2_BK.py to parse telegram signal
 
+DONE - CHecking race condition when testing and making LISTEN_TO_SIGNAL_GROUP false
+
+DONE - Handle ip restrictions and handle verify_setup.py
+cant do anything here. need to add manually ips only in biannace
+
+DONE - Find proper channel for parsing of messages.
+
 Test parsers for bot2.py
+Add 2nd prarser for bot2.py as well
 
-Handle ip restrictions and handle verify_setup.py
+One more project to take posotion as soon as the coin is listed
 
-Find proper channel for parsing of messages.
+Add TP1, TP2 logic 
 
+Add Trailing stop loss logic
+
+Add Entry1, Entry2 logic as well.
+for entry2 we might increase the leverage. also for entry 1, entry 2 different amount of collertal will be used
+
+Need someexcel to keep track of what trade is taken and how is trading going on
+
+Handling deployment and stop or start of bot through telegram only
+
+Testing mechanism for parsing of different telegram groups
