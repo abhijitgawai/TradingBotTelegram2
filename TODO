@@ -7,8 +7,11 @@ DONE - cross i dont want, i want all of tehse to be isolated trades
 
 DONE - instead of making isolated while taking trade. as we can fetch all symbols(600 something)
 DONE - cant we make all of them isolated at once using a loop.
+DONE - cant we make all of them isolated at once using a loop.
 
 DONE - can it happen binance reject the request due to ip restrictions.
+DONE - To avaoid this can we make a test api call just after bot is triggered.
+DONE - Do below line already makes sure the request is not rejected due to ip restrictions.
 DONE - To avaoid this can we make a test api call just after bot is triggered.
 DONE - Do below line already makes sure the request is not rejected due to ip restrictions.
 exchange_info = binance_client.exchange_info()
