@@ -144,9 +144,9 @@ async def handle_signal_bot_3_gg(event, tg_client, binance_client, config, preci
             
             # Place SL Order (if SL price is present)
             if sl_price_rounded:
-                SL_Trade(symbol, exit_side, quantity, sl_price_rounded, bot_id, executeSL=True)
+                SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=True, stop_price=sl_price_rounded)
             else:
-                SL_Trade(symbol, exit_side, quantity, None, bot_id, executeSL=False)
+                SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=False, stop_price=None)
             
             # Send notification AFTER all trades (wrapped in try-catch)
             try:

@@ -103,7 +103,7 @@ async def handle_signal_bot_2_bk(event, tg_client, binance_client, config, preci
             if sl_price:
                 try:
                     sl_price_rounded = round_price(sl_price, symbol)
-                    SL_Trade(symbol, exit_side, quantity, sl_price_rounded, bot_id, executeSL=True)
+                    SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=True, stop_price=sl_price_rounded)
                 except Exception as e:
                     print(f"   [{bot_id}] ⚠️ SL price error: {str(e)}")
             
