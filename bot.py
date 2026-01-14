@@ -6,6 +6,7 @@ from telethon.sessions import StringSession
 from binance.um_futures import UMFutures
 from BOT_1_P import handle_signal_bot_1_p
 from BOT_2_BK import handle_signal_bot_2_bk
+from BOT_3_GG import handle_signal_bot_3_gg
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,6 +38,12 @@ SIGNAL_CHANNEL_ID_BOT_2_BK = int(os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK'))
 MY_PRIVATE_GROUP_ID_BOT_2_BK = int(os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK'))
 LEVERAGE_BOT_2_BK = int(os.getenv('LEVERAGE_BOT_2_BK', 5))
 MARGIN_USD_BOT_2_BK = int(os.getenv('MARGIN_USD_BOT_2_BK', 100))
+
+# --- BOT 3 (Channel GG) CONFIG ---
+SIGNAL_CHANNEL_ID_BOT_3_GG = int(os.getenv('SIGNAL_CHANNEL_ID_BOT_3_GG'))
+MY_PRIVATE_GROUP_ID_BOT_3_GG = int(os.getenv('MY_PRIVATE_GROUP_ID_BOT_3_GG'))
+LEVERAGE_BOT_3_GG = int(os.getenv('LEVERAGE_BOT_3_GG', 5))
+MARGIN_USD_BOT_3_GG = int(os.getenv('MARGIN_USD_BOT_3_GG', 100))
 
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
@@ -176,6 +183,8 @@ async def test_channel_ids():
         (MY_PRIVATE_GROUP_ID_BOT_1_P, "Private Group BOT_1_P"),
         (SIGNAL_CHANNEL_ID_BOT_2_BK, "Signal Channel BOT_2_BK"),
         (MY_PRIVATE_GROUP_ID_BOT_2_BK, "Private Group BOT_2_BK"),
+        (SIGNAL_CHANNEL_ID_BOT_3_GG, "Signal Channel BOT_3_GG"),
+        (MY_PRIVATE_GROUP_ID_BOT_3_GG, "Private Group BOT_3_GG"),
     ]
     
     for channel_id, channel_name in channels_to_test:
@@ -216,6 +225,11 @@ async def startup_tests():
             print(f"[BOT]    ⚠️ MARGIN_USD_BOT_2_BK (${MARGIN_USD_BOT_2_BK}) > Balance (${wallet_balance:.2f})", end = ' | ')
         else:
             print(f"[BOT]    BOT_2_BK Margin: ✅ ${MARGIN_USD_BOT_2_BK} < Balance", end = ' | ')
+        
+        if MARGIN_USD_BOT_3_GG > wallet_balance:
+            print(f"[BOT]    ⚠️ MARGIN_USD_BOT_3_GG (${MARGIN_USD_BOT_3_GG}) > Balance (${wallet_balance:.2f})")
+        else:
+            print(f"BOT_3_GG Margin: ✅ ${MARGIN_USD_BOT_3_GG} < Balance")
             
     except Exception as e:
         print(f"[BOT]    ❌ Binance API: FAILED - {str(e)}")
@@ -236,6 +250,7 @@ async def startup_tests():
     # Determine listen channels based on LISTEN_TO_SIGNAL_GROUP
     listen_channel_bot_1_p = SIGNAL_CHANNEL_ID_BOT_1_P if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID_BOT_1_P
     listen_channel_bot_2_bk = SIGNAL_CHANNEL_ID_BOT_2_BK if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID_BOT_2_BK
+    listen_channel_bot_3_gg = SIGNAL_CHANNEL_ID_BOT_3_GG if LISTEN_TO_SIGNAL_GROUP else MY_PRIVATE_GROUP_ID_BOT_3_GG
     
     # Create config objects to pass to handlers
     config_bot_1_p = {
@@ -250,6 +265,13 @@ async def startup_tests():
         'leverage': LEVERAGE_BOT_2_BK,
         'margin_usd': MARGIN_USD_BOT_2_BK,
         'private_group_id': MY_PRIVATE_GROUP_ID_BOT_2_BK
+    }
+    
+    config_bot_3_gg = {
+        'bot_id': 'BOT_3_GG',
+        'leverage': LEVERAGE_BOT_3_GG,
+        'margin_usd': MARGIN_USD_BOT_3_GG,
+        'private_group_id': MY_PRIVATE_GROUP_ID_BOT_3_GG
     }
     
     precision = {
@@ -270,6 +292,12 @@ async def startup_tests():
         await handle_signal_bot_2_bk(event, tg_client, binance_client, config_bot_2_bk, precision,
                                       Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
                                       PLACE_REAL_TRADES)
+    
+    @tg_client.on(events.NewMessage(chats=listen_channel_bot_3_gg))
+    async def wrapper_bot_3_gg(event):
+        await handle_signal_bot_3_gg(event, tg_client, binance_client, config_bot_3_gg, precision,
+                                      Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                      PLACE_REAL_TRADES)
 
 
 # =============================================================================
@@ -281,10 +309,11 @@ if __name__ == "__main__":
     # Determine listening sources
     bot_1_p_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
     bot_2_bk_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
+    bot_3_gg_source = "✅Signal Channel" if LISTEN_TO_SIGNAL_GROUP else "❌Private Group"
     
-    print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}'}} ========================")
+    print(f"[BOT] 📡 Listening to: {{'BOT_1_P': '{bot_1_p_source}', 'BOT_2_BK': '{bot_2_bk_source}', 'BOT_3_GG': '{bot_3_gg_source}'}} ========================")
     print(f"[BOT] 💰 Real Trades: {'✅ YES' if PLACE_REAL_TRADES else '❌ NO (simulation)'}")
-    print(f"[BOT]    BOT_1_P - Leverage: {LEVERAGE_BOT_1_P}x | Margin: ${MARGIN_USD_BOT_1_P} -------- BOT_2_BK - Leverage: {LEVERAGE_BOT_2_BK}x | Margin: ${MARGIN_USD_BOT_2_BK}")
+    print(f"[BOT]    BOT_1_P - Leverage: {LEVERAGE_BOT_1_P}x | Margin: ${MARGIN_USD_BOT_1_P} | BOT_2_BK - Leverage: {LEVERAGE_BOT_2_BK}x | Margin: ${MARGIN_USD_BOT_2_BK} | BOT_3_GG - Leverage: {LEVERAGE_BOT_3_GG}x | Margin: ${MARGIN_USD_BOT_3_GG}")
     
     tg_client.start()
     tg_client.loop.run_until_complete(startup_tests())

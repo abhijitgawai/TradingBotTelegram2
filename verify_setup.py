@@ -55,20 +55,25 @@ SIGNAL_CHANNEL_ID_BOT_1_P = os.getenv('SIGNAL_CHANNEL_ID_BOT_1_P')
 MY_PRIVATE_GROUP_ID_BOT_1_P = os.getenv('MY_PRIVATE_GROUP_ID_BOT_1_P')
 SIGNAL_CHANNEL_ID_BOT_2_BK = os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK')
 MY_PRIVATE_GROUP_ID_BOT_2_BK = os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK')
+SIGNAL_CHANNEL_ID_BOT_3_GG = os.getenv('SIGNAL_CHANNEL_ID_BOT_3_GG')
+MY_PRIVATE_GROUP_ID_BOT_3_GG = os.getenv('MY_PRIVATE_GROUP_ID_BOT_3_GG')
 
 # Trading parameters
 LEVERAGE_BOT_1_P = os.getenv('LEVERAGE_BOT_1_P')
 LEVERAGE_BOT_2_BK = os.getenv('LEVERAGE_BOT_2_BK')
+LEVERAGE_BOT_3_GG = os.getenv('LEVERAGE_BOT_3_GG')
 MARGIN_USD_BOT_1_P = os.getenv('MARGIN_USD_BOT_1_P')
 MARGIN_USD_BOT_2_BK = os.getenv('MARGIN_USD_BOT_2_BK')
+MARGIN_USD_BOT_3_GG = os.getenv('MARGIN_USD_BOT_3_GG')
 
 # All required environment variables
 env_vars = ['TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'SESSION_STRING', 
             'SIGNAL_CHANNEL_ID_BOT_1_P', 'MY_PRIVATE_GROUP_ID_BOT_1_P',
             'SIGNAL_CHANNEL_ID_BOT_2_BK', 'MY_PRIVATE_GROUP_ID_BOT_2_BK',
+            'SIGNAL_CHANNEL_ID_BOT_3_GG', 'MY_PRIVATE_GROUP_ID_BOT_3_GG',
             'BINANCE_KEY', 'BINANCE_SECRET',
-            'LEVERAGE_BOT_1_P', 'LEVERAGE_BOT_2_BK',
-            'MARGIN_USD_BOT_1_P', 'MARGIN_USD_BOT_2_BK']
+            'LEVERAGE_BOT_1_P', 'LEVERAGE_BOT_2_BK', 'LEVERAGE_BOT_3_GG',
+            'MARGIN_USD_BOT_1_P', 'MARGIN_USD_BOT_2_BK', 'MARGIN_USD_BOT_3_GG']
 
 all_set = all(os.getenv(v) for v in env_vars)
 if all_set:
@@ -96,8 +101,10 @@ client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
 # Convert margin/leverage to int (already loaded as strings above)
 MARGIN_USD_BOT_1_P = int(MARGIN_USD_BOT_1_P)
 MARGIN_USD_BOT_2_BK = int(MARGIN_USD_BOT_2_BK)
+MARGIN_USD_BOT_3_GG = int(MARGIN_USD_BOT_3_GG)
 LEVERAGE_BOT_1_P = int(LEVERAGE_BOT_1_P)
 LEVERAGE_BOT_2_BK = int(LEVERAGE_BOT_2_BK)
+LEVERAGE_BOT_3_GG = int(LEVERAGE_BOT_3_GG)
 
 try:
     account = client.account()
@@ -122,6 +129,11 @@ try:
     else:
         print(f"   ✅ BOT_2_BK Margin: ${MARGIN_USD_BOT_2_BK} < Balance")
     
+    if MARGIN_USD_BOT_3_GG > wallet_balance:
+        print(f"   ⚠️ MARGIN_USD_BOT_3_GG (${MARGIN_USD_BOT_3_GG}) > Balance (${wallet_balance:.2f})")
+    else:
+        print(f"   ✅ BOT_3_GG Margin: ${MARGIN_USD_BOT_3_GG} < Balance")
+    
     test_pass("TEST CASE 2: Binance API connected")
 except Exception as e:
     test_fail(f"TEST CASE 2: Binance API failed - {str(e)}")
@@ -145,12 +157,14 @@ async def test_telegram():
     me = await tg_client.get_me()
     print(f"   Telegram account: {me.first_name}")
     
-    # Test all 4 channel/group IDs
+    # Test all channel/group IDs
     channels_to_test = [
         (SIGNAL_CHANNEL_ID_BOT_1_P, "Signal Channel BOT_1_P"),
         (MY_PRIVATE_GROUP_ID_BOT_1_P, "Private Group BOT_1_P"),
         (SIGNAL_CHANNEL_ID_BOT_2_BK, "Signal Channel BOT_2_BK"),
         (MY_PRIVATE_GROUP_ID_BOT_2_BK, "Private Group BOT_2_BK"),
+        (SIGNAL_CHANNEL_ID_BOT_3_GG, "Signal Channel BOT_3_GG"),
+        (MY_PRIVATE_GROUP_ID_BOT_3_GG, "Private Group BOT_3_GG"),
     ]
     
     all_passed = True
@@ -282,6 +296,78 @@ bot2_signals = [
     """,
 ]
 
+# BOT_3_GG sample signals (different format from BOT_1_P)
+bot3_signals = [
+    """
+        📩 #DASHUSDT 1h | Mid-Term
+        📉 Short Entry Zone: 41.92-43.80
+
+        🎯 - Strategy Accuracy:  87.49%
+        Last 5 signals:  90.0%
+        Last 10 signals:  90.0%
+        Last 20 signals:  87.5%
+
+        ⏳ - Signal details:
+        Target 1:  41.12
+        Target 2:  40.33
+        Target 3:  39.53
+        Target 4:  37.14
+        _____
+        🧲Trend-Line: 43.80
+        ❌Stop-Loss: 44.64
+        💡After reaching the first target you can put the rest of the position to breakeven
+
+        #ID20000035980
+
+    """,
+    
+    """
+        📩 #ALTUSDT 30m | Mid-Term
+        📈 Long Entry Zone: 0.01309-0.01276
+
+        🎯 - Strategy Accuracy:  91.41%
+        Last 5 signals:  85.71%
+        Last 10 signals:  83.33%
+        Last 20 signals:  90.91%
+
+        ⏳ - Signal details:
+        Target 1:  0.01329
+        Target 2:  0.01348
+        Target 3:  0.01368
+        Target 4:  0.01427
+        _____
+        🧲Trend-Line: 0.01276
+        ❌Stop-Loss: 0.01256
+        💡After reaching the first target you can put the rest of the position to breakeven
+
+        #ID20000036126
+
+    """,
+    
+    """
+        📩 #ROSEUSDT 30m | Mid-Term
+        📈 Long Entry Zone: 0.01066-0.01031
+
+        🎯 - Strategy Accuracy:  88.79%
+        Last 5 signals:  90.0%
+        Last 10 signals:  90.0%
+        Last 20 signals:  80.0%
+
+        ⏳ - Signal details:
+        Target 1:  0.01102
+        Target 2:  0.01137
+        Target 3:  0.01173
+        Target 4:  0.01280
+        _____
+        🧲Trend-Line: 0.01031
+        ❌Stop-Loss: 0.00993
+        💡After reaching the first target you can put the rest of the position to breakeven
+
+        #ID20000035741
+    """,
+]
+
+
 def test_bot1_signal(signal):
     """Test BOT_1_P signal parsing"""
     symbol = re.search(r'#(\w+)', signal)
@@ -299,13 +385,26 @@ def test_bot2_signal(signal):
     sl = re.search(r'StopLoss:\s*([\d.]+)', signal)
     return symbol and side and price and tp1 and sl
 
+def test_bot3_signal(signal):
+    """Test BOT_3_GG signal parsing (Entry Zone, Target 1, Stop-Loss)"""
+    symbol = re.search(r'#(\w+USDT)', signal)
+    short_zone = re.search(r'📉\s*Short Entry Zone:\s*([\d.]+)-([\d.]+)', signal)
+    long_zone = re.search(r'📈\s*Long Entry Zone:\s*([\d.]+)-([\d.]+)', signal)
+    side = short_zone or long_zone
+    tp1 = re.search(r'Target 1:\s*([\d.]+)', signal)
+    sl = re.search(r'❌\s*Stop-Loss:\s*([\d.]+)', signal)
+    return symbol and side and tp1 and sl
+
 # Test BOT_1_P signals
 bot1_passed = 0
 bot1_failed = 0
 for i, signal in enumerate(bot1_signals):
     if test_bot1_signal(signal):
         symbol = re.search(r'#(\w+)', signal).group(1)
-        print(f"   [BOT_1_P] Signal {i+1}: ✅ {symbol}USDT")
+        side = "BUY" if "Open Long" in signal else "SELL"
+        entry = re.search(r'Current price: ([\d.]+)', signal).group(1)
+        tp1 = re.search(r'TP 1: ([\d.]+)', signal).group(1)
+        print(f"   [BOT_1_P] Signal {i+1}: ✅ {symbol}USDT | {side} | Entry: {entry} | TP1: {tp1}")
         bot1_passed += 1
     else:
         print(f"   [BOT_1_P] Signal {i+1}: ❌ Failed")
@@ -317,22 +416,48 @@ bot2_failed = 0
 for i, signal in enumerate(bot2_signals):
     if test_bot2_signal(signal):
         symbol = re.search(r'#(\w+)', signal).group(1)
-        print(f"   [BOT_2_BK] Signal {i+1}: ✅ {symbol}USDT")
+        side = "BUY" if "LONG" in signal.upper() else "SELL"
+        entry = re.search(r'Entry:\s*([\d.]+)', signal).group(1)
+        tp1 = re.search(r'Target 1:\s*([\d.]+)', signal).group(1)
+        sl = re.search(r'StopLoss:\s*([\d.]+)', signal).group(1)
+        print(f"   [BOT_2_BK] Signal {i+1}: ✅ {symbol}USDT | {side} | Entry: {entry} | TP1: {tp1} | SL: {sl}")
         bot2_passed += 1
     else:
         print(f"   [BOT_2_BK] Signal {i+1}: ❌ Failed")
         bot2_failed += 1
 
-# Summary
-total_passed = bot1_passed + bot2_passed
-total_signals = len(bot1_signals) + len(bot2_signals)
-print(f"   ---")
-print(f"   BOT_1_P: {bot1_passed}/{len(bot1_signals)} passed | BOT_2_BK: {bot2_passed}/{len(bot2_signals)} passed")
+# Test BOT_3_GG signals
+bot3_passed = 0
+bot3_failed = 0
+for i, signal in enumerate(bot3_signals):
+    if test_bot3_signal(signal):
+        symbol = re.search(r'#(\w+USDT)', signal).group(1)
+        short_zone = re.search(r'📉\s*Short Entry Zone:\s*([\d.]+)', signal)
+        long_zone = re.search(r'📈\s*Long Entry Zone:\s*([\d.]+)', signal)
+        if short_zone:
+            side = "SELL"
+            entry = short_zone.group(1)
+        else:
+            side = "BUY"
+            entry = long_zone.group(1)
+        tp1 = re.search(r'Target 1:\s*([\d.]+)', signal).group(1)
+        sl = re.search(r'❌\s*Stop-Loss:\s*([\d.]+)', signal).group(1)
+        print(f"   [BOT_3_GG] Signal {i+1}: ✅ {symbol} | {side} | Entry: {entry} | TP1: {tp1} | SL: {sl}")
+        bot3_passed += 1
+    else:
+        print(f"   [BOT_3_GG] Signal {i+1}: ❌ Failed")
+        bot3_failed += 1
 
-if bot1_failed == 0 and bot2_failed == 0:
+# Summary
+total_passed = bot1_passed + bot2_passed + bot3_passed
+total_signals = len(bot1_signals) + len(bot2_signals) + len(bot3_signals)
+print(f"   ---")
+print(f"   BOT_1_P: {bot1_passed}/{len(bot1_signals)} passed | BOT_2_BK: {bot2_passed}/{len(bot2_signals)} passed | BOT_3_GG: {bot3_passed}/{len(bot3_signals)} passed")
+
+if bot1_failed == 0 and bot2_failed == 0 and bot3_failed == 0:
     test_pass(f"TEST CASE 4: All {total_signals} signals parsed successfully")
 else:
-    test_fail(f"TEST CASE 4: {bot1_failed + bot2_failed} signals failed")
+    test_fail(f"TEST CASE 4: {bot1_failed + bot2_failed + bot3_failed} signals failed")
 
 # ============================================================
 # TEST CASE 5: Symbol Precision Cache
@@ -433,8 +558,10 @@ print("=" * 60)
 try:
     from BOT_1_P import handle_signal_bot_1_p
     from BOT_2_BK import handle_signal_bot_2_bk
+    from BOT_3_GG import handle_signal_bot_3_gg
     print(f"   ✅ BOT_1_P module imported")
     print(f"   ✅ BOT_2_BK module imported")
+    print(f"   ✅ BOT_3_GG module imported")
     test_pass("TEST CASE 8: Bot modules import successfully")
 except ImportError as e:
     test_fail(f"TEST CASE 8: Module import failed - {str(e)}")
