@@ -3,7 +3,7 @@
 ## Project Overview
 Build a Python trading bot that:
 1. Listens to **multiple Telegram channels** for trading signals
-2. Parses signal messages using channel-specific parsers (BOT_1_P, BOT_2_BK)
+2. Parses signal messages using channel-specific parsers (BOT_1_P, BOT_2_BK, BOT_3_GG)
 3. Executes trades on Binance Futures via API (Entry + TP + SL)
 4. Sends notifications to corresponding private Telegram groups
 
@@ -31,6 +31,8 @@ Build a Python trading bot that:
 | `MY_PRIVATE_GROUP_ID_BOT_1_P` | Private group for BOT_1_P notifications | `-1009876543210` |
 | `SIGNAL_CHANNEL_ID_BOT_2_BK` | Signal channel for BOT_2_BK | `-1001234567890` |
 | `MY_PRIVATE_GROUP_ID_BOT_2_BK` | Private group for BOT_2_BK notifications | `-1009876543210` |
+| `SIGNAL_CHANNEL_ID_BOT_3_GG` | Signal channel for BOT_3_GG | `-1001234567890` |
+| `MY_PRIVATE_GROUP_ID_BOT_3_GG` | Private group for BOT_3_GG notifications | `-1009876543210` |
 
 ### Trading Parameters (Per Bot)
 | Variable | Description | Default |
@@ -39,6 +41,8 @@ Build a Python trading bot that:
 | `MARGIN_USD_BOT_1_P` | Margin per trade for BOT_1_P | `100` |
 | `LEVERAGE_BOT_2_BK` | Leverage for BOT_2_BK | `5` |
 | `MARGIN_USD_BOT_2_BK` | Margin per trade for BOT_2_BK | `100` |
+| `LEVERAGE_BOT_3_GG` | Leverage for BOT_3_GG | `5` |
+| `MARGIN_USD_BOT_3_GG` | Margin per trade for BOT_3_GG | `100` |
 
 ### Testing Switches
 | Variable | Values | Purpose |
@@ -69,6 +73,16 @@ StopLoss: 0.06180
 ```
 
 **Extracted:** Symbol: `GMTUSDT`, Side: `BUY`, Entry: `0.06527`, TP1: `0.06592`, SL: `0.06180`
+
+### BOT_3_GG (Channel GG) - Has Entry Zone + Stop Loss
+```
+📩 #DYDXUSDT 30m | Mid-Term
+📈 Long Entry Zone: 0.175-0.170
+Target 1:  0.177
+❌Stop-Loss: 0.168
+```
+
+**Extracted:** Symbol: `DYDXUSDT`, Side: `BUY`, Entry: `0.175` (first number in zone), TP1: `0.177`, SL: `0.168`
 
 ---
 
@@ -335,6 +349,7 @@ sudo journalctl -u tradingbot -f
 | `bot.py` | Main engine - routes signals to parsers, contains trade functions |
 | `BOT_1_P.py` | Parser for Channel P signals (no SL) |
 | `BOT_2_BK.py` | Parser for Channel BK signals (has SL) |
+| `BOT_3_GG.py` | Parser for Channel GG signals (Entry Zone + SL) |
 | `verify_setup.py` | Test suite for API connections |
 | `generate_session.py` | One-time session string generator |
 | `.env` | Configuration (not in git) |
@@ -355,6 +370,9 @@ BOT_1_P.py (Parser)
 
 BOT_2_BK.py (Parser)
 └── handle_signal_bot_2_bk() # Parse Channel BK format, has SL
+
+BOT_3_GG.py (Parser)
+└── handle_signal_bot_3_gg() # Parse Channel GG format, Entry Zone + SL
 ```
 
 ---
@@ -554,6 +572,12 @@ MY_PRIVATE_GROUP_ID_BOT_2_BK=-xxxxxxxxxx
 LEVERAGE_BOT_2_BK=5
 MARGIN_USD_BOT_2_BK=100
 
+# BOT 3 (Channel GG) - Has Entry Zone + Stop Loss
+SIGNAL_CHANNEL_ID_BOT_3_GG=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_3_GG=-xxxxxxxxxx
+LEVERAGE_BOT_3_GG=5
+MARGIN_USD_BOT_3_GG=100
+
 # One-time setup (run verify_setup.py with this true)
 RUN_ISOLATED_SCRIPT=false
 ```
@@ -582,6 +606,7 @@ TradingBotTelegram2/
 ├── bot.py              # Main engine - trade functions, startup tests
 ├── BOT_1_P.py          # Parser for Channel P (no SL)
 ├── BOT_2_BK.py         # Parser for Channel BK (has SL)
+├── BOT_3_GG.py         # Parser for Channel GG (Entry Zone + SL)
 ├── verify_setup.py     # Test suite + isolated margin setup
 ├── generate_session.py # One-time session generator
 ├── requirements.txt    # Dependencies

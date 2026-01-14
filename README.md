@@ -9,31 +9,36 @@ flowchart LR
     subgraph Signal Channels
         A1[📱 Signal Channel BOT_1_P]
         A2[📱 Signal Channel BOT_2_BK]
+        A3[📱 Signal Channel BOT_3_GG]
     end
     
     A1 -->|New Message| B[🤖 bot.py]
     A2 -->|New Message| B
+    A3 -->|New Message| B
     
     B -->|Parse| C1[BOT_1_P.py]
     B -->|Parse| C2[BOT_2_BK.py]
+    B -->|Parse| C3[BOT_3_GG.py]
     
     C1 -->|Symbol, Side, Price, TP| D[📈 Binance API]
     C2 -->|Symbol, Side, Price, TP, SL| D
+    C3 -->|Symbol, Side, Price, TP, SL| D
     
     D -->|Place Orders| E[✅ Entry + TP + SL]
     
     B -->|Notify| F1[👤 Private Group BOT_1_P]
     B -->|Notify| F2[👤 Private Group BOT_2_BK]
+    B -->|Notify| F3[👤 Private Group BOT_3_GG]
 ```
 
 ### Flow Explanation
 
 | Step | What Happens |
 |------|--------------|
-| 1️⃣ | Signal arrives in **Signal Channel** (BOT_1_P or BOT_2_BK) |
-| 2️⃣ | `bot.py` routes to correct parser (BOT_1_P.py or BOT_2_BK.py) |
-| 3️⃣ | Parser extracts Symbol, Side (Long/Short), Price, TP1, (SL for BOT_2_BK) |
-| 4️⃣ | Bot places **Entry Order** + **Take Profit Order** on Binance Futures |
+| 1️⃣ | Signal arrives in **Signal Channel** (BOT_1_P, BOT_2_BK, or BOT_3_GG) |
+| 2️⃣ | `bot.py` routes to correct parser (BOT_1_P.py, BOT_2_BK.py, or BOT_3_GG.py) |
+| 3️⃣ | Parser extracts Symbol, Side (Long/Short), Price, TP1, (SL for BOT_2_BK/BOT_3_GG) |
+| 4️⃣ | Bot places **Entry Order** + **Take Profit Order** + **Stop Loss** on Binance Futures |
 | 5️⃣ | Bot sends confirmation (or error) to corresponding **Private Group** |
 
 > **Result:** Each signal channel has its own private group for notifications! 🚀
@@ -42,9 +47,10 @@ flowchart LR
 
 ```
 TradingBotTelegram2/
-├── bot.py              # Main bot - runs both BOT_1_P and BOT_2_BK
+├── bot.py              # Main bot - runs BOT_1_P, BOT_2_BK, BOT_3_GG
 ├── BOT_1_P.py          # Parser for Signal Channel P (no SL)
 ├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL)
+├── BOT_3_GG.py         # Parser for Signal Channel GG (has SL + Entry Zone)
 ├── verify_setup.py     # Test suite - verify all connections
 ├── generate_session.py # Run once to get SESSION_STRING
 ├── requirements.txt    # Python dependencies
@@ -82,6 +88,12 @@ SIGNAL_CHANNEL_ID_BOT_2_BK=-100xxxxxxxxxx
 MY_PRIVATE_GROUP_ID_BOT_2_BK=-xxxxxxxxxx
 LEVERAGE_BOT_2_BK=5
 MARGIN_USD_BOT_2_BK=100
+
+# --- BOT 3 (Channel GG) Config ---
+SIGNAL_CHANNEL_ID_BOT_3_GG=-100xxxxxxxxxx
+MY_PRIVATE_GROUP_ID_BOT_3_GG=-xxxxxxxxxx
+LEVERAGE_BOT_3_GG=5
+MARGIN_USD_BOT_3_GG=100
 ```
 
 ### Variable Reference:
@@ -258,6 +270,23 @@ StopLoss: 0.06180
 | Entry | `Entry: X.XXX` (first number) | `0.06527` |
 | TP1 | `Target 1: X.XXX` | `0.06592` |
 | SL | `StopLoss: X.XXX` | `0.06180` |
+
+### BOT_3_GG (Channel GG) - Has Entry Zone + Stop Loss
+
+```
+📩 #DYDXUSDT 30m | Mid-Term
+📈 Long Entry Zone: 0.175-0.170
+Target 1:  0.177
+❌Stop-Loss: 0.168
+```
+
+| Field | Pattern | Example |
+|-------|---------|---------|
+| Symbol | `#COINUSDT` | `#DYDXUSDT` → `DYDXUSDT` |
+| Side | `📈 Long Entry Zone` / `📉 Short Entry Zone` | `Long` → `BUY` |
+| Entry | First number in Entry Zone | `0.175` |
+| TP1 | `Target 1: X.XXX` | `0.177` |
+| SL | `❌Stop-Loss: X.XXX` | `0.168` |
 
 ---
 
