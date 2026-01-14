@@ -395,6 +395,25 @@ def test_bot3_signal(signal):
     sl = re.search(r'❌\s*Stop-Loss:\s*([\d.]+)', signal)
     return symbol and side and tp1 and sl
 
+# Expected values for assertions
+bot1_expected = [
+    {'symbol': 'DOGE', 'side': 'BUY', 'entry': '0.31500', 'tp1': '0.31800'},
+    {'symbol': 'CUDIS', 'side': 'BUY', 'entry': '0.02926', 'tp1': '0.029556'},
+    {'symbol': 'EPT', 'side': 'SELL', 'entry': '0.003428', 'tp1': '0.0033933'},
+]
+
+bot2_expected = [
+    {'symbol': 'MTL', 'side': 'SELL', 'entry': '0.4310', 'tp1': '0.4270', 'sl': '0.4530'},
+    {'symbol': 'ZIL', 'side': 'SELL', 'entry': '0.005825', 'tp1': '0.005775', 'sl': '0.006260'},
+    {'symbol': 'DUSK', 'side': 'BUY', 'entry': '0.05913', 'tp1': '0.05973', 'sl': '0.05554'},
+]
+
+bot3_expected = [
+    {'symbol': 'DASHUSDT', 'side': 'SELL', 'entry': '41.92', 'tp1': '41.12', 'sl': '44.64'},
+    {'symbol': 'ALTUSDT', 'side': 'BUY', 'entry': '0.01309', 'tp1': '0.01329', 'sl': '0.01256'},
+    {'symbol': 'ROSEUSDT', 'side': 'BUY', 'entry': '0.01066', 'tp1': '0.01102', 'sl': '0.00993'},
+]
+
 # Test BOT_1_P signals
 bot1_passed = 0
 bot1_failed = 0
@@ -404,7 +423,18 @@ for i, signal in enumerate(bot1_signals):
         side = "BUY" if "Open Long" in signal else "SELL"
         entry = re.search(r'Current price: ([\d.]+)', signal).group(1)
         tp1 = re.search(r'TP 1: ([\d.]+)', signal).group(1)
+        
+        # Print parsed values
         print(f"   [BOT_1_P] Signal {i+1}: ✅ {symbol}USDT | {side} | Entry: {entry} | TP1: {tp1}")
+        
+        # Assert expected values
+        exp = bot1_expected[i]
+        assert symbol == exp['symbol'], f"Symbol mismatch: {symbol} != {exp['symbol']}"
+        assert side == exp['side'], f"Side mismatch: {side} != {exp['side']}"
+        assert entry == exp['entry'], f"Entry mismatch: {entry} != {exp['entry']}"
+        assert tp1 == exp['tp1'], f"TP1 mismatch: {tp1} != {exp['tp1']}"
+        print(f"            Expected: {exp['symbol']}USDT | {exp['side']} | Entry: {exp['entry']} | TP1: {exp['tp1']} ✓")
+        
         bot1_passed += 1
     else:
         print(f"   [BOT_1_P] Signal {i+1}: ❌ Failed")
@@ -420,7 +450,19 @@ for i, signal in enumerate(bot2_signals):
         entry = re.search(r'Entry:\s*([\d.]+)', signal).group(1)
         tp1 = re.search(r'Target 1:\s*([\d.]+)', signal).group(1)
         sl = re.search(r'StopLoss:\s*([\d.]+)', signal).group(1)
+        
+        # Print parsed values
         print(f"   [BOT_2_BK] Signal {i+1}: ✅ {symbol}USDT | {side} | Entry: {entry} | TP1: {tp1} | SL: {sl}")
+        
+        # Assert expected values
+        exp = bot2_expected[i]
+        assert symbol == exp['symbol'], f"Symbol mismatch: {symbol} != {exp['symbol']}"
+        assert side == exp['side'], f"Side mismatch: {side} != {exp['side']}"
+        assert entry == exp['entry'], f"Entry mismatch: {entry} != {exp['entry']}"
+        assert tp1 == exp['tp1'], f"TP1 mismatch: {tp1} != {exp['tp1']}"
+        assert sl == exp['sl'], f"SL mismatch: {sl} != {exp['sl']}"
+        print(f"            Expected: {exp['symbol']}USDT | {exp['side']} | Entry: {exp['entry']} | TP1: {exp['tp1']} | SL: {exp['sl']} ✓")
+        
         bot2_passed += 1
     else:
         print(f"   [BOT_2_BK] Signal {i+1}: ❌ Failed")
@@ -442,7 +484,19 @@ for i, signal in enumerate(bot3_signals):
             entry = long_zone.group(1)
         tp1 = re.search(r'Target 1:\s*([\d.]+)', signal).group(1)
         sl = re.search(r'❌\s*Stop-Loss:\s*([\d.]+)', signal).group(1)
+        
+        # Print parsed values
         print(f"   [BOT_3_GG] Signal {i+1}: ✅ {symbol} | {side} | Entry: {entry} | TP1: {tp1} | SL: {sl}")
+        
+        # Assert expected values
+        exp = bot3_expected[i]
+        assert symbol == exp['symbol'], f"Symbol mismatch: {symbol} != {exp['symbol']}"
+        assert side == exp['side'], f"Side mismatch: {side} != {exp['side']}"
+        assert entry == exp['entry'], f"Entry mismatch: {entry} != {exp['entry']}"
+        assert tp1 == exp['tp1'], f"TP1 mismatch: {tp1} != {exp['tp1']}"
+        assert sl == exp['sl'], f"SL mismatch: {sl} != {exp['sl']}"
+        print(f"            Expected: {exp['symbol']} | {exp['side']} | Entry: {exp['entry']} | TP1: {exp['tp1']} | SL: {exp['sl']} ✓")
+        
         bot3_passed += 1
     else:
         print(f"   [BOT_3_GG] Signal {i+1}: ❌ Failed")
