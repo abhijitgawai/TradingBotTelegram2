@@ -7,6 +7,7 @@ from binance.um_futures import UMFutures
 from BOT_1_P import handle_signal_bot_1_p
 from BOT_2_BK import handle_signal_bot_2_bk
 from BOT_3_GG import handle_signal_bot_3_gg
+from ADMIN_BOT import handle_admin_command, handle_button_click, send_startup_alert
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,9 +46,18 @@ MY_PRIVATE_GROUP_ID_BOT_3_GG = int(os.getenv('MY_PRIVATE_GROUP_ID_BOT_3_GG'))
 LEVERAGE_BOT_3_GG = int(os.getenv('LEVERAGE_BOT_3_GG', 5))
 MARGIN_USD_BOT_3_GG = int(os.getenv('MARGIN_USD_BOT_3_GG', 100))
 
+# --- ADMIN CONFIG ---
+ADMIN_GROUP_ID = int(os.getenv('ADMIN_GROUP_ID'))
+ADMIN_BOT_TOKEN = os.getenv('ADMIN_BOT_TOKEN')  # Bot token from @BotFather
+
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
 binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
+
+# Admin bot client (separate bot account for buttons)
+# Will be initialized in startup_tests() if ADMIN_BOT_TOKEN is set
+admin_bot_client = None
+HAS_ADMIN_BOT = bool(ADMIN_BOT_TOKEN)
 
 # Cache symbol precision (quantity and price)
 SYMBOL_PRECISION = {}  # quantityPrecision
@@ -298,6 +308,43 @@ async def startup_tests():
         await handle_signal_bot_3_gg(event, tg_client, binance_client, config_bot_3_gg, precision,
                                       Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
                                       PLACE_REAL_TRADES)
+    
+    # Initialize admin bot client if token is set
+    global admin_bot_client
+    if HAS_ADMIN_BOT and admin_bot_client is None:
+        try:
+            admin_bot_client = TelegramClient('admin_bot', TELEGRAM_API_ID, TELEGRAM_API_HASH)
+            await admin_bot_client.start(bot_token=ADMIN_BOT_TOKEN)
+            print("[ADMIN] ✅ Bot account connected (buttons enabled!)")
+        except Exception as e:
+            print(f"[ADMIN] ❌ Failed to connect bot account: {e}")
+            admin_bot_client = None
+    elif not HAS_ADMIN_BOT:
+        print("[ADMIN] ℹ️ No ADMIN_BOT_TOKEN - using text commands only")
+    
+    # Admin handler - use bot client if available (for buttons!)
+    admin_client = admin_bot_client if admin_bot_client else tg_client
+    admin_config = {'admin_group_id': ADMIN_GROUP_ID, 'has_buttons': admin_bot_client is not None}
+    
+    # Register handlers on the appropriate client
+    if admin_bot_client:
+        # Bot account - register on bot client
+        @admin_bot_client.on(events.NewMessage(chats=ADMIN_GROUP_ID))
+        async def wrapper_admin(event):
+            await handle_admin_command(event, admin_bot_client, admin_config)
+        
+        @admin_bot_client.on(events.CallbackQuery())
+        async def wrapper_admin_buttons(event):
+            if event.chat_id == ADMIN_GROUP_ID:
+                await handle_button_click(event, admin_bot_client, admin_config)
+    else:
+        # User account fallback - register on user client
+        @tg_client.on(events.NewMessage(chats=ADMIN_GROUP_ID))
+        async def wrapper_admin(event):
+            await handle_admin_command(event, tg_client, admin_config)
+    
+    # Send startup alert
+    await send_startup_alert(admin_client, ADMIN_GROUP_ID, admin_config.get('has_buttons', False))
 
 
 # =============================================================================

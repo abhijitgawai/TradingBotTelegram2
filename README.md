@@ -51,6 +51,7 @@ TradingBotTelegram2/
 ├── BOT_1_P.py          # Parser for Signal Channel P (no SL)
 ├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL)
 ├── BOT_3_GG.py         # Parser for Signal Channel GG (has SL + Entry Zone)
+├── ADMIN_BOT.py        # Admin commands with inline buttons
 ├── verify_setup.py     # Test suite - verify all connections
 ├── generate_session.py # Run once to get SESSION_STRING
 ├── requirements.txt    # Python dependencies
@@ -94,6 +95,10 @@ SIGNAL_CHANNEL_ID_BOT_3_GG=-100xxxxxxxxxx
 MY_PRIVATE_GROUP_ID_BOT_3_GG=-xxxxxxxxxx
 LEVERAGE_BOT_3_GG=5
 MARGIN_USD_BOT_3_GG=100
+
+# --- Admin Bot Config (for inline buttons) ---
+ADMIN_GROUP_ID=-100xxxxxxxxxx
+ADMIN_BOT_TOKEN=your_bot_token_from_botfather
 ```
 
 ### Variable Reference:
@@ -115,6 +120,8 @@ MARGIN_USD_BOT_3_GG=100
 | `MY_PRIVATE_GROUP_ID_BOT_2_BK` | Private group for BOT_2_BK notifications |
 | `LEVERAGE_BOT_2_BK` | Leverage for BOT_2_BK trades |
 | `MARGIN_USD_BOT_2_BK` | Margin in USD per trade for BOT_2_BK |
+| `ADMIN_GROUP_ID` | Telegram supergroup ID for admin commands |
+| `ADMIN_BOT_TOKEN` | Bot token from @BotFather (for inline buttons) |
 
 ### Testing Modes:
 

@@ -44,6 +44,12 @@ Build a Python trading bot that:
 | `LEVERAGE_BOT_3_GG` | Leverage for BOT_3_GG | `5` |
 | `MARGIN_USD_BOT_3_GG` | Margin per trade for BOT_3_GG | `100` |
 
+### Admin Bot Configuration
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `ADMIN_GROUP_ID` | Telegram **supergroup** ID for admin commands | `-1001234567890` |
+| `ADMIN_BOT_TOKEN` | Bot token from @BotFather (for inline buttons) | `123456:ABC...` |
+
 ### Testing Switches
 | Variable | Values | Purpose |
 |----------|--------|---------|

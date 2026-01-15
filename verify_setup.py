@@ -57,6 +57,7 @@ SIGNAL_CHANNEL_ID_BOT_2_BK = os.getenv('SIGNAL_CHANNEL_ID_BOT_2_BK')
 MY_PRIVATE_GROUP_ID_BOT_2_BK = os.getenv('MY_PRIVATE_GROUP_ID_BOT_2_BK')
 SIGNAL_CHANNEL_ID_BOT_3_GG = os.getenv('SIGNAL_CHANNEL_ID_BOT_3_GG')
 MY_PRIVATE_GROUP_ID_BOT_3_GG = os.getenv('MY_PRIVATE_GROUP_ID_BOT_3_GG')
+ADMIN_GROUP_ID = os.getenv('ADMIN_GROUP_ID')
 
 # Trading parameters
 LEVERAGE_BOT_1_P = os.getenv('LEVERAGE_BOT_1_P')
@@ -71,6 +72,7 @@ env_vars = ['TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'SESSION_STRING',
             'SIGNAL_CHANNEL_ID_BOT_1_P', 'MY_PRIVATE_GROUP_ID_BOT_1_P',
             'SIGNAL_CHANNEL_ID_BOT_2_BK', 'MY_PRIVATE_GROUP_ID_BOT_2_BK',
             'SIGNAL_CHANNEL_ID_BOT_3_GG', 'MY_PRIVATE_GROUP_ID_BOT_3_GG',
+            'ADMIN_GROUP_ID',
             'BINANCE_KEY', 'BINANCE_SECRET',
             'LEVERAGE_BOT_1_P', 'LEVERAGE_BOT_2_BK', 'LEVERAGE_BOT_3_GG',
             'MARGIN_USD_BOT_1_P', 'MARGIN_USD_BOT_2_BK', 'MARGIN_USD_BOT_3_GG']
@@ -84,6 +86,13 @@ else:
     print("\n⛔ CRITICAL: Cannot continue without required environment variables.")
     print("   Please set all variables in .env file and try again.")
     exit(1)
+
+# Optional: Check ADMIN_BOT_TOKEN (for inline buttons)
+ADMIN_BOT_TOKEN = os.getenv('ADMIN_BOT_TOKEN')
+if ADMIN_BOT_TOKEN:
+    print(f"   ✅ ADMIN_BOT_TOKEN set (buttons enabled!)")
+else:
+    print(f"   ℹ️ ADMIN_BOT_TOKEN not set (text commands only)")
 
 # Convert types
 TELEGRAM_API_ID = int(TELEGRAM_API_ID) if TELEGRAM_API_ID else None
@@ -165,6 +174,7 @@ async def test_telegram():
         (MY_PRIVATE_GROUP_ID_BOT_2_BK, "Private Group BOT_2_BK"),
         (SIGNAL_CHANNEL_ID_BOT_3_GG, "Signal Channel BOT_3_GG"),
         (MY_PRIVATE_GROUP_ID_BOT_3_GG, "Private Group BOT_3_GG"),
+        (ADMIN_GROUP_ID, "Admin Group"),
     ]
     
     all_passed = True
@@ -613,12 +623,70 @@ try:
     from BOT_1_P import handle_signal_bot_1_p
     from BOT_2_BK import handle_signal_bot_2_bk
     from BOT_3_GG import handle_signal_bot_3_gg
+    from ADMIN_BOT import handle_admin_command, send_startup_alert
     print(f"   ✅ BOT_1_P module imported")
     print(f"   ✅ BOT_2_BK module imported")
     print(f"   ✅ BOT_3_GG module imported")
+    print(f"   ✅ ADMIN_BOT module imported")
     test_pass("TEST CASE 8: Bot modules import successfully")
 except ImportError as e:
     test_fail(f"TEST CASE 8: Module import failed - {str(e)}")
+
+
+# ============================================================
+# TEST CASE 9: ADMIN_BOT Module Tests
+# ============================================================
+print("\n" + "=" * 60)
+print("TEST CASE 9: ADMIN_BOT Module Tests")
+print("=" * 60)
+
+try:
+    from ADMIN_BOT import (
+        handle_admin_command, 
+        handle_button_click, 
+        send_startup_alert,
+        COMMANDS,
+        CALLBACK_HANDLERS,
+        get_admin_menu
+    )
+    
+    # Test 1: Verify all expected commands exist
+    expected_commands = ['/status', '/restart', '/forcerestart', '/deploy', '/config', '/logs', '/help', '/menu', '/test']
+    missing_commands = [cmd for cmd in expected_commands if cmd not in COMMANDS]
+    
+    if missing_commands:
+        print(f"   ⚠️ Missing commands: {missing_commands}")
+    else:
+        print(f"   ✅ All {len(expected_commands)} commands registered")
+    
+    # Test 2: Verify callback handlers exist
+    expected_callbacks = [b'cmd_status', b'cmd_restart', b'cmd_forcerestart', b'cmd_deploy', b'cmd_config', b'cmd_logs', b'cmd_help', b'cmd_test']
+    missing_callbacks = [cb for cb in expected_callbacks if cb not in CALLBACK_HANDLERS]
+    
+    if missing_callbacks:
+        print(f"   ⚠️ Missing callbacks: {[cb.decode() for cb in missing_callbacks]}")
+    else:
+        print(f"   ✅ All {len(expected_callbacks)} button callbacks registered")
+    
+    # Test 3: Verify menu buttons are generated
+    menu_buttons = get_admin_menu()
+    button_count = sum(len(row) for row in menu_buttons)
+    print(f"   ✅ Menu has {len(menu_buttons)} rows, {button_count} buttons total")
+    
+    # Test 4: Verify handlers are callable
+    for cmd, info in COMMANDS.items():
+        if not callable(info['handler']):
+            print(f"   ❌ Handler for {cmd} is not callable")
+            break
+    else:
+        print(f"   ✅ All command handlers are callable")
+    
+    test_pass("TEST CASE 9: ADMIN_BOT module verified")
+    
+except ImportError as e:
+    test_fail(f"TEST CASE 9: ADMIN_BOT import failed - {str(e)}")
+except Exception as e:
+    test_fail(f"TEST CASE 9: ADMIN_BOT test error - {str(e)}")
 
 
 # ============================================================
