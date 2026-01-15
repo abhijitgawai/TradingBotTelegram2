@@ -4,11 +4,15 @@ Run this single file to verify all components before deploying.
 
 Usage: python verify_setup.py
 """
+import sys
 import os
 import re
 import time
 import asyncio
 from dotenv import load_dotenv
+
+# Add parent directory to path to allow imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
 
@@ -620,9 +624,9 @@ print("TEST CASE 8: Bot Module Import")
 print("=" * 60)
 
 try:
-    from BOT_1_P import handle_signal_bot_1_p
-    from BOT_2_BK import handle_signal_bot_2_bk
-    from BOT_3_GG import handle_signal_bot_3_gg
+    from BOTS.BOT_1_P import handle_signal_bot_1_p
+    from BOTS.BOT_2_BK import handle_signal_bot_2_bk
+    from BOTS.BOT_3_GG import handle_signal_bot_3_gg
     from ADMIN_BOT import handle_admin_command, send_startup_alert
     print(f"   ✅ BOT_1_P module imported")
     print(f"   ✅ BOT_2_BK module imported")

@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from binance.um_futures import UMFutures
-from BOT_1_P import handle_signal_bot_1_p
-from BOT_2_BK import handle_signal_bot_2_bk
-from BOT_3_GG import handle_signal_bot_3_gg
+from BOTS.BOT_1_P import handle_signal_bot_1_p
+from BOTS.BOT_2_BK import handle_signal_bot_2_bk
+from BOTS.BOT_3_GG import handle_signal_bot_3_gg
 from ADMIN_BOT import handle_admin_command, handle_button_click, send_startup_alert
 
 # Load environment variables from .env file

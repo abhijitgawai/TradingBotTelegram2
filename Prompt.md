@@ -594,7 +594,7 @@ RUN_ISOLATED_SCRIPT=false
 
 1. ✅ Generate SESSION_STRING locally
 2. ✅ Set up `.env` with all credentials
-3. ✅ Run `python verify_setup.py` - all tests pass
+3. ✅ Run `python tools/test_setup.py` - all tests pass
 4. ✅ Test with `LISTEN_TO_SIGNAL_GROUP=false`, `PLACE_REAL_TRADES=false`
 5. ✅ Send test signal to private group
 6. ✅ Verify simulation response
@@ -609,16 +609,19 @@ RUN_ISOLATED_SCRIPT=false
 
 ```
 TradingBotTelegram2/
-├── bot.py              # Main engine - trade functions, startup tests
-├── BOT_1_P.py          # Parser for Channel P (no SL)
-├── BOT_2_BK.py         # Parser for Channel BK (has SL)
-├── BOT_3_GG.py         # Parser for Channel GG (Entry Zone + SL)
-├── verify_setup.py     # Test suite + isolated margin setup
-├── generate_session.py # One-time session generator
-├── requirements.txt    # Dependencies
-├── .env                # Config (local only, not in git)
-├── .gitignore          # Excludes .env and other sensitive files
-├── README.md           # Setup & deployment guide
-└── Prompt.md           # This file - recreate the bot from scratch
+├── BOTS/                   # Individual bot parsers for each channel
+│   ├── BOT_1_P.py          # Parser for Channel P
+│   ├── BOT_2_BK.py         # Parser for Channel BK
+│   └── BOT_3_GG.py         # Parser for Channel GG
+├── tools/                  # Utility scripts
+│   ├── test_setup.py       # Test suite + isolated margin setup
+│   └── generate_session.py # One-time session generator
+├── bot.py                  # Main engine - trade functions, logic
+├── ADMIN_BOT.py            # Admin commands with inline buttons
+├── requirements.txt        # Dependencies
+├── .env                    # Config (local only, not in git)
+├── .gitignore              # Excludes .env and other sensitive files
+├── README.md               # Setup & deployment guide
+└── Prompt.md               # This file - recreate the bot from scratch
 ```
 

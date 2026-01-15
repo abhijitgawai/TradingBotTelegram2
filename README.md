@@ -47,17 +47,18 @@ flowchart LR
 
 ```
 TradingBotTelegram2/
-├── bot.py              # Main bot - runs BOT_1_P, BOT_2_BK, BOT_3_GG
-├── BOT_1_P.py          # Parser for Signal Channel P (no SL)
-├── BOT_2_BK.py         # Parser for Signal Channel BK (has SL)
-├── BOT_3_GG.py         # Parser for Signal Channel GG (has SL + Entry Zone)
-├── ADMIN_BOT.py        # Admin commands with inline buttons
-├── verify_setup.py     # Test suite - verify all connections
-├── generate_session.py # Run once to get SESSION_STRING
-├── requirements.txt    # Python dependencies
-├── .env                # API keys & config (not in git)
-├── .gitignore          # Excludes sensitive files
-└── README.md           # This file
+├── BOTS/                  # Individual bot parsers
+│   ├── BOT_1_P.py         # Parser for Signal Channel P
+│   ├── BOT_2_BK.py        # Parser for Signal Channel BK
+│   └── BOT_3_GG.py        # Parser for Signal Channel GG
+├── tools/                 # Utility scripts
+│   ├── test_setup.py      # Verify connections (run this first)
+│   └── generate_session.py# Run once to get SESSION_STRING
+├── bot.py                 # Main Entry Point
+├── ADMIN_BOT.py           # Admin Interface
+├── requirements.txt       # Dependencies
+├── .env                   # Config (create this)
+└── README.md              # Documentation
 ```
 
 ## ⚙️ Configuration
