@@ -187,6 +187,8 @@ Entry order locks your margin but won't fill (price too low)
 DONE - Test parsers for bot2.py
 Add 2nd prarser for bot2.py as well
 
+DONE - Handling deployment and stop or start of bot through telegram only
+
 One more project to take posotion as soon as the coin is listed
 
 Add TP1, TP2 logic 
@@ -198,6 +200,5 @@ for entry2 we might increase the leverage. also for entry 1, entry 2 different a
 
 Need someexcel to keep track of what trade is taken and how is trading going on
 
-Handling deployment and stop or start of bot through telegram only
 
 
