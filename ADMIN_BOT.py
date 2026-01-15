@@ -207,6 +207,7 @@ async def cmd_deploy(event, tg_client, config, is_callback=False):
     )
     
     git_output = git_result.stdout if git_result.stdout else git_result.stderr
+    print(f"[ADMIN] Git pull output: {git_output.strip()}")
     await tg_client.send_message(
         config['admin_group_id'], 
         f"📥 **Git Pull:**\n```\n{git_output[-1000:]}\n```"

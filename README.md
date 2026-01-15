@@ -297,6 +297,38 @@ Target 1:  0.177
 
 ---
 
+## �️ Admin Bot (Remote Management)
+
+Control your bot from Telegram with inline buttons!
+
+### Features
+- 📊 **Status** - Check if bot is running + uptime
+- 📋 **Logs** - Get last 20 log lines
+- 🔄 **Restart** - Restart the bot
+- ⚡ **Force Restart** - Clear logs + restart
+- 🚀 **Deploy** - Git pull + restart (update code remotely!)
+- ⚙️ **Config** - View current settings
+- 🧪 **Test** - Local test (works without systemctl)
+
+### Setup Requirements
+1. Create bot via **@BotFather** on Telegram
+2. Add bot to your Admin Group (**must be a supergroup**)
+3. Make bot an **Admin** of the group
+4. Add to `.env`:
+```env
+ADMIN_GROUP_ID=-100xxxxxxxxxx
+ADMIN_BOT_TOKEN=your_bot_token_from_botfather
+```
+
+### GCP Sudoers Setup (One-Time)
+```bash
+sudo visudo
+# Add at end:
+# username ALL=(ALL) NOPASSWD: /bin/systemctl restart tradingbot, /usr/bin/journalctl
+```
+
+---
+
 ## 🌐 Deployment on Google Cloud Platform (FREE!)
 
 ### Why Google Cloud?

@@ -38,7 +38,9 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
         await tg_client.send_message(private_group_id, f"[{bot_id}] ❌ Symbol not found")
         print(f"[{bot_id}] ❌ Symbol not found")
         return
-    symbol = f"{symbol_match.group(1).upper()}USDT"
+    symbol = symbol_match.group(1).upper()
+    if not symbol.endswith('USDT'):
+        symbol = f"{symbol}USDT"
     print(f"   [{bot_id}] 📌 Symbol: {symbol}")
     
     # 2. Extract Side
