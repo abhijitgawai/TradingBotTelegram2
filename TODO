@@ -200,5 +200,24 @@ for entry2 we might increase the leverage. also for entry 1, entry 2 different a
 
 Need someexcel to keep track of what trade is taken and how is trading going on
 
+Leverage change after trade is taken
+
+Trailing stop loss. 
+TP tp
+Percent tp
+
+Predictium backtest
+
+Binance killer backtest
+
+Create automation if we can to to put trade on tradingview
+
+Create new section on trading view
+
+Back test analysis needs to write all in different files and one monitor for all
+
+Check the stop loss error
+
+Not able to place take profit order as order of entry is not executed yet
 
 
