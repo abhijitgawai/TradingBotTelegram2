@@ -1,6 +1,20 @@
 # 🤖 Telegram Trading Signal Bot
-
 Automatically execute Binance Futures trades based on signals received from **multiple Telegram channels**.
+## Previously Executed Trades
+<img src="https://github.com/user-attachments/assets/9d4aa61c-5ff8-4566-89bc-149204582faf" width="400" alt="Binance Trades" />
+<br>
+<em>Signal Group</em>
+<br><br>
+<img src="https://github.com/user-attachments/assets/f801e592-391e-4f9e-997c-ff4e1540b55a" width="500" alt="Private Group Logs" />
+<br>
+<em>Private Group to log</em>
+<br><br>
+<img src="https://github.com/user-attachments/assets/4192aef2-5184-4819-a523-03446419b98c" width="600" alt="Crypto Exchange Execution" />
+<br>
+<em>Execution on Crypto Exchange</em>
+
+
+
 
 ## 📊 How It Works
 
