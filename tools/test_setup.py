@@ -108,8 +108,16 @@ print("\n" + "=" * 60)
 print("TEST CASE 2: Binance API Connection")
 print("=" * 60)
 
-from binance.um_futures import UMFutures
-client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
+from binance_common.configuration import ConfigurationRestAPI
+from binance_common.constants import DERIVATIVES_TRADING_USDS_FUTURES_REST_API_PROD_URL
+from binance_sdk_derivatives_trading_usds_futures import DerivativesTradingUsdsFutures
+
+binance_config = ConfigurationRestAPI(
+    api_key=BINANCE_KEY,
+    api_secret=BINANCE_SECRET,
+    base_path=DERIVATIVES_TRADING_USDS_FUTURES_REST_API_PROD_URL
+)
+client = DerivativesTradingUsdsFutures(config_rest_api=binance_config)
 
 # Convert margin/leverage to int (already loaded as strings above)
 MARGIN_USD_BOT_1_P = int(MARGIN_USD_BOT_1_P)
@@ -120,13 +128,15 @@ LEVERAGE_BOT_2_BK = int(LEVERAGE_BOT_2_BK)
 LEVERAGE_BOT_3_GG = int(LEVERAGE_BOT_3_GG)
 
 try:
-    account = client.account()
-    wallet_balance = float(account['totalWalletBalance'])
+    response = client.rest_api.account_information_v2()
+    account = response.data()
+    wallet_balance = float(account.get('totalWalletBalance', 0))
     print(f"   Balance: {wallet_balance:.2f} USDT")
     
     # Check Position Mode (must be One-Way, not Hedge)
-    mode = client.get_position_mode()
-    if mode['dualSidePosition']:
+    response = client.rest_api.get_current_position_mode()
+    mode = response.data()
+    if mode.get('dualSidePosition', False):
         print("   ⚠️ Position Mode: HEDGE (change to One-Way in Binance settings!)")
     else:
         print("   ✅ Position Mode: One-Way")
@@ -165,7 +175,13 @@ from telethon.sessions import StringSession
 
 async def test_telegram():
     tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
-    await tg_client.start()
+    await tg_client.connect()
+    
+    # Verify session is valid (not asking for new auth)
+    if not await tg_client.is_user_authorized():
+        print("   ❌ SESSION_STRING is invalid or expired. Please regenerate using generate_session.py")
+        await tg_client.disconnect()
+        return False
     
     me = await tg_client.get_me()
     print(f"   Telegram account: {me.first_name}")
@@ -536,8 +552,15 @@ print("=" * 60)
 
 try:
     start = time.time()
-    exchange_info = client.exchange_info()
-    PRECISION = {s['symbol']: s['quantityPrecision'] for s in exchange_info['symbols']}
+    response = client.rest_api.exchange_information()
+    exchange_info = response.data()
+    # New SDK returns objects with snake_case attributes
+    symbols_list = exchange_info.symbols if hasattr(exchange_info, 'symbols') else []
+    PRECISION = {}
+    for s in symbols_list:
+        sym = s.symbol if hasattr(s, 'symbol') else s.get('symbol', '')
+        prec = s.quantity_precision if hasattr(s, 'quantity_precision') else s.get('quantity_precision', 0)
+        PRECISION[sym] = prec
     elapsed = (time.time() - start) * 1000
     print(f"   Cached {len(PRECISION)} symbols in {elapsed:.0f}ms")
     print(f"   DOGEUSDT precision: {PRECISION.get('DOGEUSDT', 'N/A')} decimals")
@@ -557,8 +580,9 @@ TEST_LEVERAGE = 5
 
 try:
     # Change leverage (this tests trading permissions and IP whitelist)
-    result = client.change_leverage(symbol=TEST_SYMBOL, leverage=TEST_LEVERAGE)
-    actual_leverage = result.get('leverage', TEST_LEVERAGE)
+    response = client.rest_api.change_initial_leverage(symbol=TEST_SYMBOL, leverage=TEST_LEVERAGE)
+    result = response.data()
+    actual_leverage = result.get('leverage', TEST_LEVERAGE) if result else TEST_LEVERAGE
     print(f"   Changed {TEST_SYMBOL} leverage to {actual_leverage}x")
     test_pass("TEST CASE 6: Leverage change works (trading permissions OK)")
 except Exception as e:
@@ -575,8 +599,9 @@ print("=" * 60)
 if RUN_ISOLATED_SCRIPT:
     print("   ⚠️ RUN_ISOLATED_SCRIPT=true - Changing all symbols to ISOLATED margin...")
     try:
-        exchange_info = client.exchange_info()
-        symbols = [s['symbol'] for s in exchange_info['symbols'] if s['status'] == 'TRADING']
+        response = client.rest_api.exchange_information()
+        exchange_info = response.data()
+        symbols = [s['symbol'] for s in exchange_info.get('symbols', []) if s.get('status') == 'TRADING']
         total = len(symbols)
         success_count = 0
         skip_count = 0
@@ -584,7 +609,7 @@ if RUN_ISOLATED_SCRIPT:
         
         for i, symbol in enumerate(symbols):
             try:
-                client.change_margin_type(symbol=symbol, marginType='ISOLATED')
+                client.rest_api.change_margin_type(symbol=symbol, margin_type='ISOLATED')
                 success_count += 1
                 print(f"   [{i+1}/{total}] ✅ {symbol} → ISOLATED")
             except Exception as e:
@@ -605,7 +630,7 @@ if RUN_ISOLATED_SCRIPT:
 else:
     # Just check BTCUSDT margin type
     try:
-        client.change_margin_type(symbol=TEST_SYMBOL, marginType='CROSSED')
+        client.rest_api.change_margin_type(symbol=TEST_SYMBOL, margin_type='CROSSED')
         print(f"   {TEST_SYMBOL}: CROSSED margin")
         test_pass("TEST CASE 7: Margin type is CROSSED")
     except Exception as e:

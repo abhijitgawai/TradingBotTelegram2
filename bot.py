@@ -3,7 +3,10 @@ import os
 from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-from binance.um_futures import UMFutures
+# New Binance SDK for algo orders
+from binance_common.configuration import ConfigurationRestAPI
+from binance_common.constants import DERIVATIVES_TRADING_USDS_FUTURES_REST_API_PROD_URL
+from binance_sdk_derivatives_trading_usds_futures import DerivativesTradingUsdsFutures
 from BOTS.BOT_1_P import handle_signal_bot_1_p
 from BOTS.BOT_2_BK import handle_signal_bot_2_bk
 from BOTS.BOT_3_GG import handle_signal_bot_3_gg
@@ -52,7 +55,14 @@ ADMIN_BOT_TOKEN = os.getenv('ADMIN_BOT_TOKEN')  # Bot token from @BotFather
 
 # Initialize Clients
 tg_client = TelegramClient(StringSession(SESSION_STRING), TELEGRAM_API_ID, TELEGRAM_API_HASH)
-binance_client = UMFutures(key=BINANCE_KEY, secret=BINANCE_SECRET)
+
+# Initialize Binance client with new SDK
+binance_config = ConfigurationRestAPI(
+    api_key=BINANCE_KEY,
+    api_secret=BINANCE_SECRET,
+    base_path=DERIVATIVES_TRADING_USDS_FUTURES_REST_API_PROD_URL
+)
+binance_client = DerivativesTradingUsdsFutures(config_rest_api=binance_config)
 
 # Admin bot client (separate bot account for buttons)
 # Will be initialized in startup_tests() if ADMIN_BOT_TOKEN is set
@@ -95,22 +105,22 @@ def calculate_quantity(margin_usd, leverage, entry_price, symbol):
 
 def Enter_Trade(symbol, side, quantity, price, leverage, bot_id):
     """
-    Place entry LIMIT order.
+    Place entry LIMIT order. (Fallback function)
     Returns True if successful, False otherwise.
     """
     try:
         if PLACE_REAL_TRADES:
             # Set Leverage
-            binance_client.change_leverage(symbol=symbol, leverage=leverage)
+            binance_client.rest_api.change_initial_leverage(symbol=symbol, leverage=leverage)
             
             # Entry LIMIT Order
-            binance_client.new_order(
+            binance_client.rest_api.new_order(
                 symbol=symbol,
                 side=side,
                 type='LIMIT',
                 quantity=quantity,
                 price=price,
-                timeInForce='GTC'
+                time_in_force='GTC'
             )
             print(f"   [{bot_id}] ✅ Entry order placed: {symbol} {side} @ {price}")
             return True
@@ -124,19 +134,19 @@ def Enter_Trade(symbol, side, quantity, price, leverage, bot_id):
 
 def TP_Trade(symbol, side, quantity, price, bot_id):
     """
-    Place take profit LIMIT order with reduceOnly.
+    Place take profit LIMIT order with reduceOnly. (Fallback function - may fail if entry not filled)
     Returns True if successful, False otherwise.
     """
     try:
         if PLACE_REAL_TRADES:
-            binance_client.new_order(
+            binance_client.rest_api.new_order(
                 symbol=symbol,
                 side=side,
                 type='LIMIT',
                 quantity=quantity,
                 price=price,
-                timeInForce='GTC',
-                reduceOnly='True'
+                time_in_force='GTC',
+                reduce_only='true'
             )
             print(f"   [{bot_id}] ✅ TP order placed: {symbol} {side} @ {price}")
             return True
@@ -150,7 +160,7 @@ def TP_Trade(symbol, side, quantity, price, bot_id):
 
 def SL_Trade(symbol, side, quantity, bot_id, executeSL=False, stop_price=None):
     """
-    Place stop loss order.
+    Place stop loss order. (Fallback function - uses algo order now)
     executeSL: If False, skip SL. If True, place SL order.
     Returns True if successful, False otherwise.
     """
@@ -161,13 +171,15 @@ def SL_Trade(symbol, side, quantity, bot_id, executeSL=False, stop_price=None):
     if executeSL:
         try:
             if PLACE_REAL_TRADES:
-                binance_client.new_order(
+                # Use algo order for SL (required since Dec 2025)
+                binance_client.rest_api.new_algo_order(
+                    algo_type="CONDITIONAL",
                     symbol=symbol,
                     side=side,
                     type='STOP_MARKET',
+                    trigger_price=stop_price,
                     quantity=quantity,
-                    stopPrice=stop_price,
-                    reduceOnly='True'
+                    reduce_only='true'
                 )
                 print(f"   [{bot_id}] ✅ SL order placed: {symbol} {side} @ {stop_price}")
                 return True
@@ -178,6 +190,75 @@ def SL_Trade(symbol, side, quantity, bot_id, executeSL=False, stop_price=None):
             print(f"   [{bot_id}] ⚠️ SL order error: {str(e)}")
             return False
     
+
+def Place_Bracket_Order(symbol, side, quantity, entry_price, tp_price, leverage, bot_id, sl_price=None):
+    """
+    Place Entry + TP + SL using new Algo Order API.
+    - Entry: LIMIT order via regular endpoint
+    - TP: TAKE_PROFIT_MARKET via algo order with closePosition=true
+    - SL: STOP_MARKET via algo order with closePosition=true
+    
+    Falls back to old method (Enter_Trade + TP_Trade + SL_Trade) if new method fails.
+    
+    Returns: (success, result_or_error)
+    """
+    exit_side = "SELL" if side == "BUY" else "BUY"
+    
+    try:
+        if PLACE_REAL_TRADES:
+            # Step 1: Set leverage
+            binance_client.rest_api.change_initial_leverage(symbol=symbol, leverage=leverage)
+            
+            # Step 2: Place Entry LIMIT order
+            entry_result = binance_client.rest_api.new_order(
+                symbol=symbol,
+                side=side,
+                type="LIMIT",
+                quantity=quantity,
+                price=entry_price,
+                time_in_force="GTC"
+            )
+            print(f"   [{bot_id}] ✅ Entry order placed: {symbol} {side} @ {entry_price}")
+            
+            # Step 3: Place TP (algo order with closePosition)
+            tp_result = binance_client.rest_api.new_algo_order(
+                algo_type="CONDITIONAL",
+                symbol=symbol,
+                side=exit_side,
+                type="TAKE_PROFIT_MARKET",
+                trigger_price=tp_price,
+                close_position="true"
+            )
+            print(f"   [{bot_id}] ✅ TP algo order placed: {symbol} {exit_side} @ trigger {tp_price}")
+            
+            # Step 4: Place SL if provided (algo order with closePosition)
+            if sl_price:
+                sl_result = binance_client.rest_api.new_algo_order(
+                    algo_type="CONDITIONAL",
+                    symbol=symbol,
+                    side=exit_side,
+                    type="STOP_MARKET",
+                    trigger_price=sl_price,
+                    close_position="true"
+                )
+                print(f"   [{bot_id}] ✅ SL algo order placed: {symbol} {exit_side} @ trigger {sl_price}")
+            
+            print(f"   [{bot_id}] ✅ Bracket order complete: {symbol} {side} @ {entry_price} | TP: {tp_price} | SL: {sl_price}")
+            return True, entry_result
+        else:
+            print(f"   [{bot_id}] 🧪 [SIM] Bracket order: {symbol} {side} @ {entry_price} | TP: {tp_price} | SL: {sl_price}")
+            return True, None
+    except Exception as e:
+        print(f"   [{bot_id}] ⚠️ Algo order failed: {str(e)}")
+        print(f"   [{bot_id}] ⚠️ Falling back to old method...")
+        # Fallback to existing Enter_Trade, TP_Trade, SL_Trade
+        entry_success = Enter_Trade(symbol, side, quantity, entry_price, leverage, bot_id)
+        if entry_success:
+            TP_Trade(symbol, exit_side, quantity, tp_price, bot_id)
+            if sl_price:
+                SL_Trade(symbol, exit_side, quantity, bot_id, executeSL=True, stop_price=sl_price)
+        return False, str(e)
+
 
 # =============================================================================
 # STARTUP TESTS
@@ -221,8 +302,9 @@ async def startup_tests():
     
     # Test Binance API connection with private endpoint (verifies IP whitelist)
     try:
-        account = binance_client.account()
-        wallet_balance = float(account['totalWalletBalance'])
+        response = binance_client.rest_api.account_information_v2()
+        account = response.data()
+        wallet_balance = float(account.total_wallet_balance if hasattr(account, 'total_wallet_balance') else account.get('totalWalletBalance', 0))
         print(f"[BOT]    Binance API: ✅ Connected (Balance: {wallet_balance:.2f} USDT)")
         
         # Validate margin settings against wallet balance
@@ -248,10 +330,15 @@ async def startup_tests():
     # Cache symbol precision
     global SYMBOL_PRECISION, PRICE_PRECISION
     try:
-        exchange_info = binance_client.exchange_info()
-        for s in exchange_info['symbols']:
-            SYMBOL_PRECISION[s['symbol']] = s['quantityPrecision']
-            PRICE_PRECISION[s['symbol']] = s['pricePrecision']
+        response = binance_client.rest_api.exchange_information()
+        exchange_info = response.data()
+        symbols_list = exchange_info.symbols if hasattr(exchange_info, 'symbols') else []
+        for s in symbols_list:
+            sym = s.symbol if hasattr(s, 'symbol') else s.get('symbol', '')
+            qty_prec = s.quantity_precision if hasattr(s, 'quantity_precision') else s.get('quantity_precision', 0)
+            price_prec = s.price_precision if hasattr(s, 'price_precision') else s.get('price_precision', 0)
+            SYMBOL_PRECISION[sym] = qty_prec
+            PRICE_PRECISION[sym] = price_prec
         print(f"[BOT]    Binance Symbols: ✅ Cached {len(SYMBOL_PRECISION)} symbols", '========================')
     except Exception as e:
         print(f"[BOT]    ⚠️ Could not cache decimals: {str(e)}")
@@ -294,19 +381,19 @@ async def startup_tests():
     @tg_client.on(events.NewMessage(chats=listen_channel_bot_1_p))
     async def wrapper_bot_1_p(event):
         await handle_signal_bot_1_p(event, tg_client, binance_client, config_bot_1_p, precision,
-                                     Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                     Enter_Trade, TP_Trade, SL_Trade, Place_Bracket_Order,round_price, calculate_quantity,
                                      PLACE_REAL_TRADES)
     
     @tg_client.on(events.NewMessage(chats=listen_channel_bot_2_bk))
     async def wrapper_bot_2_bk(event):
         await handle_signal_bot_2_bk(event, tg_client, binance_client, config_bot_2_bk, precision,
-                                      Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                      Enter_Trade, TP_Trade, SL_Trade, Place_Bracket_Order, round_price, calculate_quantity,
                                       PLACE_REAL_TRADES)
     
     @tg_client.on(events.NewMessage(chats=listen_channel_bot_3_gg))
     async def wrapper_bot_3_gg(event):
         await handle_signal_bot_3_gg(event, tg_client, binance_client, config_bot_3_gg, precision,
-                                      Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                      Enter_Trade, TP_Trade, SL_Trade, Place_Bracket_Order, round_price, calculate_quantity,
                                       PLACE_REAL_TRADES)
     
     # Initialize admin bot client if token is set

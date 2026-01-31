@@ -1,4 +1,5 @@
 telethon
-binance-futures-connector
+binance-sdk-derivatives-trading-usds-futures
+binance-common
 requests
 python-dotenv

@@ -10,7 +10,7 @@ import re
 
 
 async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precision,
-                                 Enter_Trade, TP_Trade, SL_Trade, round_price, calculate_quantity,
+                                 Enter_Trade, TP_Trade, SL_Trade, Place_Bracket_Order, round_price, calculate_quantity,
                                  PLACE_REAL_TRADES):
 
     bot_id = config['bot_id']
@@ -90,25 +90,27 @@ async def handle_signal_bot_1_p(event, tg_client, binance_client, config, precis
         
         print(f"[{bot_id}] ====Signal====")
         
-        # Place Entry Order
-        entry_success = Enter_Trade(symbol, side, quantity, entry_price_rounded, leverage, bot_id)
+        # Place Bracket Order (Entry + TP, no SL for BOT_1_P)
+        success, result = Place_Bracket_Order(
+            symbol=symbol,
+            side=side,
+            quantity=quantity,
+            entry_price=entry_price_rounded,
+            tp_price=tp1_price_rounded,
+            leverage=leverage,
+            bot_id=bot_id,
+            sl_price=None  # BOT_1_P: No Stop Loss
+        )
         
-        if entry_success:
-            # Place TP Order
-            exit_side = "SELL" if side == "BUY" else "BUY"
-            tp_success = TP_Trade(symbol, exit_side, quantity, tp1_price_rounded, bot_id)
-            
-            # BOT_1_P: No Stop Loss
-            
-            # Send notification AFTER all trades (wrapped in try-catch)
-            try:
-                if PLACE_REAL_TRADES:
-                    msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                else:
-                    msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
-                await tg_client.send_message(private_group_id, msg)
-            except Exception as tg_error:
-                print(f"   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
+        # Send notification AFTER trade (wrapped in try-catch)
+        try:
+            if PLACE_REAL_TRADES:
+                msg = f"[{bot_id}] 🚀 {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+            else:
+                msg = f"[{bot_id}] 🧪 [SIM] {symbol} {side}\nEntry: {entry_price_rounded}\nTP1: {tp1_price_rounded}\nQty: {quantity}"
+            await tg_client.send_message(private_group_id, msg)
+        except Exception as tg_error:
+            print(f"   [{bot_id}] ⚠️ Telegram notification failed: {str(tg_error)}")
     
     except Exception as e:
         print(f"   [{bot_id}] ⚠️ Error: {str(e)}")
